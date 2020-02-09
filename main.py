@@ -12,6 +12,7 @@ display_height = 490
 gameScreen = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Hacker Strike: Virus Offensive')
 clock = pygame.time.Clock()
+
 gameMap = load_pygame("./Assets/Map/map.tmx")
 restingDownImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingDown.png").convert_alpha(), (32,32))
 walkingDown1Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingDown1.png").convert_alpha(), (32,32))
@@ -25,6 +26,7 @@ walkingLeft2Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sp
 restingRightImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingRight.png").convert_alpha(), (32,32))
 walkingRight1Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingRight1.png").convert_alpha(), (32,32))
 walkingRight2Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingRight2.png").convert_alpha(), (32,32))
+
 class Sprite(object):
     def __init__(self):
         self.x = 250
