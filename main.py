@@ -43,24 +43,24 @@ class Sprite(object):
         key = pygame.key.get_pressed()
         dist = 7
         if any(key) and key.index(1) != 300:
-            if key[pygame.K_UP] and self.canMoveUp:
+            if (key[pygame.K_UP] or key[pygame.K_w]) and self.canMoveUp:
                 self.y -= dist
                 # self.velocityY = dist
                 self.image = walkingUp1Image if self.movedLeft else walkingUp2Image
                 self.lastPressedButtons = "UP"
-            elif key[pygame.K_DOWN] and self.canMoveDown:
+            elif (key[pygame.K_DOWN] or key[pygame.K_s]) and self.canMoveDown:
                 self.y += dist
                 # self.velocityY = -dist
                 self.image = walkingDown1Image if self.movedLeft else walkingDown2Image
                 self.lastPressedButtons = "DOWN"
             # else:
                 # self.velocityY = 0
-            if key[pygame.K_LEFT] and self.canMoveLeft:
+            if (key[pygame.K_LEFT] or key[pygame.K_a]) and self.canMoveLeft:
                 self.x -= dist
                 # self.velocityX = -dist
                 self.image = walkingLeft1Image if self.movedLeft else walkingLeft2Image
                 self.lastPressedButtons = "LEFT"
-            elif key[pygame.K_RIGHT] and self.canMoveRight:
+            elif (key[pygame.K_RIGHT] or key[pygame.K_d]) and self.canMoveRight:
                 self.x += dist
                 # self.velocityX = dist
                 self.image = walkingRight1Image if self.movedLeft else walkingRight2Image
@@ -101,7 +101,9 @@ def game_loop():
                 for obj in layer:
                     if sprite.x + 42 > obj.x and sprite.y + 32 >= obj.y and sprite.y <= obj.y + obj.height and sprite.x < obj.x:
                         sprite.canMoveRight = False
-                        print ("name: {} \ntype: {}".format(obj.name, obj.type))
+                        # print ("name: {} \ntype: {}".format(obj.name, obj.type))
+                        if obj.type == 'chest' and pygame.key.get_pressed()[pygame.K_e]:
+                            print("{} opened".format(obj.name))
                         if obj.type == 'new room':
                             print("You have entered the {}".format(obj.name))
                         break
@@ -109,7 +111,9 @@ def game_loop():
                     for obj in layer:
                         if sprite.x < obj.x + obj.width and sprite.y + 32 >= obj.y and sprite.y <= obj.y + obj.height and sprite.x > obj.x:
                             sprite.canMoveLeft = False
-                            print ("name: {} \ntype: {}".format(obj.name, obj.type))
+                            # print ("name: {} \ntype: {}".format(obj.name, obj.type))
+                            if obj.type == 'chest' and pygame.key.get_pressed()[pygame.K_e]:
+                                print("{} opened".format(obj.name))
                             if obj.type == 'new room':
                                 print("You have entered the {}".format(obj.name))
                             break
@@ -128,7 +132,9 @@ def game_loop():
                 for obj in layer:
                     if sprite.y < obj.y + obj.height and sprite.x + 32 >= obj.x and sprite.x <= obj.x + obj.width and sprite.y > obj.y:
                         sprite.canMoveUp = False
-                        print ("name: {} \ntype: {}".format(obj.name, obj.type))
+                        # print ("name: {} \ntype: {}".format(obj.name, obj.type))
+                        if obj.type == 'chest' and pygame.key.get_pressed()[pygame.K_e]:
+                            print("{} opened".format(obj.name))
                         if obj.type == 'new room':
                             print("You have entered the {}".format(obj.name))
                         break
@@ -136,7 +142,9 @@ def game_loop():
                     for obj in layer:
                         if sprite.y + 42 > obj.y and sprite.x + 32 >= obj.x and sprite.x <= obj.x + obj.width and sprite.y < obj.y:
                             sprite.canMoveDown = False
-                            print ("name: {} \ntype: {}".format(obj.name, obj.type))
+                            if obj.type == 'chest' and pygame.key.get_pressed()[pygame.K_e]:
+                                print("{} opened".format(obj.name))
+                            # print ("name: {} \ntype: {}".format(obj.name, obj.type))
                             if obj.type == 'new room':
                                 print("You have entered the {}".format(obj.name))
                             break
