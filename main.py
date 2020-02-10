@@ -6,7 +6,7 @@ from pygame.locals import *
 
 pygame.init()
 
-display_width = 460
+display_width = 920
 display_height = 490
 
 gameScreen = pygame.display.set_mode((display_width, display_height))
@@ -14,24 +14,25 @@ pygame.display.set_caption('Hacker Strike: Virus Offensive')
 clock = pygame.time.Clock()
 
 gameMap = load_pygame("./Assets/Map/map.tmx")
-restingDownImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingDown.png").convert_alpha(), (32,32))
-walkingDown1Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingDown1.png").convert_alpha(), (32,32))
-walkingDown2Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingDown2.png").convert_alpha(), (32,32))
-restingUpImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingUp.png").convert_alpha(), (32,32))
-walkingUp1Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingUp1.png").convert_alpha(), (32,32))
-walkingUp2Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingUp2.png").convert_alpha(), (32,32))
-restingLeftImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingLeft.png").convert_alpha(), (32,32))
-walkingLeft1Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingLeft1.png").convert_alpha(), (32,32))
-walkingLeft2Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingLeft2.png").convert_alpha(), (32,32))
-restingRightImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingRight.png").convert_alpha(), (32,32))
-walkingRight1Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingRight1.png").convert_alpha(), (32,32))
-walkingRight2Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingRight2.png").convert_alpha(), (32,32))
 
 class Sprite(object):
+    restingDownImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingDown.png").convert_alpha(), (32,32))
+    walkingDown1Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingDown1.png").convert_alpha(), (32,32))
+    walkingDown2Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingDown2.png").convert_alpha(), (32,32))
+    restingUpImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingUp.png").convert_alpha(), (32,32))
+    walkingUp1Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingUp1.png").convert_alpha(), (32,32))
+    walkingUp2Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingUp2.png").convert_alpha(), (32,32))
+    restingLeftImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingLeft.png").convert_alpha(), (32,32))
+    walkingLeft1Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingLeft1.png").convert_alpha(), (32,32))
+    walkingLeft2Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingLeft2.png").convert_alpha(), (32,32))
+    restingRightImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingRight.png").convert_alpha(), (32,32))
+    walkingRight1Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingRight1.png").convert_alpha(), (32,32))
+    walkingRight2Image = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/walkingRight2.png").convert_alpha(), (32,32))
+
     def __init__(self):
         self.x = 250
         self.y = 250
-        self.image = restingDownImage
+        self.image = self.restingDownImage
         self.movedLeft = False
         self.canMoveUp = True
         self.canMoveDown = True
@@ -48,24 +49,24 @@ class Sprite(object):
             if (key[pygame.K_UP] or key[pygame.K_w]) and self.canMoveUp:
                 self.y -= dist
                 # self.velocityY = dist
-                self.image = walkingUp1Image if self.movedLeft else walkingUp2Image
+                self.image = self.walkingUp1Image if self.movedLeft else self.walkingUp2Image
                 self.lastPressedButtons = "UP"
             elif (key[pygame.K_DOWN] or key[pygame.K_s]) and self.canMoveDown:
                 self.y += dist
                 # self.velocityY = -dist
-                self.image = walkingDown1Image if self.movedLeft else walkingDown2Image
+                self.image = self.walkingDown1Image if self.movedLeft else self.walkingDown2Image
                 self.lastPressedButtons = "DOWN"
             # else:
                 # self.velocityY = 0
             if (key[pygame.K_LEFT] or key[pygame.K_a]) and self.canMoveLeft:
                 self.x -= dist
                 # self.velocityX = -dist
-                self.image = walkingLeft1Image if self.movedLeft else walkingLeft2Image
+                self.image = self.walkingLeft1Image if self.movedLeft else self.walkingLeft2Image
                 self.lastPressedButtons = "LEFT"
             elif (key[pygame.K_RIGHT] or key[pygame.K_d]) and self.canMoveRight:
                 self.x += dist
                 # self.velocityX = dist
-                self.image = walkingRight1Image if self.movedLeft else walkingRight2Image
+                self.image = self.walkingRight1Image if self.movedLeft else self.walkingRight2Image
                 self.lastPressedButtons = "RIGHT"
             # else:
                 # self.velocityX = 0
@@ -73,13 +74,13 @@ class Sprite(object):
         else:
             # self.velocityX = self.velocityY = 0
             if self.lastPressedButtons == "LEFT":
-                self.image = restingLeftImage
+                self.image = self.restingLeftImage
             elif self.lastPressedButtons == "UP":
-                self.image = restingUpImage
+                self.image = self.restingUpImage
             elif self.lastPressedButtons == "RIGHT":
-                self.image = restingRightImage
+                self.image = self.restingRightImage
             else:
-                self.image = restingDownImage
+                self.image = self.restingDownImage
     def draw(self, surface):
         surface.blit(self.image, (self.x, self.y))
 
@@ -89,7 +90,7 @@ def game_loop():
     gameExit = False
     while not gameExit:
         clock.tick(60)
-        sleep(0.08)
+        sleep(0.02)
         sprite.handle_keys()
         for layer in gameMap.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
@@ -163,6 +164,9 @@ def game_loop():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                gameExit = True
 
-if __name__ == '__main__':
+def main():
     game_loop()
     pygame.quit()
+
+if __name__ == '__main__':
+    main()
