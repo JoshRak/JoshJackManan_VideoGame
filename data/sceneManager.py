@@ -17,7 +17,7 @@ class SceneManager(object):
             self.alpha = 0
 
     def draw(self, screen):
-        self.scene.draw(screen)
+        self.scene.render(screen)
         if self.fading:
             self.veil.set_alpha(self.alpha)
             screen.blit(self.veil, (0, 0))

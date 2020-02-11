@@ -3,7 +3,7 @@ import pytmx
 from pytmx.util_pygame import load_pygame
 from time import sleep
 from pygame.locals import *
-from data import player, scene
+from data import player, scene, sceneManager
 
 pygame.init()
 
@@ -16,6 +16,27 @@ clock = pygame.time.Clock()
 
 gameMap = load_pygame("./Assets/Map/map.tmx")
 
+poseImgs = ["./Assets/Images/Sprites/Characters/restingDown.png",
+            "./Assets/Images/Sprites/Characters/restingUp.png",
+            "./Assets/Images/Sprites/Characters/restingLeft.png",
+            "./Assets/Images/Sprites/Characters/restingRight.png",
+            "./Assets/Images/Sprites/Characters/walkingDown1.png",
+            "./Assets/Images/Sprites/Characters/walkingDown2.png",
+            "./Assets/Images/Sprites/Characters/walkingUp1.png",
+            "./Assets/Images/Sprites/Characters/walkingUp2.png",
+            "./Assets/Images/Sprites/Characters/walkingLeft1.png",
+            "./Assets/Images/Sprites/Characters/walkingLeft2.png",
+            "./Assets/Images/Sprites/Characters/walkingRight1.png",
+            "./Assets/Images/Sprites/Characters/walkingRight2.png"]
+
+def scaleImgs(imgList):
+    output = []
+    for img in imgList:
+        output.append(pygame.transform.scale(pygame.image.load(img).convert_alpha(), (32,32)))
+    return output
+
+def initPlayer():
+    return player.Player(250, 250, scaleImgs(poseImgs))
 
 # player = Player(250, 250)
 
@@ -100,25 +121,29 @@ gameMap = load_pygame("./Assets/Map/map.tmx")
 #                gameExit = True
 
 def main():
-    screen_width, screen_height = 300, 300
+    screen_width, screen_height = 920, 490
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
     currentTime = 0
     spriteGroup = pygame.sprite.Group()
-    spriteGroup.add(player.Player(250, 250))
+    spriteGroup.add(initPlayer())
     scene1 = scene.Scene(1, gameMap, spriteGroup)
-    manager = sceneManager([scene1, scene1])
+    manager = sceneManager.SceneManager([scene1, scene1])
     gameExit = False
     while not gameExit:
-        for event in pygame.event.get():
+        events = pygame.event.get()
+        for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 gameExit = True
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_g:
+                manager.nextScene()
 
         manager.draw(screen)
         manager.update(currentTime, events)
 
         pygame.display.flip()
         currentTime = clock.tick(30)
+        
 if __name__ == '__main__':
     main()
     pygame.quit()
