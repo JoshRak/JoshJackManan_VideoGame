@@ -3,6 +3,7 @@ import pytmx
 from pytmx.util_pygame import load_pygame
 from time import sleep
 from pygame.locals import *
+import menu
 
 # restingDownImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingDown.png").convert_alpha(), (32,32))
 # restingUpImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingUp.png").convert_alpha(), (32,32))
@@ -20,6 +21,8 @@ from pygame.locals import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, posesList):
         super(Player, self).__init__()
+        self.inventory = menu(Player)
+        self.equipped = {'CPU':'None', 'DO FOR ALL PARTS'}
         self.x = x
         self.y = y
         self.posesDict = self.initPoses(posesList)
@@ -71,6 +74,7 @@ class Player(pygame.sprite.Sprite):
             # else:
                 # self.velocityX = 0
             self.movedLeft = not self.movedLeft
+            if (key[pygame.K_Q] and not self.inventory.currentlyDisplayed)
         else:
             # self.velocityX = self.velocityY = 0
             if self.lastPressedButtons == "LEFT":
