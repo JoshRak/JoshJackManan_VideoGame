@@ -23,13 +23,6 @@ class SceneManager(object):
             self.veil.set_alpha(self.alpha)
             screen.blit(self.veil, (0, 0))
     
-    def drawImage(self, screen, image, point):
-        while self.alpha <= 255:
-            self.veil.set_alpha(self.alpha) 
-            sleep(0.01)
-        screen.blit(self.veil, point)
-        self.fading = 'IN'
-
     def update(self, currentTime, events):
         self.scene.update(currentTime, events)
 

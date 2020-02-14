@@ -3,18 +3,31 @@ import pytmx
 from pytmx.util_pygame import load_pygame
 from time import sleep
 from pygame.locals import *
+import computer
+import chest
 
 class Scene(object):
     def __init__(self, roomNum, sceneMap, entities):
         self.sceneMap = sceneMap
+        self.roomNum = roomNum
         self.entities = entities
         self.player = entities.sprites()[0]
         self.player.scene = self
+        self.state = "active"
 
-        self.roomNum = roomNum
-        
         # build the room
+    
+    def initStates(self):
+        stateDict = {
+            "active":self.update(),
+            "chest":self.paused(),
+            "popup":self.paused(),
+            "challenge":self.paused()
+        }
 
+    def chestInteraction(obj, chestContents, chestType):
+        if obj.type == 'chest' and pygame.get_key_pressed()[pygame.K_e]:
+            chest.Chest(chestContents, 1, chestType)
     def render(self, screen):
         key = pygame.key.get_pressed()
         for layer in self.sceneMap.visible_layers:
@@ -41,7 +54,7 @@ class Scene(object):
                             self.player.canMoveLeft = False
                             # print ("name: {} \ntype: {}".format(obj.name, obj.type))
                             if obj.type == 'chest' and pygame.key.get_pressed()[pygame.K_e]:
-                                print("{} opened".format(obj.name))
+                                
                             if obj.type == 'new room':
                                 print("You have entered the {}".format(obj.name))
                             break
@@ -86,9 +99,19 @@ class Scene(object):
         for entity in self.entities:
             entity.draw(screen)
 
+    def toggleState(self):
+        if self.state == "active":
+            self.state = "paused"
+        elif self.state == "paused":
+            self.state 
+
+    def pause(self):
+
+
     def update(self, currentTime, events):
         keys = pygame.key.get_pressed()
         self.player.update(keys, currentTime)
+        self.player.scene = self
         
 
     # def exit(self):

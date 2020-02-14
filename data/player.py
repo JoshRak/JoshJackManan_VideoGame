@@ -4,6 +4,7 @@ from pytmx.util_pygame import load_pygame
 from time import sleep
 from pygame.locals import *
 import menu
+import items
 
 # restingDownImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingDown.png").convert_alpha(), (32,32))
 # restingUpImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingUp.png").convert_alpha(), (32,32))
@@ -21,8 +22,9 @@ import menu
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, posesList):
         super(Player, self).__init__()
-        self.inventory = menu(Player)
-        self.equipped = {'CPU':'None', 'DO FOR ALL PARTS'}
+        self.inventory = menu.Menu(Player)
+        self.keysCollection = []
+        self.equipped = None
         self.x = x
         self.y = y
         self.posesDict = self.initPoses(posesList)
@@ -85,6 +87,20 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.posesDict["restingRightImage"]
             else:
                 self.image = self.posesDict["restingDownImage"]
+
+    def equipPart(self, part):
+        currentPart = getattr(self.equipped, lower(str(type(part))))
+        if currentPart == None:
+            setattr(self.equipped, lower(str(type(part))), part)
+        else:
+            if len(self.inventory.inventory == 9):
+                print("Unable to add this item")
+            else:
+                self.inventory.add_item(getattr(self.equipped, lower(str(type(part)))))
+                setattr(self.equipped, lower(str(type(part))), part)
+
+    def equipComputer(self, computer):
+        self.equipped = computer
 
     def draw(self, surface):
         surface.blit(self.image, (self.x, self.y))
