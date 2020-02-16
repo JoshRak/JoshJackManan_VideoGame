@@ -18,6 +18,7 @@ class Scene(object):
         self.states = self.initStates()
         self.state = "active"
         self.chests = {}
+        self.currentChest = None
         self.objects = self.initObjects()
 
         # build the room
@@ -33,29 +34,17 @@ class Scene(object):
             "CPC1" : chest.Chest(mouseTier1, 1, 'TOOL', obj.x, obj.y),
             "KC1" : chest.Chest(mouseTier1, 1, 'TOOL', obj.x, obj.y),
         }
-        
         return chestsDict[obj.name]
 
     def initStates(self):
         statesDict = {
-            "active":self.default,
-            "chest":self.chestOpened,
-            "popup":self.popup,
-            "challenge":self.challengeActive
+            "active":self.defaultState,
+            "chest":self.chestOpenedState,
+            "popup":self.popupState,
+            "challenge":self.challengeActiveState
         }
         return statesDict
 
-    # def initChest(self, obj):
-    #     chestsDict = {
-    #         "CPC1" : chest.Chest(mouseTier1, 1, 'TOOL'),
-    #         "KC1" : chest.Chest(mouseTier1, 1, 'TOOL'),
-    #     }
-    #     return chestsDict[obj.name]
-    #     # for obj in layer:
-    #     #     if obj.name == 'CPC1':
-    #     #         chest1 = chest.Chest(mouseTier1, 1, 'TOOL', obj.x, obj.y)
-    #     #     elif obj.name == 'CPC2':
-                
     def render(self, screen):
         key = pygame.key.get_pressed()
         for layer in self.sceneMap.visible_layers:
@@ -68,6 +57,7 @@ class Scene(object):
                 for obj in layer:
                     if obj.type == 'chest':
                         self.chests[obj.name] = self.initChest(obj)
+                        self.chests[obj.name].scene = self
             elif isinstance(layer, pytmx.TiledImageLayer):
                 image = pygame.get_tile_image_by_gid(gid)
                 if image:
@@ -81,57 +71,50 @@ class Scene(object):
     #     elif self.state == "paused":
     #         self.state 
 
-    def chestOpened(self, screen, obj, currentTime):
-        self.chests[obj.name].open(screen, currentTime)
+    def checkChests(self, screen, obj, event, currentTime):
+        print("checking chests")
+        chest = self.objects['chests'][obj.name]
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_e and not chest.alreadyAccessed:
+            self.state = "chest"
+            self.currentChest = chest
+            print("open chest")
+            return True
+
+    def chestOpenedState(self, screen, currentTime, events):
+        print("chest opened")
+        self.player.isAccessingChest = True
+        pygame.draw.rect(screen,(0,0,0),[0, 0, 460, 490])
+        self.currentChest.open(screen)
+        while self.player.isAccessingChest:
+            # print("in loop")
+            self.currentChest.update(screen)
+            pygame.display.update()
+            events = pygame.event.get()
+            if any(event.type == pygame.KEYDOWN and event.key == pygame.K_e for event in events):
+                break
+            # print (selections)
+            for event in events:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_e: 
+                    self.player.isAccessingChest = False
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                    self.currentChest.selectPrev()
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                    self.currentChest.selectNext()
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                    self.currentChest.selected(screen)
+                    self.state = "active"
+                print(self.currentChest.selection)
         # block player movement
         # self.chest.render()
-    
-    def chestClose(self, screen, obj, currentTime):
-        pass
 
-    def chestUpdate(self, screen, obj, currentTime, events):
-        pass
-
-    def popup(self, screen, currentTime, events):
+    def popupState(self, screen, currentTime, events):
         pass
     
-    def challengeActive(self, screen, currentTime, events):
+    def challengeActiveState(self, screen, currentTime, events):
         pass
 
-    def pause(self, screen):
-        self.manager.pauseScene(screen)
-
-    def update(self, screen, currentTime, events):
-        if self.state != "active":
-            self.pause(screen)
-        self.states[self.state](screen, currentTime, events)
-    def checkChests(self, screen, obj, event, currentTime):
-        selections = itertools.cycle(["LEAVE", 'EQUIP', 'STORE'])
-        selection = next(selections)
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_e and not self.objects['chests'][obj.name].alreadyAccessed:
-            self.player.isAccessingChest = True
-            pygame.draw.rect(screen,(0,0,0),[0, 0, 460, 490])
-            self.chestOpened(screen, obj, currentTime)
-            while self.player.isAccessingChest:
-                # print("in loop")
-                pygame.display.update()
-                events = pygame.event.get()
-                if any(event.type == pygame.KEYDOWN and event.key == pygame.K_e for event in events):
-                    break
-                # print (selections)
-                for event in events:
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_e: 
-                        self.player.isAccessingChest = False
-                    elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                        selection = next(selections)
-                        selection = next(selections)
-                    elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                        selection = next(selections)
-                    elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                        self.objects["chests"][obj.name].selected(screen, self.player, selection)
-                    print(selection)
-
-    def default(self, screen, currentTime, events):
+    def defaultState(self, screen, currentTime, events):
+        print("default")
         key = pygame.key.get_pressed()
         for layer in self.sceneMap.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
@@ -148,7 +131,8 @@ class Scene(object):
                         events = pygame.event.get()
                         for event in events:
                             if obj.type == 'chest':
-                                self.checkChests(screen, obj, event, currentTime)
+                                if self.checkChests(screen, obj, event, currentTime):
+                                    break
                             if obj.type == 'new room':
                                 print("You have entered the {}".format(obj.name)) 
                         break 
@@ -158,7 +142,8 @@ class Scene(object):
                         events = pygame.event.get()
                         for event in events:
                             if obj.type == 'chest':
-                                self.checkChests(screen, obj, event, currentTime)
+                                if self.checkChests(screen, obj, event, currentTime):
+                                    break
                             if obj.type == 'new room':
                                 print("You have entered the {}".format(obj.name))
                         break
@@ -173,7 +158,8 @@ class Scene(object):
                         events = pygame.event.get()
                         for event in events:
                             if obj.type == 'chest':
-                                self.checkChests(screen, obj, event, currentTime)
+                                if self.checkChests(screen, obj, event, currentTime):
+                                    break
                             if obj.type == 'new room':
                                 print("You have entered the {}".format(obj.name)) 
                         break
@@ -183,7 +169,8 @@ class Scene(object):
                         events = pygame.event.get()
                         for event in events:
                             if obj.type == 'chest':
-                                self.checkChests(screen, obj, event, currentTime)
+                                if self.checkChests(screen, obj, event, currentTime):
+                                    break
                             if obj.type == 'new room':
                                 print("You have entered the {}".format(obj.name))
                         break
@@ -205,20 +192,13 @@ class Scene(object):
         self.player.update(screen, keys, currentTime)
         self.player.scene = self
 
-    
-  
-    # def chestInteraction(obj, chestContents, chestType):
-    #     if obj.type == 'chest' and pygame.get_key_pressed()[pygame.K_e]:
-    #         chest.Chest(chestContents, 1, chestType)
+    def update(self, screen, currentTime, events):
+        if self.state != "active":
+            self.pause(screen)
+        self.states[self.state](screen, currentTime, events)
 
-    # def exit(self):
-    #     if self.roomNum+1 in rooms:
-    #         self.manager.go_to(GameScene(self.roomNum+1))
-    #     else:
-    #         self.manager.go_to(CustomScene("You win!"))
-
-    # def die(self):
-    #     self.manager.go_to(CustomScene("You lose!"))
+    def pause(self, screen):
+        self.manager.pauseScene(screen)
 
     def handle_events(self, events):
         for event in events:

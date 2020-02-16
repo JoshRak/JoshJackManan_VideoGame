@@ -52,7 +52,7 @@ class Player(pygame.sprite.Sprite):
         dist = 7
         key = keys
         if any(key) and key.index(1) != 300 and not self.isAccessingChest:
-            print("here")
+            # print("here")
             if (key[pygame.K_UP] or key[pygame.K_w]) and self.canMoveUp:
                 self.y -= dist
                 # self.velocityY = dist
