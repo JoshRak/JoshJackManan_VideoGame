@@ -3,8 +3,8 @@ import pytmx
 from pytmx.util_pygame import load_pygame
 from time import sleep
 from pygame.locals import *
-import menu
-import items
+import data.menu as menu
+import data.items as items
 
 # restingDownImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingDown.png").convert_alpha(), (32,32))
 # restingUpImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingUp.png").convert_alpha(), (32,32))
@@ -24,7 +24,7 @@ class Player(pygame.sprite.Sprite):
         super(Player, self).__init__()
         self.inventory = menu.Menu(Player)
         self.keysCollection = []
-        self.equipped = None
+        self.equipped = items.computerTier0
         self.x = x
         self.y = y
         self.posesDict = self.initPoses(posesList)
@@ -35,7 +35,8 @@ class Player(pygame.sprite.Sprite):
         self.canMoveRight = True
         self.canMoveLeft = True
         self.lastPressedButtons = ""
-        self.inventory = []
+        # self.inventory = []
+        self.isAccessingChest = False
         # self.velocityX = 0
         # self.velocityY = 0
 
@@ -47,10 +48,11 @@ class Player(pygame.sprite.Sprite):
                     "walkingRight1Image", "walkingRight2Image"]
         return dict(zip(poseNames, posesList))
 
-    def update(self, keys, currentTime):
+    def update(self, screen, keys, currentTime):
         dist = 7
         key = keys
-        if any(key) and key.index(1) != 300:
+        if any(key) and key.index(1) != 300 and not self.isAccessingChest:
+            print("here")
             if (key[pygame.K_UP] or key[pygame.K_w]) and self.canMoveUp:
                 self.y -= dist
                 # self.velocityY = dist
@@ -76,7 +78,9 @@ class Player(pygame.sprite.Sprite):
             # else:
                 # self.velocityX = 0
             self.movedLeft = not self.movedLeft
-            if (key[pygame.K_Q] and not self.inventory.currentlyDisplayed)
+            if (key[pygame.K_q] and not self.inventory.currentlyDisplayed):
+                print (self.inventory)
+                print(self.equipped)
         else:
             # self.velocityX = self.velocityY = 0
             if self.lastPressedButtons == "LEFT":
@@ -87,17 +91,21 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.posesDict["restingRightImage"]
             else:
                 self.image = self.posesDict["restingDownImage"]
+        # screen.blit(self.image, (self.x, self.y))
+        sleep(0.04)
 
     def equipPart(self, part):
-        currentPart = getattr(self.equipped, lower(str(type(part))))
+        currentPart = getattr(self.equipped, str(type(part))[19:-2].lower())
         if currentPart == None:
-            setattr(self.equipped, lower(str(type(part))), part)
+            setattr(self.equipped, str(type(part))[19:-2].lower(), part)
+            print (self.equipped.mouse)
         else:
-            if len(self.inventory.inventory == 9):
-                print("Unable to add this item")
+            if len(self.inventory.inventory) == 9:
+                raise ValueError("Could not equip or add to inventory!")
             else:
-                self.inventory.add_item(getattr(self.equipped, lower(str(type(part)))))
-                setattr(self.equipped, lower(str(type(part))), part)
+                self.inventory.add_item(getattr(self.equipped, str(type(part))[19:-2].lower()), 1)
+                setattr(self.equipped, str(type(part))[19:-3].lower(), part)
+                raise ValueError("You already have a part equipped!")
 
     def equipComputer(self, computer):
         self.equipped = computer

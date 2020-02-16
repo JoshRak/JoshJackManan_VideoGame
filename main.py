@@ -1,5 +1,5 @@
 import pygame
-import pytmx 
+import pytmx
 from pytmx.util_pygame import load_pygame
 from time import sleep
 from pygame.locals import *
@@ -121,7 +121,7 @@ def initPlayer():
 #                gameExit = True
 
 def main():
-    screen_width, screen_height = 920, 490
+    screen_width, screen_height = 448, 480
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
     currentTime = 0
@@ -130,16 +130,20 @@ def main():
     scene1 = scene.Scene(1, gameMap, spriteGroup)
     manager = sceneManager.SceneManager([scene1, scene1])
     gameExit = False
+    newRoom = True
     while not gameExit:
+        if newRoom:
+            manager.draw(screen)
+            newRoom = False
+
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 gameExit = True
             if event.type == pygame.KEYDOWN and event.key == pygame.K_g:
+                newRoom = True
                 manager.nextScene()
-
-        manager.draw(screen)
-        manager.update(currentTime, events)
+        manager.update(screen, currentTime, events)
 
         pygame.display.flip()
         currentTime = clock.tick(30)
