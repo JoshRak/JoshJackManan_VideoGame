@@ -6,6 +6,7 @@ from pygame.locals import *
 import data.menu as menu
 import data.items as items
 import itertools
+import copy
 
 # restingDownImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingDown.png").convert_alpha(), (32,32))
 # restingUpImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingUp.png").convert_alpha(), (32,32))
@@ -100,6 +101,7 @@ class Player(pygame.sprite.Sprite):
                                 elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
                                     self.inventory.select_prev()
                                 elif event.key == pygame.K_RETURN:
+                                    print (self.inventory.currentItem)
                                     if isinstance(self.inventory.currentItem, items.Computer):
                                         if self.equipped:
                                             if self.equipped.tier < self.inventory.currentItem.tier:
@@ -107,22 +109,29 @@ class Player(pygame.sprite.Sprite):
                                                     if not a.startswith('__'):
                                                         if getattr(self.inventory.currentItem, a) is None and getattr(self.equipped, a) is not None:
                                                             setattr(self.inventory.currentItem, a, getattr(self.equipped, a))
+                                                x = self.equipped
                                                 self.inventory.drop_item(self.inventory.currentItem, 1)
                                                 self.inventory.add_item(self.equipped, 1)
                                                 self.equipped = self.inventory.currentItem
                                                 self.inventory.select_next()
                                         else:
+                                            x = copy.deepcopy(self.equipped)
                                             self.inventory.drop_item(self.inventory.currentItem, 1)
+                                            self.inventory.add_item(self.equipped, 1)
                                             self.equipped = self.inventory.currentItem
                                             self.inventory.select_next()
+                                            # self.inventory.update(screen)
                                             # self.inventory.add_item(getattr(self.equipped, str(type(self.inventory.currentItem))[19:-2].lower()), 1)
                                     else:
                                         if self.equipped and self.equipped.tier >= self.inventory.currentItem.tier:
                                     # if hasattr(self.equipped, str(type(self.inventory.currentItem))[19:-2]):
                                             self.inventory.drop_item(self.inventory.currentItem, 1)
-                                            self.inventory.select_next()
                                             self.inventory.add_item(getattr(self.equipped, str(type(self.inventory.currentItem))[19:-2].lower()), 1)
                                             setattr(self.equipped, str(type(self.inventory.currentItem))[19:-2].lower(), self.inventory.currentItem)
+                                            self.inventory.select_next()
+                                elif event.key == pygame.K_f:
+                                    self.inventory.drop_item(self.inventory.currentItem, 1)
+                                    self.inventory.select_next()
                         self.inventory.update(screen)
                         # self.inventory.select_item(select)
                         pygame.display.update()

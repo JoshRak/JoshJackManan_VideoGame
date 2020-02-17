@@ -39,6 +39,7 @@ class Scene(object):
     def initStates(self):
         statesDict = {
             "active":self.defaultState,
+            "transitioning":self.transitionState,
             "chest":self.chestOpenedState,
             "popup":self.popupState,
             "challenge":self.challengeActiveState
@@ -113,6 +114,9 @@ class Scene(object):
     def challengeActiveState(self, screen, currentTime, events):
         pass
 
+    def transitionState(self, screen, currentTime, events):
+        pass
+
     def defaultState(self, screen, currentTime, events):
         print("default")
         key = pygame.key.get_pressed()
@@ -134,7 +138,10 @@ class Scene(object):
                                 if self.checkChests(screen, obj, event, currentTime):
                                     break
                             if obj.type == 'new room':
-                                print("You have entered the {}".format(obj.name)) 
+                                print("You have entered the {}".format(obj.name))
+                                # self.manager.nextScene()
+                                self.state = "transitioning"
+                                break
                         break 
                 else:
                     for obj in layer:
@@ -148,6 +155,8 @@ class Scene(object):
                                         break
                                 if obj.type == 'new room':
                                     print("You have entered the {}".format(obj.name))
+                                    self.manager.nextScene()
+                                    break
                             break
                     else:
                         self.player.canMoveLeft = True

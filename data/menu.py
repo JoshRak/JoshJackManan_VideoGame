@@ -28,6 +28,12 @@ class Menu(object):
     #     if self.inventory:
     #         itertools.cycle(self.inventory)
 
+    def refreshSelections(self):
+        if self.inventory:
+            self.selections = itertools.cycle(self.inventory)
+        else:
+            self.selections = None
+
     def add_item(self, item, itemAmount):
         if len(self.inventory) == 5:
             raise ValueError("You are holding too many items!")
@@ -38,6 +44,7 @@ class Menu(object):
             # if itemQuantity < itemAmount:
             #     print("You tried to add {} items but can only add {}".format(itemAmount, itemQuantity))
         self.inventory.append(item)
+        self.refreshSelections()
             # self.inventory[item.name] = self.inventory[item.name] + itemQuantity if self.contains(item) else itemQuantity
 
     def drop_item(self, item, itemAmount):
@@ -49,6 +56,7 @@ class Menu(object):
             #     del self.inventory[item.name]
             # else:
             self.inventory.remove(item)
+            
         else:
             print("This item was not found")
 
@@ -56,11 +64,17 @@ class Menu(object):
         return item is not None and item in self.inventory
 
     def select_next(self):
-        self.currentItem = next(self.selections)
+        if self.selections:
+            self.currentItem = next(self.selections)
+        else:
+            self.currentItem = None
     
     def select_prev(self):
-        for i in range(1, len(self.inventory)):
-            self.currentItem = next(self.selections)
+        if self.selections:
+            for i in range(1, len(self.inventory)):
+                self.currentItem = next(self.selections)
+        else:
+            self.currentItem = None
 
     def add_border(self, img, outputPath):
         outputImg = ImageOps.expand(img, border=10, fill="#0000ff").resize(img.size, Image.ANTIALIAS)
