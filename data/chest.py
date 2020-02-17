@@ -1,4 +1,5 @@
 import pygame
+from PIL import Image, ImageOps
 import itertools
 # from interactiveObject import InteractiveObject
 class Chest():
@@ -6,6 +7,7 @@ class Chest():
         self.contents = contents
         self.alreadyAccessed = False
         self.contentAmount = contentAmount
+        self.starsImg = self.displayTier(self.contents.tier)
         self.type = chestType
         self.x = x
         self.y = y
@@ -28,10 +30,29 @@ class Chest():
         }
         return states
 
+    def displayTier(self, tier, gapWidth = 20):
+        starImg = Image.open("./Assets/Images/star.jpg")
+        scale = 0.1
+        # starImg.show()
+        img = Image.new('RGBA', ((starImg.size[0] * tier) + (gapWidth * (tier+1)), starImg.size[1] + (gapWidth * 2)), (127,0,127,0))
+        for i in range(0, tier):
+            img.paste(starImg, ((i * starImg.size[0]) + ((i + 1) * gapWidth), gapWidth), mask=starImg)
+        
+        img = img.resize((round(img.size[0] * scale), round(img.size[1] * scale)))
+        
+        path = "./Assets/Images/tier{}Stars.png".format(tier)
+        img.save(path)
+        return pygame.image.load(path).convert_alpha()
+
     def open(self, screen):
+        chestW, chestH = self.chestImage.get_rect().size
+        starsW, starsH = self.starsImg.get_rect().size
+
         screen.blit(self.chestImage, (32,32))
         print(self.contents)
         screen.blit(pygame.transform.scale(pygame.image.load(self.contents.imagePath), (140, 155)), (155, 120))
+        screen.blit(self.starsImg, (round((chestW / 2) - (starsW / 2)), round((0.7 * chestH) - (starsH / 2))))
+        
         # if self.type == 'KEY':
         #     sceneManager.drawImage(self.toolChestImage, (0,0))
         # else:
@@ -69,11 +90,36 @@ class Chest():
                     print(Er)
                     self.alreadyAccessed = False
                     player.isAccessingChest = True
-        else:
-            player.keysCollection.append(self.contents)
+        if self.type == 'COMP':
+            if self.selection == 'LEAVE':
+                self.alreadyAccessed = False
+                player.isAccessingChest = False
+            elif self.selection == 'EQUIP':
+                try:
+                    player.isAccessingChest = False
+                    self.alreadyAccessed = True
+                    player.equip(self.contents)
+                except ValueError as Er:
+                    print(Er)
+                    if 'or add' in str(Er):
+                        self.alreadyAccessed = False
+                        player.isAccessingChest = True
+            else:
+                try:
+                    player.inventory.add_item(self.contents, 1)
+                    self.alreadyAccessed = True
+                    player.isAccessingChest = False
+                except ValueError as Er:
+                    print(Er)
+                    self.alreadyAccessed = False
+                    player.isAccessingChest = True
     
     def update(self, screen):
         self.chestImage = self.states[self.selection]
+        chestW, chestH = self.chestImage.get_rect().size
+        starsW, starsH = self.starsImg.get_rect().size
+
         screen.blit(self.chestImage, (32,32))
-        # print(self.contents)
+        print(self.contents)
         screen.blit(pygame.transform.scale(pygame.image.load(self.contents.imagePath), (140, 155)), (155, 120))
+        screen.blit(self.starsImg, (round((chestW / 2) - (starsW / 2)), round((0.7 * chestH) - (starsH / 2))))

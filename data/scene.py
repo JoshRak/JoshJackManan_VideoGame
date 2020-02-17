@@ -31,8 +31,8 @@ class Scene(object):
 
     def initChest(self, obj):
         chestsDict = {
-            "CPC1" : chest.Chest(mouseTier1, 1, 'TOOL', obj.x, obj.y),
-            "KC1" : chest.Chest(mouseTier1, 1, 'TOOL', obj.x, obj.y),
+            "CPC1" : chest.Chest(computerTier4, 1, 'COMP', obj.x, obj.y),
+            "KC1" : chest.Chest(mouseTier5, 1, 'TOOL', obj.x, obj.y),
         }
         return chestsDict[obj.name]
 
@@ -96,9 +96,9 @@ class Scene(object):
             for event in events:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_e: 
                     self.player.isAccessingChest = False
-                elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                elif event.type == pygame.KEYDOWN and (event.key == pygame.K_LEFT or event.key == pygame.K_a):
                     self.currentChest.selectPrev()
-                elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                elif event.type == pygame.KEYDOWN and (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
                     self.currentChest.selectNext()
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                     self.currentChest.selected(screen)
@@ -136,20 +136,22 @@ class Scene(object):
                             if obj.type == 'new room':
                                 print("You have entered the {}".format(obj.name)) 
                         break 
-                    elif self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
-                        # print("hit right")
-                        self.player.canMoveLeft = False
-                        events = pygame.event.get()
-                        for event in events:
-                            if obj.type == 'chest':
-                                if self.checkChests(screen, obj, event, currentTime):
-                                    break
-                            if obj.type == 'new room':
-                                print("You have entered the {}".format(obj.name))
-                        break
                 else:
-                    self.player.canMoveLeft = True
-                    self.player.canMoveRight = True
+                    for obj in layer:
+                        if self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
+                            # print("hit right")
+                            self.player.canMoveLeft = False
+                            events = pygame.event.get()
+                            for event in events:
+                                if obj.type == 'chest':
+                                    if self.checkChests(screen, obj, event, currentTime):
+                                        break
+                                if obj.type == 'new room':
+                                    print("You have entered the {}".format(obj.name))
+                            break
+                    else:
+                        self.player.canMoveLeft = True
+                        self.player.canMoveRight = True
                         
                 for obj in layer:
                     if self.player.y < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
@@ -163,20 +165,22 @@ class Scene(object):
                             if obj.type == 'new room':
                                 print("You have entered the {}".format(obj.name)) 
                         break
-                    elif self.player.y + 42 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
-                        self.player.canMoveDown = False
-                        # print("hit up")
-                        events = pygame.event.get()
-                        for event in events:
-                            if obj.type == 'chest':
-                                if self.checkChests(screen, obj, event, currentTime):
-                                    break
-                            if obj.type == 'new room':
-                                print("You have entered the {}".format(obj.name))
-                        break
                 else:
-                    self.player.canMoveUp = True
-                    self.player.canMoveDown = True
+                    for obj in layer:
+                        if self.player.y + 42 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
+                            self.player.canMoveDown = False
+                            # print("hit up")
+                            events = pygame.event.get()
+                            for event in events:
+                                if obj.type == 'chest':
+                                    if self.checkChests(screen, obj, event, currentTime):
+                                        break
+                                if obj.type == 'new room':
+                                    print("You have entered the {}".format(obj.name))
+                            break
+                    else:
+                        self.player.canMoveUp = True
+                        self.player.canMoveDown = True
             # elif isinstance(layer, pytmx.TiledImageLayer):
             #     image = pygame.get_tile_image_by_gid(gid)
             #     if image:
@@ -189,8 +193,8 @@ class Scene(object):
         self.player.scene = self
         for entity in self.entities:
             entity.draw(screen)
-        self.player.update(screen, keys, currentTime)
-        self.player.scene = self
+        # self.player.update(screen, keys, currentTime)
+        # self.player.scene = self
 
     def update(self, screen, currentTime, events):
         if self.state != "active":

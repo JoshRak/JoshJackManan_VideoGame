@@ -22,9 +22,9 @@ import data.items as items
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, posesList):
         super(Player, self).__init__()
-        self.inventory = menu.Menu(Player)
+        self.inventory = menu.Menu(self)
         self.keysCollection = []
-        self.equipped = items.computerTier0
+        self.equipped = None 
         self.x = x
         self.y = y
         self.posesDict = self.initPoses(posesList)
@@ -78,9 +78,11 @@ class Player(pygame.sprite.Sprite):
             # else:
                 # self.velocityX = 0
             self.movedLeft = not self.movedLeft
-            if (key[pygame.K_q] and not self.inventory.currentlyDisplayed):
-                print (self.inventory)
-                print(self.equipped)
+            if (key[pygame.K_q]):
+                print(self.inventory)
+                self.inventory.render(screen)
+                pygame.display.update()
+                sleep(5)
         else:
             # self.velocityX = self.velocityY = 0
             if self.lastPressedButtons == "LEFT":
@@ -92,23 +94,34 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.image = self.posesDict["restingDownImage"]
         # screen.blit(self.image, (self.x, self.y))
-        sleep(0.04)
+        sleep(0.08)
 
     def equipPart(self, part):
-        currentPart = getattr(self.equipped, str(type(part))[19:-2].lower())
-        if currentPart == None:
-            setattr(self.equipped, str(type(part))[19:-2].lower(), part)
-            print (self.equipped.mouse)
+        if self.equipped:
+            currentPart = getattr(self.equipped, str(type(part))[19:-2].lower())
+            if currentPart == None:
+                setattr(self.equipped, str(type(part))[19:-2].lower(), part)
+                print (self.equipped.mouse)
+            else:
+                if len(self.inventory.inventory) == 5:
+                    raise ValueError("Could not equip or add to inventory!")
+                else:
+                    self.inventory.add_item(getattr(self.equipped, str(type(part))[19:-2].lower()), 1)
+                    setattr(self.equipped, str(type(part))[19:-3].lower(), part)
+                    raise ValueError("You already have a part equipped!")
         else:
-            if len(self.inventory.inventory) == 9:
+            self.menu.add_item(part)
+
+    def equip(self, computer):
+        if self.equipped:
+            if len(self.inventory.inventory == 5):
+                self.inventory.inventory.add_item(computer)
                 raise ValueError("Could not equip or add to inventory!")
             else:
-                self.inventory.add_item(getattr(self.equipped, str(type(part))[19:-2].lower()), 1)
-                setattr(self.equipped, str(type(part))[19:-3].lower(), part)
-                raise ValueError("You already have a part equipped!")
-
-    def equipComputer(self, computer):
-        self.equipped = computer
+                raise ValueError("Could not equip!")
+        else:
+            self.equipped = computer
+        print(self.equipped)
 
     def draw(self, surface):
         surface.blit(self.image, (self.x, self.y))

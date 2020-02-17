@@ -49,14 +49,14 @@ class Computer:
     name : str
     mouse : Mouse
     keyboard : Keyboard
-    CPU : CPU
-    RAM : int
+    cpu : CPU
+    ram : int
     storage : int
-    GPU : GPU
-    coolingSystem : CoolingSystem
+    gpu : GPU
+    coolingsystem : CoolingSystem
     
-    maxRAM : int
-    maxStorage : int
+    maxram : int
+    maxstorage : int
     display : str
     tier : int
     notes : str
@@ -98,32 +98,32 @@ coolingSystemTier4 = CoolingSystem(name="Polar Tech Dry Ice Transport Cooler", t
 coolingSystemTier5 = CoolingSystem(name="Cooler Master Silver Edition", tier = 5, notes="Comes with LEDs", imagePath = "./Assets/Images/Sprites/Cooling_Systems/coolermaster_sprite.png")
 
 computerTier0 = Computer(name = 'Potato', mouse = None, keyboard = None,
-                    CPU = None, RAM = 0, storage = 0,
-                    GPU = None, coolingSystem = None,
-                    maxRAM = 0, maxStorage = 0, display = None, tier = 0, notes = "", imagePath = "./Assets/Images/Sprites/Computers/potato_sprite.png")
+                    cpu = None, ram = 0, storage = 0,
+                    gpu = None, coolingsystem = None,
+                    maxram = 0, maxstorage = 0, display = None, tier = 0, notes = "", imagePath = "./Assets/Images/Sprites/Computers/potato_sprite.png")
 
 computerTier1 = Computer(name = 'Vintage IBM Thinkpad R52', mouse = None, keyboard = None,
-                    CPU = CPU(name = 'Intel Pentium M 740', tier = 0, notes = "", imagePath = ""), RAM = .512, storage = 40,
-                    GPU = GPU(name = 'Intel GMA 900', tier = 0, notes = "", imagePath = ""), coolingSystem = None,
-                    maxRAM = 0, maxStorage = 0, display = "720 x 480", tier = 1, notes = "", imagePath = "./Assets/Images/Sprites/Computers/ibm_sprite.png")
+                    cpu = CPU(name = 'Intel Pentium M 740', tier = 0, notes = "", imagePath = ""), ram = .512, storage = 40,
+                    gpu = GPU(name = 'Intel GMA 900', tier = 0, notes = "", imagePath = ""), coolingsystem = None,
+                    maxram = 0, maxstorage = 0, display = "720 x 480", tier = 1, notes = "", imagePath = "./Assets/Images/Sprites/Computers/ibm_sprite.png")
 
 computerTier2 = Computer(name = 'Dell Latitude E6400', mouse = None, keyboard = None,
-                    CPU = CPUTier2_2, RAM = 2, storage = 320,
-                    GPU = None, coolingSystem = None,
-                    maxRAM = 4, maxStorage = 512, display = "1280 x 800", tier = 2, notes = "", imagePath = "./Assets/Images/Sprites/Computers/latitude_sprite.png")
+                    cpu = CPUTier2_2, ram = 2, storage = 320,
+                    gpu = None, coolingsystem = None,
+                    maxram = 4, maxstorage = 512, display = "1280 x 800", tier = 2, notes = "", imagePath = "./Assets/Images/Sprites/Computers/latitude_sprite.png")
 
 computerTier3 = Computer(name = 'Lenovo Flex', mouse = None, keyboard = None,
-                    CPU = CPUTier3_1, RAM = 8, storage = 512,
-                    GPU = GPU(name = "Nvidia GeForce MX230", tier = 2, notes = "", imagePath = ""),
-                    coolingSystem = CoolingSystem(name = "Internal Fans", tier = 2, notes = "", imagePath = ""),
-                    maxRAM = 16, maxStorage = 1536, display = "1920 x 1080", tier = 3, notes = "", imagePath = "./Assets/Images/Sprites/Computers/lenovo_sprite.png")
+                    cpu = CPUTier3_1, ram = 8, storage = 512,
+                    gpu = GPU(name = "Nvidia GeForce MX230", tier = 2, notes = "", imagePath = ""),
+                    coolingsystem = CoolingSystem(name = "Internal Fans", tier = 2, notes = "", imagePath = ""),
+                    maxram = 16, maxstorage = 1536, display = "1920 x 1080", tier = 3, notes = "", imagePath = "./Assets/Images/Sprites/Computers/lenovo_sprite.png")
                     
-computerTier4 = Computer(name = 'Acer Predator Helios 300', mouse = None, keyboard = None, CPU = CPUTier4_1, RAM = 16, storage = 256, 
-                    GPU = GPU(name="NVIDIA GeForce GTX 1060", tier=3, notes="", imagePath=""), 
-                    coolingSystem = CoolingSystem(name="Internal Fans", tier=3, notes="", imagePath=""),
-                    maxRAM = 64, maxStorage = 1024, display = "1920 x 1080", tier = 4, notes = "", imagePath = "./Assets/Images/Sprites/Computers/predator_sprite.png")
+computerTier4 = Computer(name = 'Acer Predator Helios 300', mouse = None, keyboard = None, cpu = CPUTier4_1, ram = 16, storage = 256, 
+                    gpu = GPU(name="NVIDIA GeForce GTX 1060", tier=3, notes="", imagePath=""), 
+                    coolingsystem = CoolingSystem(name="Internal Fans", tier=3, notes="", imagePath=""),
+                    maxram = 64, maxstorage = 1024, display = "1920 x 1080", tier = 4, notes = "", imagePath = "./Assets/Images/Sprites/Computers/predator_sprite.png")
                     
 computerTier5 = Computer(name = 'ROG Mothership GZ700 Gaming Laptop', mouse = Mouse(name="Glaudius II Gaming Mouse", dpi = 16000, tier = 4, notes="", imagePath=""), 
-                    keyboard = None, CPU = CPUTier5_2, RAM = 64, storage = 1536, GPU = GPU(name="NVIDIA GeForce RTX 2080", tier=4, notes="", imagePath=""), 
-                    coolingSystem = CoolingSystem(name="Internal Fans", tier=3, notes="", imagePath=""),
-                    maxRAM = 256, maxStorage = 4096, display = "1920 x 1080", tier = 5, notes = "", imagePath = "./Assets/Images/Sprites/Computers/")
+                    keyboard = None, cpu = CPUTier5_2, ram = 64, storage = 1536, gpu = GPU(name="NVIDIA GeForce RTX 2080", tier=4, notes="", imagePath=""), 
+                    coolingsystem = CoolingSystem(name="Internal Fans", tier=3, notes="", imagePath=""),
+                    maxram = 256, maxstorage = 4096, display = "1920 x 1080", tier = 5, notes = "", imagePath = "./Assets/Images/Sprites/Computers/")
