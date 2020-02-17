@@ -4,6 +4,8 @@ from time import sleep
 
 class SceneManager(object):
     def __init__(self, scenes):
+        for scene in scenes:
+            scene.manager = self
         self.scenes = cycle(scenes)
         self.scene = next(self.scenes)
         self.scene.manager = self
@@ -26,15 +28,17 @@ class SceneManager(object):
         self.scene.render(screen)
         
     def update(self, screen, currentTime, events):
+        fadeIncrement = 50
         self.scene.update(screen, currentTime, events)
 
         if self.fading == 'OUT':
-            self.alpha += 10
+            self.alpha += fadeIncrement
             if self.alpha >= 255:
                 self.fading = 'IN'
                 self.scene = next(self.scenes)
+                self.draw(screen)
         else:
-            self.alpha -= 10
+            self.alpha -= fadeIncrement
             if self.alpha <= 0:
                 self.fading = None
         

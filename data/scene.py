@@ -47,6 +47,7 @@ class Scene(object):
         return statesDict
 
     def render(self, screen):
+        self.state = "active"
         key = pygame.key.get_pressed()
         for layer in self.sceneMap.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
@@ -115,10 +116,12 @@ class Scene(object):
         pass
 
     def transitionState(self, screen, currentTime, events):
+        self.manager.nextScene()
+        # self.state = "active"
         pass
 
     def defaultState(self, screen, currentTime, events):
-        print("default")
+        # print("default")
         key = pygame.key.get_pressed()
         for layer in self.sceneMap.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
@@ -130,7 +133,7 @@ class Scene(object):
             elif isinstance(layer, pytmx.TiledObjectGroup):
                 for obj in layer:
                     if self.player.x + 32 > obj.x and self.player.x < obj.x and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height:
-                        # print("hit left")
+                        # print("hit on left, player's right")
                         self.player.canMoveRight = False
                         events = pygame.event.get()
                         for event in events:
@@ -141,12 +144,13 @@ class Scene(object):
                                 print("You have entered the {}".format(obj.name))
                                 # self.manager.nextScene()
                                 self.state = "transitioning"
+                                self.player.selectStartPos("left", (None, self.player.y))
                                 break
                         break 
                 else:
                     for obj in layer:
                         if self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
-                            # print("hit right")
+                            # print("hit on right, player's left")
                             self.player.canMoveLeft = False
                             events = pygame.event.get()
                             for event in events:
@@ -155,7 +159,9 @@ class Scene(object):
                                         break
                                 if obj.type == 'new room':
                                     print("You have entered the {}".format(obj.name))
-                                    self.manager.nextScene()
+                                    # self.manager.nextScene()
+                                    self.state = "transitioning"
+                                    self.player.selectStartPos("right")
                                     break
                             break
                     else:
@@ -164,7 +170,7 @@ class Scene(object):
                         
                 for obj in layer:
                     if self.player.y < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
-                        # print("hit down")
+                        # print("hit on bottom, player's top")
                         self.player.canMoveUp = False
                         events = pygame.event.get()
                         for event in events:
@@ -172,20 +178,26 @@ class Scene(object):
                                 if self.checkChests(screen, obj, event, currentTime):
                                     break
                             if obj.type == 'new room':
-                                print("You have entered the {}".format(obj.name)) 
+                                # self.manager.nextScene()
+                                self.state = "transitioning"
+                                self.player.selectStartPos("bottom")
+                                break
                         break
                 else:
                     for obj in layer:
                         if self.player.y + 42 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
                             self.player.canMoveDown = False
-                            # print("hit up")
+                            # print("hit on top, player's bottom")
                             events = pygame.event.get()
                             for event in events:
                                 if obj.type == 'chest':
                                     if self.checkChests(screen, obj, event, currentTime):
                                         break
                                 if obj.type == 'new room':
-                                    print("You have entered the {}".format(obj.name))
+                                    # self.manager.nextScene()
+                                    self.state = "transitioning"
+                                    self.player.selectStartPos("top")
+                                    break
                             break
                     else:
                         self.player.canMoveUp = True
@@ -199,6 +211,7 @@ class Scene(object):
 
         keys = pygame.key.get_pressed()
         self.player.update(screen, keys, currentTime)
+        print("an updating")
         self.player.scene = self
         for entity in self.entities:
             entity.draw(screen)
@@ -206,8 +219,8 @@ class Scene(object):
         # self.player.scene = self
 
     def update(self, screen, currentTime, events):
-        if self.state != "active":
-            self.pause(screen)
+        # if self.state != "active":
+        #     self.pause(screen)
         self.states[self.state](screen, currentTime, events)
 
     def pause(self, screen):

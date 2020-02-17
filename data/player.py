@@ -30,6 +30,7 @@ class Player(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.posesDict = self.initPoses(posesList)
+        self.positions = self.initPositions()
         self.image = self.posesDict["restingDownImage"]
         self.movedLeft = False
         self.canMoveUp = True
@@ -42,6 +43,18 @@ class Player(pygame.sprite.Sprite):
         # self.velocityX = 0
         # self.velocityY = 0
 
+    def initPositions(self):
+        widthOffset = 80
+        heightOffset = 40
+
+        positionsDict = {
+            "top" : (224, heightOffset),
+            "bottom" : (224, 480 - heightOffset),
+            "right" : (448 - widthOffset, 240),
+            "left" : (widthOffset, 240)
+        }
+        return positionsDict
+
     def initPoses(self, posesList):
         poseNames = ["restingDownImage", "restingUpImage", "restingLeftImage", "restingRightImage",
                     "walkingDown1Image", "walkingDown2Image",
@@ -49,6 +62,17 @@ class Player(pygame.sprite.Sprite):
                     "walkingLeft1Image", "walkingLeft2Image",
                     "walkingRight1Image", "walkingRight2Image"]
         return dict(zip(poseNames, posesList))
+
+    def selectStartPos(self, pos, coords=None):
+        if coords:
+            if coords[0]:
+                self.x = coords[0]
+                self.y = self.positions[pos][1]
+            elif coords[1]:
+                self.x = self.positions[pos][0]
+                self.y = coords[1]
+            return
+        self.x, self.y = self.positions[pos]
 
     def update(self, screen, keys, currentTime):
         dist = 7
@@ -157,7 +181,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.image = self.posesDict["restingDownImage"]
         # screen.blit(self.image, (self.x, self.y))
-        sleep(0.08)
+        sleep(0.01)
 
     def equipPart(self, part):
         if self.equipped and not self.equipped.tier < part.tier:
@@ -186,5 +210,8 @@ class Player(pygame.sprite.Sprite):
             self.equipped = computer
         print(self.equipped)
 
-    def draw(self, surface):
-        surface.blit(self.image, (self.x, self.y))
+    def draw(self, surface, x=None, y=None):
+        if x is None and y is None:
+            x = self.x
+            y = self.y
+        surface.blit(self.image, (x, y))
