@@ -31,8 +31,8 @@ class Scene(object):
 
     def initChest(self, obj):
         chestsDict = {
-            "CPC1" : chest.Chest(computerTier4, 1, 'COMP', obj.x, obj.y),
-            "KC1" : chest.Chest(mouseTier5, 1, 'TOOL', obj.x, obj.y),
+            "CPC1" : chest.Chest(computerTier2, 1, 'COMP', obj.x, obj.y),
+            "KC1" : chest.Chest(keyboardTier1, 1, 'TOOL', obj.x, obj.y),
         }
         return chestsDict[obj.name]
 

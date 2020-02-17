@@ -31,7 +31,7 @@ class Chest():
         return states
 
     def displayTier(self, tier, gapWidth = 20):
-        starImg = Image.open("./Assets/Images/star.jpg")
+        starImg = Image.open("./Assets/Images/transparentStar.png")
         scale = 0.1
         # starImg.show()
         img = Image.new('RGBA', ((starImg.size[0] * tier) + (gapWidth * (tier+1)), starImg.size[1] + (gapWidth * 2)), (127,0,127,0))
@@ -51,8 +51,10 @@ class Chest():
         screen.blit(self.chestImage, (32,32))
         print(self.contents)
         screen.blit(pygame.transform.scale(pygame.image.load(self.contents.imagePath), (140, 155)), (155, 120))
-        screen.blit(self.starsImg, (round((chestW / 2) - (starsW / 2)), round((0.7 * chestH) - (starsH / 2))))
+        screen.blit(self.starsImg, (round((chestW - starsW) / 2) + 32, round((0.7 * chestH) - (starsH / 2)) + 32))
         
+        #(round((chestW - starsW) / 2) + 999999, round((0.7 * chestH) - (starsH / 2)) + 32)
+
         # if self.type == 'KEY':
         #     sceneManager.drawImage(self.toolChestImage, (0,0))
         # else:
@@ -98,7 +100,7 @@ class Chest():
                 try:
                     player.isAccessingChest = False
                     self.alreadyAccessed = True
-                    player.equip(self.contents)
+                    player.equipComp(self.contents)
                 except ValueError as Er:
                     print(Er)
                     if 'or add' in str(Er):
@@ -122,4 +124,4 @@ class Chest():
         screen.blit(self.chestImage, (32,32))
         print(self.contents)
         screen.blit(pygame.transform.scale(pygame.image.load(self.contents.imagePath), (140, 155)), (155, 120))
-        screen.blit(self.starsImg, (round((chestW / 2) - (starsW / 2)), round((0.7 * chestH) - (starsH / 2))))
+        screen.blit(self.starsImg, (round((chestW - starsW) / 2) + 32, round((0.7 * chestH) - (starsH / 2)) + 32))

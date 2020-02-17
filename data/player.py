@@ -5,6 +5,7 @@ from time import sleep
 from pygame.locals import *
 import data.menu as menu
 import data.items as items
+import itertools
 
 # restingDownImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingDown.png").convert_alpha(), (32,32))
 # restingUpImage = pygame.transform.scale(pygame.image.load("./Assets/Images/Sprites/Characters/restingUp.png").convert_alpha(), (32,32))
@@ -82,7 +83,60 @@ class Player(pygame.sprite.Sprite):
                 print(self.inventory)
                 self.inventory.render(screen)
                 pygame.display.update()
-                sleep(5)
+                if self.inventory.inventory:
+                    # selected = itertools.cycle(self.inventory.inventory)
+                    # select = next(selected)
+                    sleep(0.02)
+                    val = True
+                    while val:
+                        print("In loop")
+                        events = pygame.event.get()
+                        for event in events:
+                            if event.type == pygame.KEYDOWN:
+                                if event.key == pygame.K_ESCAPE:
+                                    val = False
+                                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                                    self.inventory.select_next()
+                                elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                                    self.inventory.select_prev()
+                                elif event.key == pygame.K_RETURN:
+                                    if isinstance(self.inventory.currentItem, items.Computer):
+                                        if self.equipped:
+                                            if self.equipped.tier < self.inventory.currentItem.tier:
+                                                for a in dir(self.inventory.currentItem):
+                                                    if not a.startswith('__'):
+                                                        if getattr(self.inventory.currentItem, a) is None and getattr(self.equipped, a) is not None:
+                                                            setattr(self.inventory.currentItem, a, getattr(self.equipped, a))
+                                                self.inventory.drop_item(self.inventory.currentItem, 1)
+                                                self.inventory.add_item(self.equipped, 1)
+                                                self.equipped = self.inventory.currentItem
+                                                self.inventory.select_next()
+                                        else:
+                                            self.inventory.drop_item(self.inventory.currentItem, 1)
+                                            self.equipped = self.inventory.currentItem
+                                            self.inventory.select_next()
+                                            # self.inventory.add_item(getattr(self.equipped, str(type(self.inventory.currentItem))[19:-2].lower()), 1)
+                                    else:
+                                        if self.equipped and self.equipped.tier >= self.inventory.currentItem.tier:
+                                    # if hasattr(self.equipped, str(type(self.inventory.currentItem))[19:-2]):
+                                            self.inventory.drop_item(self.inventory.currentItem, 1)
+                                            self.inventory.select_next()
+                                            self.inventory.add_item(getattr(self.equipped, str(type(self.inventory.currentItem))[19:-2].lower()), 1)
+                                            setattr(self.equipped, str(type(self.inventory.currentItem))[19:-2].lower(), self.inventory.currentItem)
+                        self.inventory.update(screen)
+                        # self.inventory.select_item(select)
+                        pygame.display.update()
+                else:
+                    self.inventory.render(screen)
+                    pygame.display.update()
+                    sleep(0.02)
+                    val = True
+                    while val:
+                        events = pygame.event.get()
+                        for event in events:
+                            if event.type == pygame.KEYDOWN:
+                                if event.key == pygame.K_ESCAPE:
+                                    val = False
         else:
             # self.velocityX = self.velocityY = 0
             if self.lastPressedButtons == "LEFT":
@@ -97,7 +151,7 @@ class Player(pygame.sprite.Sprite):
         sleep(0.08)
 
     def equipPart(self, part):
-        if self.equipped:
+        if self.equipped and not self.equipped.tier < part.tier:
             currentPart = getattr(self.equipped, str(type(part))[19:-2].lower())
             if currentPart == None:
                 setattr(self.equipped, str(type(part))[19:-2].lower(), part)
@@ -110,12 +164,12 @@ class Player(pygame.sprite.Sprite):
                     setattr(self.equipped, str(type(part))[19:-3].lower(), part)
                     raise ValueError("You already have a part equipped!")
         else:
-            self.menu.add_item(part)
+            self.inventory.add_item(part, 1)
 
-    def equip(self, computer):
+    def equipComp(self, computer):
         if self.equipped:
             if len(self.inventory.inventory == 5):
-                self.inventory.inventory.add_item(computer)
+                self.inventory.add_item(computer)
                 raise ValueError("Could not equip or add to inventory!")
             else:
                 raise ValueError("Could not equip!")
