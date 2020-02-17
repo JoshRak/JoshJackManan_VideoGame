@@ -46,7 +46,8 @@ def main():
     spriteGroup = pygame.sprite.Group()
     spriteGroup.add(initPlayer())
     scene1 = scene.Scene(1, gameMap, spriteGroup)
-    manager = sceneManager.SceneManager([scene1, scene1])
+    scene2 = scene.Scene(2, gameMap, spriteGroup)
+    manager = sceneManager.SceneManager([scene1, scene2])
     gameExit = False
     newRoom = True
     while not gameExit:
