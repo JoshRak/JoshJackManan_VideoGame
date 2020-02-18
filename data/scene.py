@@ -7,6 +7,8 @@ from pygame.locals import *
 import data.items as items
 import data.chest as chest
 from data.items import *
+from data.dialogBox import DialogBox
+import textboxify
 
 class Scene(object):
     def __init__(self, roomNum, sceneMap, entities):
@@ -45,10 +47,48 @@ class Scene(object):
             "challenge":self.challengeActiveState
         }
         return statesDict
+    
+    def tutorialMovement(self, screen):
+        info_text_1 = textboxify.Text(text="Press WASD to move", size = 30, color=(255, 255, 255), background=(222,184,135))
+        screen.blit(info_text_1.image, (40, 40))
+        pygame.display.update()
+        val = True
+        while val:
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.KEYDOWN:
+                    if event.key in (pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d):
+                        val = False
+    def tutorialInventory(self, screen): 
+        info_text_1 = textboxify.Text(text="Press Q to open inventory and", size = 30, color=(255, 255, 255), background=(222,184,135))
+        info_text_2 = textboxify.Text(text="escape to exit", size = 30, color=(255, 255, 255), background=(222,184,135))
+        screen.blit(info_text_1.image, (40, 40))
+        screen.blit(info_text_2.image, (40, 70))
+        pygame.display.update()
+        val = True
+        while val:
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        val = False
+    def tutorialInteraction(self,screen):
+        info_text_1 = textboxify.Text(text="Press E to interact with objects", size = 29, color=(255, 255, 255), background=(222,184,135))
+        screen.blit(info_text_1.image, (40, 40))
+        pygame.display.update()
+        val = True
+        while val:
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_e:
+                        val = False
 
     def render(self, screen):
         self.state = "active"
         key = pygame.key.get_pressed()
+        # dialog_group = pygame.sprite.LayeredDirty()
+        # dialog_group.clear(screen, pygame.Surface(screen.get_size()))
         for layer in self.sceneMap.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid in layer:
@@ -66,6 +106,12 @@ class Scene(object):
                     screen.blit(image, (0,0))
         for entity in self.entities:
             entity.draw(screen)
+        if self.roomNum == 1:
+            self.tutorialMovement(screen)
+            self.tutorialInteraction(screen)
+            self.tutorialInventory(screen)
+        # dialogBox = DialogBox("Press WASD to move", (0,0,0), 25, (222,184,135))
+        # dialogBox.render((100,100), screen)
 
     # def toggleState(self):
     #     if self.state == "active":
