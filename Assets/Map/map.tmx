@@ -51,13 +51,13 @@
   <image source="Tilesets/tresure.png" width="192" height="192"/>
  </tileset>
  <tileset firstgid="6823" name="map2" tilewidth="32" tileheight="32" tilecount="49" columns="7">
-  <image source="../../../../Downloads/TilesetGrass/TilesetGrass/map2.png" width="240" height="240"/>
+  <image source="Tilesets/map2.png" width="240" height="240"/>
  </tileset>
  <tileset firstgid="6872" name="overworld_tileset_grass" tilewidth="32" tileheight="32" tilecount="60" columns="6">
-  <image source="../../../../Downloads/TilesetGrass/TilesetGrass/overworld_tileset_grass.png" width="192" height="336"/>
+  <image source="Tilesets/overworld_tileset_grass.png" width="192" height="336"/>
  </tileset>
  <tileset firstgid="6932" name="samplemap" tilewidth="32" tileheight="32" tilecount="3600" columns="60">
-  <image source="../../../../Downloads/Pipoya RPG Tileset 32x32/Pipoya RPG Tileset 32x32/SampleMap/samplemap.png" width="1920" height="1920"/>
+  <image source="Tilesets/samplemap.png" width="1920" height="1920"/>
  </tileset>
  <tileset firstgid="10532" name="classroom" tilewidth="32" tileheight="32" tilecount="272" columns="17">
   <image source="Tilesets/classroom.png" width="544" height="512"/>
@@ -75,13 +75,13 @@
   <image source="Tilesets/farming.png" width="384" height="320"/>
  </tileset>
  <tileset firstgid="730117" name="cow_walk" tilewidth="32" tileheight="32" tilecount="256" columns="16">
-  <image source="../../../../Downloads/cow_walk.png" width="512" height="512"/>
+  <image source="Tilesets/cow_walk.png" width="512" height="512"/>
  </tileset>
  <tileset firstgid="730373" name="pig_walk" tilewidth="32" tileheight="32" tilecount="256" columns="16">
-  <image source="../../../../Downloads/pig_walk.png" width="512" height="512"/>
+  <image source="Tilesets/pig_walk.png" width="512" height="512"/>
  </tileset>
  <tileset firstgid="730629" name="chicken_walk" tilewidth="32" tileheight="32" tilecount="16" columns="4">
-  <image source="../../../../Downloads/chicken_walk.png" width="128" height="128"/>
+  <image source="Tilesets/chicken_walk.png" width="128" height="128"/>
  </tileset>
  <tileset firstgid="730645" name="dragon" tilewidth="32" tileheight="32" tilecount="64" columns="8">
   <image source="Tilesets/dragon.gif" width="256" height="256"/>
