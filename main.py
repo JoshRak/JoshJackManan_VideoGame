@@ -38,16 +38,21 @@ def scaleImgs(imgList):
 def initPlayer():
     return player.Player(250, 250, scaleImgs(poseImgs))
 
+def initRooms():
+    spriteGroup = pygame.sprite.Group()
+    spriteGroup.add(initPlayer())
+
+    scene1 = scene.Scene(1, gameMap, spriteGroup)
+    scene2 = scene.Scene(2, gameMap, spriteGroup)
+    return [scene1, scene2]
+
 def main():
     screen_width, screen_height = 448, 480
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
     currentTime = 0
-    spriteGroup = pygame.sprite.Group()
-    spriteGroup.add(initPlayer())
-    scene1 = scene.Scene(1, gameMap, spriteGroup)
-    scene2 = scene.Scene(2, gameMap, spriteGroup)
-    manager = sceneManager.SceneManager([scene1, scene2])
+    
+    manager = sceneManager.SceneManager(initRooms())
     gameExit = False
     newRoom = True
     while not gameExit:
