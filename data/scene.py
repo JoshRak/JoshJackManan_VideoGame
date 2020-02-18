@@ -18,6 +18,7 @@ class Scene(object):
         self.player = entities.sprites()[0]
         self.player.scene = self
         self.states = self.initStates()
+        self.roomTypes = self.initRooms()
         self.state = "active"
         self.chests = {}
         self.currentChest = None
@@ -48,6 +49,19 @@ class Scene(object):
         }
         return statesDict
     
+    def initRooms(self):
+        rooms = {
+            1:self.roomOne,
+            2:self.roomTwo,
+            3:self.roomThree,
+            4:self.roomFour,
+            5:self.roomFive,
+            6:self.roomSix,
+            7:self.roomSeven,
+            8:self.roomEight
+        }
+        return rooms
+
     def tutorialMovement(self, screen):
         info_text_1 = textboxify.Text(text="Press WASD to move", size = 30, color=(255, 255, 255), background=(222,184,135))
         screen.blit(info_text_1.image, (40, 40))
@@ -113,6 +127,30 @@ class Scene(object):
         # dialogBox = DialogBox("Press WASD to move", (0,0,0), 25, (222,184,135))
         # dialogBox.render((100,100), screen)
 
+    def roomOne(self, screen):
+        pass
+    def roomTwo(self, screen):
+        pass
+    def roomThree(self, screen):
+        while not self.player.roomThreeCompleted:
+            pass
+    def roomFour(self, screen):
+        pass
+    def roomFive(self, screen):
+        pass
+    def roomSix(self, screen):
+        pass
+    def roomSeven(self, screen):
+        pass
+    def roomEight(self, screen):
+        pass
+    def roomNine(self, screen):
+        darkness = pygame.Surface(screen.get_rect().size)
+        darkness.fill((0, 0, 0))
+        darkness.set_alpha(100)
+        while not self.player.roomNineCompleted:
+            screen.blit(darkness, (0,0))
+
     # def toggleState(self):
     #     if self.state == "active":
     #         self.state = "paused"
@@ -159,7 +197,7 @@ class Scene(object):
         pass
     
     def challengeActiveState(self, screen, currentTime, events):
-        pass
+        self.defaultState(screen, currentTime, events)
 
     def transitionState(self, screen, currentTime, events):
         self.manager.nextScene()
@@ -175,11 +213,10 @@ class Scene(object):
                     tile = self.sceneMap.get_tile_image_by_gid(gid)
                     if tile:
                         screen.blit(tile, (x * self.sceneMap.tilewidth, y * self.sceneMap.tileheight))
-
             elif isinstance(layer, pytmx.TiledObjectGroup):
                 for obj in layer:
                     if self.player.x + 32 > obj.x and self.player.x < obj.x and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height:
-                        # print("hit on left, player's right")
+                        print("hit on left, player's right")
                         self.player.canMoveRight = False
                         events = pygame.event.get()
                         for event in events:
@@ -196,7 +233,7 @@ class Scene(object):
                 else:
                     for obj in layer:
                         if self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
-                            # print("hit on right, player's left")
+                            print("hit on right, player's left")
                             self.player.canMoveLeft = False
                             events = pygame.event.get()
                             for event in events:
@@ -211,14 +248,16 @@ class Scene(object):
                                     break
                             break
                     else:
+                        print("RIGHTLEFTTRUE")
                         self.player.canMoveLeft = True
                         self.player.canMoveRight = True
                         
                 for obj in layer:
                     if self.player.y < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
-                        # print("hit on bottom, player's top")
+                        print("hit on bottom, player's top")
                         self.player.canMoveUp = False
                         events = pygame.event.get()
+                        print(events)
                         for event in events:
                             if obj.type == 'chest':
                                 if self.checkChests(screen, obj, event, currentTime):
@@ -228,12 +267,14 @@ class Scene(object):
                                 self.state = "transitioning"
                                 self.player.selectStartPos("bottom")
                                 break
+                        print("broken")
                         break
+                    print("Continuing?")
                 else:
                     for obj in layer:
                         if self.player.y + 42 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
                             self.player.canMoveDown = False
-                            # print("hit on top, player's bottom")
+                            print("hit on top, player's bottom")
                             events = pygame.event.get()
                             for event in events:
                                 if obj.type == 'chest':
@@ -246,6 +287,7 @@ class Scene(object):
                                     break
                             break
                     else:
+                        print("UPDOWNTRUE")
                         self.player.canMoveUp = True
                         self.player.canMoveDown = True
             # elif isinstance(layer, pytmx.TiledImageLayer):
@@ -254,6 +296,12 @@ class Scene(object):
             #         screen.blit(image, (0,0))
 
         # print("out of loop")
+        print(self.player.canMoveUp)
+        print(self.player.canMoveDown)
+        print(self.player.canMoveRight)
+        print(self.player.canMoveLeft)
+        # self.roomTypes[self.roomNum](screen)
+
 
         keys = pygame.key.get_pressed()
         self.player.update(screen, keys, currentTime)

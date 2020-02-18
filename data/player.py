@@ -13,8 +13,16 @@ import os
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, posesList):
         super(Player, self).__init__()
-        self.sudoPerms = False
-        self.xrandrCompleted = False
+        self.roomThreeCompleted = False 
+        self.roomFourCompleted = False
+        self.roomFiveCompleted = False
+        self.roomSixCompleted = True
+        self.roomSevenCompleted = False
+        self.roomEightCompleted = False
+        self.roomNineCompleted = False
+        self.roomTenCompleted = False
+        self.roomElevenCompleted = False
+        self.roomTwelveCompleted = False
         self.inventory = menu.Menu(self)
         self.keysCollection = []
         self.equipped = None 
@@ -136,6 +144,7 @@ class Player(pygame.sprite.Sprite):
         if any(key) and key.index(1) != 300 and not self.isAccessingChest:
             # print("here")
             if (key[pygame.K_UP] or key[pygame.K_w]) and self.canMoveUp:
+                print("Moved y", self.canMoveUp)
                 self.y -= dist
                 # self.velocityY = dist
                 self.image = self.posesDict["walkingUp1Image"] if self.movedLeft else self.posesDict["walkingUp2Image"]

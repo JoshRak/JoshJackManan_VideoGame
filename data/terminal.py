@@ -156,7 +156,10 @@ class Terminal(object):
         elif cmd.startswith('cd '):
             direc = cmd[3:]
             direc = direc.strip()
-            return directory.changePWD(direc)
+            directory.changePWD(direc)
+            if directory.getPWD() == 'FLAG5':
+                self.inventory.roomFiveCompleted = True
+            return directory.getPWD()
         elif cmd.startswith('move '):
             cmd = cmd[5:]
             return directory.move(cmd)
@@ -186,16 +189,30 @@ class Terminal(object):
             return directory.findContent(cmd[1], cmd[0])
         elif cmd.startswith('expr '):
             cmd = cmd[5:]
+            self.player.roomNineCompleted = True
             return ([str(eval(cmd))])
         elif cmd.startswith('sudo'):
             self.player.sudoPerms = True
             return []
         elif cmd.startswith('xrandr '):
             if '-brightness' in cmd:
-                self.player.xrandrCompleted = True
+                self.player.roomSevenCompleted = True
+            return []
+        elif cmd.startswith('FLAG3'):
+            self.player.roomThreeCompleted = True
+            return []
+        elif cmd.startswith('FLAG5'):
+            self.player.roomFiveCompleted = True
+            return []
+        elif cmd.startswith('FLAG6'):
+            self.player.roomSixCompleted = True
+            return []
+        elif cmd.startswith('FLAG12'):
+            self.player.roomTwelveCompleted = True
             return []
         elif cmd.startswith('cowsay '):
             cmd = cmd[7:]
+            self.player.roomEightCompleted = True
             return directory.cowsay(cmd)
         elif cmd.startswith('checkpath '):
             cmd = cmd[10:]

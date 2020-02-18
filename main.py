@@ -15,6 +15,7 @@ pygame.display.set_caption('Hacker Strike: Virus Offensive')
 clock = pygame.time.Clock()
 
 gameMap = load_pygame("./Assets/Map/map.tmx")
+gameMap2 = load_pygame("./Assets/Map/Garbage_Room.tmx")
 
 poseImgs = ["./Assets/Images/Sprites/Characters/restingDown.png",
             "./Assets/Images/Sprites/Characters/restingUp.png",
@@ -43,7 +44,7 @@ def initRooms():
     spriteGroup.add(initPlayer())
 
     scene1 = scene.Scene(1, gameMap, spriteGroup)
-    scene2 = scene.Scene(2, gameMap, spriteGroup)
+    scene2 = scene.Scene(2, gameMap2, spriteGroup)
     return [scene1, scene2]
 
 def main():
