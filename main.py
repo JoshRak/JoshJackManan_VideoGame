@@ -14,8 +14,20 @@ gameScreen = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Hacker Strike: Virus Offensive')
 clock = pygame.time.Clock()
 
-gameMap = load_pygame("./Assets/Map/map.tmx")
-gameMap2 = load_pygame("./Assets/Map/Garbage_Room.tmx")
+gameMaps = [load_pygame("./Assets/Map/Cow_Room.tmx"),
+            load_pygame("./Assets/Map/Cow_Room.tmx"),
+            load_pygame("./Assets/Map/Garbage_Room.tmx"),
+            load_pygame("./Assets/Map/Jail_Room.tmx"),
+            load_pygame("./Assets/Map/Cow_Room.tmx"),
+            load_pygame("./Assets/Map/Cow_Room.tmx"),
+            load_pygame("./Assets/Map/Cat_Room.tmx"),
+            load_pygame("./Assets/Map/Cow_Room.tmx"),
+            load_pygame("./Assets/Map/Brightness_Room.tmx"),
+            load_pygame("./Assets/Map/Cow_Room.tmx"),
+            load_pygame("./Assets/Map/Math_Room.tmx"),
+            load_pygame("./Assets/Map/Zip_Room.tmx")]
+
+# 1 2 garbage jail cd, cd, cat_room, reversecat, brightness, cow, math, zip
 
 poseImgs = ["./Assets/Images/Sprites/Characters/restingDown.png",
             "./Assets/Images/Sprites/Characters/restingUp.png",
@@ -42,10 +54,14 @@ def initPlayer():
 def initRooms():
     spriteGroup = pygame.sprite.Group()
     spriteGroup.add(initPlayer())
+    # 1, 2, 5, 6, 8
 
-    scene1 = scene.Scene(1, gameMap, spriteGroup)
-    scene2 = scene.Scene(2, gameMap2, spriteGroup)
-    return [scene1, scene2]
+    lst = []
+
+    for i in range(0, len(gameMaps)):
+        lst.append(scene.Scene(i+1, gameMaps[i], spriteGroup))
+
+    return lst
 
 def main():
     screen_width, screen_height = 448, 480

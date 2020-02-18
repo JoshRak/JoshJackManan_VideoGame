@@ -20,6 +20,7 @@ class Scene(object):
         self.states = self.initStates()
         self.roomTypes = self.initRooms()
         self.state = "active"
+        self.nextRoom = None
         self.chests = {}
         self.currentChest = None
         self.objects = self.initObjects()
@@ -36,6 +37,8 @@ class Scene(object):
         chestsDict = {
             "CPC1" : chest.Chest(computerTier2, 1, 'COMP', obj.x, obj.y),
             "KC1" : chest.Chest(keyboardTier1, 1, 'TOOL', obj.x, obj.y),
+            "Chest1" : chest.Chest(mouseTier2, 2, 'TOOL', obj.x, obj.y),
+            "Chest2" : chest.Chest(GPUTier3, 3, 'TOOL', obj.x, obj.y)
         }
         return chestsDict[obj.name]
 
@@ -58,7 +61,9 @@ class Scene(object):
             5:self.roomFive,
             6:self.roomSix,
             7:self.roomSeven,
-            8:self.roomEight
+            8:self.roomEight,
+            9:self.roomNine,
+            10:self.roomTen
         }
         return rooms
 
@@ -127,29 +132,32 @@ class Scene(object):
         # dialogBox = DialogBox("Press WASD to move", (0,0,0), 25, (222,184,135))
         # dialogBox.render((100,100), screen)
 
-    def roomOne(self, screen):
+    def roomOne(self, screen, currentTime, events):
         pass
-    def roomTwo(self, screen):
+    def roomTwo(self, screen, currentTime, events):
         pass
-    def roomThree(self, screen):
-        while not self.player.roomThreeCompleted:
-            pass
-    def roomFour(self, screen):
+    def roomThree(self, screen, currentTime, events):
+        # while not self.player.roomThreeCompleted:
         pass
-    def roomFive(self, screen):
+    def roomFour(self, screen, currentTime, events):
         pass
-    def roomSix(self, screen):
+    def roomFive(self, screen, currentTime, events):
         pass
-    def roomSeven(self, screen):
+    def roomSix(self, screen, currentTime, events):
         pass
-    def roomEight(self, screen):
+    def roomSeven(self, screen, currentTime, events):
         pass
-    def roomNine(self, screen):
+    def roomEight(self, screen, currentTime, events):
+        pass
+    def roomNine(self, screen, currentTime, events):
         darkness = pygame.Surface(screen.get_rect().size)
         darkness.fill((0, 0, 0))
-        darkness.set_alpha(100)
         while not self.player.roomNineCompleted:
+            darkness.set_alpha(10)
             screen.blit(darkness, (0,0))
+            self.defaultState(screen, currentTime, events)
+    def roomTen(self, screen, currentTime, events):
+        pass
 
     # def toggleState(self):
     #     if self.state == "active":
@@ -211,11 +219,13 @@ class Scene(object):
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid in layer:
                     tile = self.sceneMap.get_tile_image_by_gid(gid)
-                    if tile:
+                    if tile and not(self.roomNum == 3 and self.player.roomThreeCompleted and layer.name=='Removable Props'):
                         screen.blit(tile, (x * self.sceneMap.tilewidth, y * self.sceneMap.tileheight))
             elif isinstance(layer, pytmx.TiledObjectGroup):
                 for obj in layer:
-                    if self.player.x + 32 > obj.x and self.player.x < obj.x and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height:
+                    if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
+                        pass
+                    elif self.player.x + 32 > obj.x and self.player.x < obj.x and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height:
                         print("hit on left, player's right")
                         self.player.canMoveRight = False
                         events = pygame.event.get()
@@ -228,10 +238,13 @@ class Scene(object):
                                 # self.manager.nextScene()
                                 self.state = "transitioning"
                                 self.player.selectStartPos("left", (None, self.player.y))
+                                self.nextRoom = "right"
                                 break
                         break 
                 else:
                     for obj in layer:
+                        if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
+                            pass
                         if self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
                             print("hit on right, player's left")
                             self.player.canMoveLeft = False
@@ -245,6 +258,7 @@ class Scene(object):
                                     # self.manager.nextScene()
                                     self.state = "transitioning"
                                     self.player.selectStartPos("right")
+                                    self.nextRoom = "left"
                                     break
                             break
                     else:
@@ -253,6 +267,8 @@ class Scene(object):
                         self.player.canMoveRight = True
                         
                 for obj in layer:
+                    if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
+                        pass
                     if self.player.y < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
                         print("hit on bottom, player's top")
                         self.player.canMoveUp = False
@@ -266,12 +282,13 @@ class Scene(object):
                                 # self.manager.nextScene()
                                 self.state = "transitioning"
                                 self.player.selectStartPos("bottom")
+                                self.nextRoom = "top"
                                 break
-                        print("broken")
                         break
-                    print("Continuing?")
                 else:
                     for obj in layer:
+                        if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
+                            pass
                         if self.player.y + 42 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
                             self.player.canMoveDown = False
                             print("hit on top, player's bottom")
@@ -284,6 +301,7 @@ class Scene(object):
                                     # self.manager.nextScene()
                                     self.state = "transitioning"
                                     self.player.selectStartPos("top")
+                                    self.nextRoom = "bottom"
                                     break
                             break
                     else:
@@ -296,11 +314,11 @@ class Scene(object):
             #         screen.blit(image, (0,0))
 
         # print("out of loop")
-        print(self.player.canMoveUp)
-        print(self.player.canMoveDown)
-        print(self.player.canMoveRight)
-        print(self.player.canMoveLeft)
-        # self.roomTypes[self.roomNum](screen)
+        # print(self.player.canMoveUp)
+        # print(self.player.canMoveDown)
+        # print(self.player.canMoveRight)
+        # print(self.player.canMoveLeft)
+        self.roomTypes[self.roomNum](screen, currentTime, events)
 
 
         keys = pygame.key.get_pressed()

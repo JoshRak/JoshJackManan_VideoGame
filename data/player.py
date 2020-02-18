@@ -46,7 +46,7 @@ class Player(pygame.sprite.Sprite):
         heightOffset = 40
 
         positionsDict = {
-            "top" : (224, 120 + heightOffset),
+            "top" : (224, 135 + heightOffset),
             "bottom" : (224, 480 - heightOffset),
             "right" : (448 - widthOffset, 240),
             "left" : (widthOffset, 240)

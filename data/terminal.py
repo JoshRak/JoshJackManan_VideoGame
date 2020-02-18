@@ -263,7 +263,7 @@ class Terminal(object):
                     self.SCREEN = pygame.display.set_mode((self.width,self.height), HWSURFACE|DOUBLEBUF|RESIZABLE)
                 self.fullLine = (self.height - 120) // 20
                 if len(self.contentDisplay) >= self.fullLine:
-                    self.camBot = len(contentDisplay)
+                    self.camBot = len(self.contentDisplay)
                     self.camTop = self.camBot - (self.fullLine - 1)
                 else:
                     self.camBot = len(self.contentDisplay)
