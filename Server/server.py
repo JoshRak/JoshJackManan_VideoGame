@@ -5,7 +5,7 @@ import time
 import struct
 
 
-HOST = '192.168.43.227'  # Standard loopback interface address (localhost)
+HOST = '192.168.86.25'  # Standard loopback interface address (localhost)
 PORT = 65432        # Port to listen on (non-privileged ports are > 1023)
 
 while True:
