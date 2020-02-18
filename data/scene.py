@@ -245,7 +245,7 @@ class Scene(object):
                     for obj in layer:
                         if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
                             pass
-                        if self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
+                        elif self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
                             print("hit on right, player's left")
                             self.player.canMoveLeft = False
                             events = pygame.event.get()
@@ -269,7 +269,7 @@ class Scene(object):
                 for obj in layer:
                     if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
                         pass
-                    if self.player.y < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
+                    elif self.player.y < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
                         print("hit on bottom, player's top")
                         self.player.canMoveUp = False
                         events = pygame.event.get()
@@ -289,7 +289,7 @@ class Scene(object):
                     for obj in layer:
                         if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
                             pass
-                        if self.player.y + 42 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
+                        elif self.player.y + 42 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
                             self.player.canMoveDown = False
                             print("hit on top, player's bottom")
                             events = pygame.event.get()
@@ -318,7 +318,7 @@ class Scene(object):
         # print(self.player.canMoveDown)
         # print(self.player.canMoveRight)
         # print(self.player.canMoveLeft)
-        self.roomTypes[self.roomNum](screen, currentTime, events)
+        # self.roomTypes[self.roomNum](screen, currentTime, events)
 
 
         keys = pygame.key.get_pressed()
