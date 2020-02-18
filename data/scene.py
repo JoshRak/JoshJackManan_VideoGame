@@ -63,7 +63,9 @@ class Scene(object):
             7:self.roomSeven,
             8:self.roomEight,
             9:self.roomNine,
-            10:self.roomTen
+            10:self.roomTen,
+            11:self.roomEleven,
+            12:self.roomTwelve
         }
         return rooms
 
@@ -132,31 +134,34 @@ class Scene(object):
         # dialogBox = DialogBox("Press WASD to move", (0,0,0), 25, (222,184,135))
         # dialogBox.render((100,100), screen)
 
-    def roomOne(self, screen, currentTime, events):
+    def roomOne(self, screen):
         pass
-    def roomTwo(self, screen, currentTime, events):
+    def roomTwo(self, screen):
         pass
-    def roomThree(self, screen, currentTime, events):
+    def roomThree(self, screen):
         # while not self.player.roomThreeCompleted:
         pass
-    def roomFour(self, screen, currentTime, events):
+    def roomFour(self, screen):
         pass
-    def roomFive(self, screen, currentTime, events):
+    def roomFive(self, screen):
         pass
-    def roomSix(self, screen, currentTime, events):
+    def roomSix(self, screen):
         pass
-    def roomSeven(self, screen, currentTime, events):
+    def roomSeven(self, screen):
         pass
-    def roomEight(self, screen, currentTime, events):
+    def roomEight(self, screen):
         pass
-    def roomNine(self, screen, currentTime, events):
+    def roomNine(self, screen):
         darkness = pygame.Surface(screen.get_rect().size)
         darkness.fill((0, 0, 0))
-        while not self.player.roomNineCompleted:
-            darkness.set_alpha(10)
-            screen.blit(darkness, (0,0))
-            self.defaultState(screen, currentTime, events)
-    def roomTen(self, screen, currentTime, events):
+        darkness.set_alpha(170)
+        screen.blit(darkness, (0,0))
+            # self.defaultState(screen, currentTime, events)
+    def roomTen(self, screen):
+        pass
+    def roomEleven(self, screen):
+        pass
+    def roomTwelve(self, screen):
         pass
 
     # def toggleState(self):
@@ -318,7 +323,8 @@ class Scene(object):
         # print(self.player.canMoveDown)
         # print(self.player.canMoveRight)
         # print(self.player.canMoveLeft)
-        self.roomTypes[self.roomNum](screen, currentTime, events)
+        if self.player.roomNineCompleted == False:
+            self.roomTypes[self.roomNum](screen)
 
 
         keys = pygame.key.get_pressed()
