@@ -26,7 +26,7 @@ class Scene(object):
         self.objects = self.initObjects()
 
         # build the room
-    
+
     def initObjects(self):
         objectsDict = {
             "chests": self.chests
@@ -51,7 +51,7 @@ class Scene(object):
             "challenge":self.challengeActiveState
         }
         return statesDict
-    
+
     def initRooms(self):
         rooms = {
             1:self.roomOne,
@@ -63,7 +63,9 @@ class Scene(object):
             7:self.roomSeven,
             8:self.roomEight,
             9:self.roomNine,
-            10:self.roomTen
+            10:self.roomTen,
+            11:self.roomEleven,
+            12:self.roomTwelve
         }
         return rooms
 
@@ -78,7 +80,7 @@ class Scene(object):
                 if event.type == pygame.KEYDOWN:
                     if event.key in (pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d):
                         val = False
-    def tutorialInventory(self, screen): 
+    def tutorialInventory(self, screen):
         info_text_1 = textboxify.Text(text="Press Q to open inventory and", size = 30, color=(255, 255, 255), background=(222,184,135))
         info_text_2 = textboxify.Text(text="escape to exit", size = 30, color=(255, 255, 255), background=(222,184,135))
         screen.blit(info_text_1.image, (40, 40))
@@ -132,38 +134,41 @@ class Scene(object):
         # dialogBox = DialogBox("Press WASD to move", (0,0,0), 25, (222,184,135))
         # dialogBox.render((100,100), screen)
 
-    def roomOne(self, screen, currentTime, events):
+    def roomOne(self, screen):
         pass
-    def roomTwo(self, screen, currentTime, events):
+    def roomTwo(self, screen):
         pass
-    def roomThree(self, screen, currentTime, events):
+    def roomThree(self, screen):
         # while not self.player.roomThreeCompleted:
         pass
-    def roomFour(self, screen, currentTime, events):
+    def roomFour(self, screen):
         pass
-    def roomFive(self, screen, currentTime, events):
+    def roomFive(self, screen):
         pass
-    def roomSix(self, screen, currentTime, events):
+    def roomSix(self, screen):
         pass
-    def roomSeven(self, screen, currentTime, events):
+    def roomSeven(self, screen):
         pass
-    def roomEight(self, screen, currentTime, events):
+    def roomEight(self, screen):
         pass
-    def roomNine(self, screen, currentTime, events):
+    def roomNine(self, screen):
         darkness = pygame.Surface(screen.get_rect().size)
         darkness.fill((0, 0, 0))
-        while not self.player.roomNineCompleted:
-            darkness.set_alpha(10)
-            screen.blit(darkness, (0,0))
-            self.defaultState(screen, currentTime, events)
-    def roomTen(self, screen, currentTime, events):
+        darkness.set_alpha(170)
+        screen.blit(darkness, (0,0))
+            # self.defaultState(screen, currentTime, events)
+    def roomTen(self, screen):
+        pass
+    def roomEleven(self, screen):
+        pass
+    def roomTwelve(self, screen):
         pass
 
     # def toggleState(self):
     #     if self.state == "active":
     #         self.state = "paused"
     #     elif self.state == "paused":
-    #         self.state 
+    #         self.state
 
     def checkChests(self, screen, obj, event, currentTime):
         print("checking chests")
@@ -188,7 +193,7 @@ class Scene(object):
                 break
             # print (selections)
             for event in events:
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_e: 
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
                     self.player.isAccessingChest = False
                 elif event.type == pygame.KEYDOWN and (event.key == pygame.K_LEFT or event.key == pygame.K_a):
                     self.currentChest.selectPrev()
@@ -203,7 +208,7 @@ class Scene(object):
 
     def popupState(self, screen, currentTime, events):
         pass
-    
+
     def challengeActiveState(self, screen, currentTime, events):
         self.defaultState(screen, currentTime, events)
 
@@ -240,7 +245,7 @@ class Scene(object):
                                 self.player.selectStartPos("left", (None, self.player.y))
                                 self.nextRoom = "right"
                                 break
-                        break 
+                        break
                 else:
                     for obj in layer:
                         if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
@@ -265,7 +270,7 @@ class Scene(object):
                         print("RIGHTLEFTTRUE")
                         self.player.canMoveLeft = True
                         self.player.canMoveRight = True
-                        
+
                 for obj in layer:
                     if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
                         pass
@@ -318,7 +323,8 @@ class Scene(object):
         # print(self.player.canMoveDown)
         # print(self.player.canMoveRight)
         # print(self.player.canMoveLeft)
-        # self.roomTypes[self.roomNum](screen, currentTime, events)
+        if self.player.roomNineCompleted == False:
+            self.roomTypes[self.roomNum](screen)
 
 
         keys = pygame.key.get_pressed()
