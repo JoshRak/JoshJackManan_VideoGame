@@ -26,7 +26,7 @@ class Scene(object):
         self.objects = self.initObjects()
 
         # build the room
-    
+
     def initObjects(self):
         objectsDict = {
             "chests": self.chests
@@ -51,7 +51,7 @@ class Scene(object):
             "challenge":self.challengeActiveState
         }
         return statesDict
-    
+
     def initRooms(self):
         rooms = {
             1:self.roomOne,
@@ -80,7 +80,7 @@ class Scene(object):
                 if event.type == pygame.KEYDOWN:
                     if event.key in (pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d):
                         val = False
-    def tutorialInventory(self, screen): 
+    def tutorialInventory(self, screen):
         info_text_1 = textboxify.Text(text="Press Q to open inventory and", size = 30, color=(255, 255, 255), background=(222,184,135))
         info_text_2 = textboxify.Text(text="escape to exit", size = 30, color=(255, 255, 255), background=(222,184,135))
         screen.blit(info_text_1.image, (40, 40))
@@ -168,7 +168,7 @@ class Scene(object):
     #     if self.state == "active":
     #         self.state = "paused"
     #     elif self.state == "paused":
-    #         self.state 
+    #         self.state
 
     def checkChests(self, screen, obj, event, currentTime):
         print("checking chests")
@@ -193,7 +193,7 @@ class Scene(object):
                 break
             # print (selections)
             for event in events:
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_e: 
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
                     self.player.isAccessingChest = False
                 elif event.type == pygame.KEYDOWN and (event.key == pygame.K_LEFT or event.key == pygame.K_a):
                     self.currentChest.selectPrev()
@@ -208,7 +208,7 @@ class Scene(object):
 
     def popupState(self, screen, currentTime, events):
         pass
-    
+
     def challengeActiveState(self, screen, currentTime, events):
         self.defaultState(screen, currentTime, events)
 
@@ -245,12 +245,12 @@ class Scene(object):
                                 self.player.selectStartPos("left", (None, self.player.y))
                                 self.nextRoom = "right"
                                 break
-                        break 
+                        break
                 else:
                     for obj in layer:
                         if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
                             pass
-                        if self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
+                        elif self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
                             print("hit on right, player's left")
                             self.player.canMoveLeft = False
                             events = pygame.event.get()
@@ -270,11 +270,11 @@ class Scene(object):
                         print("RIGHTLEFTTRUE")
                         self.player.canMoveLeft = True
                         self.player.canMoveRight = True
-                        
+
                 for obj in layer:
                     if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
                         pass
-                    if self.player.y < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
+                    elif self.player.y < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
                         print("hit on bottom, player's top")
                         self.player.canMoveUp = False
                         events = pygame.event.get()
@@ -294,7 +294,7 @@ class Scene(object):
                     for obj in layer:
                         if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
                             pass
-                        if self.player.y + 42 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
+                        elif self.player.y + 42 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
                             self.player.canMoveDown = False
                             print("hit on top, player's bottom")
                             events = pygame.event.get()
