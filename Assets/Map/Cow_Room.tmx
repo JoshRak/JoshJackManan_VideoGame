@@ -1150,7 +1150,7 @@
   <object id="100" name="Left Wall" type="new room" x="12.6667" y="223.333" width="20" height="129.333"/>
   <object id="101" name="Bottom Entrance" type="new room" x="161.333" y="450.667" width="128.667" height="18.6667"/>
   <object id="102" name="Top Wall" x="31.3333" y="96" width="164.667" height="62"/>
-  <object id="103" name="Top Entrance" type="new room" x="194.667" y="95.3333" width="57.3333" height="64.6667"/>
+  <object id="103" name="Locked" type="new room" x="194.667" y="95.3333" width="57.3333" height="64.6667"/>
   <object id="104" name="Top Wall" type="new room" x="253.333" y="98" width="163.333" height="64"/>
   <object id="105" name="Left Wall" x="8.66667" y="154" width="24.6667" height="67.3333"/>
   <object id="106" name="Left Wall" x="12" y="352.667" width="20" height="102.667"/>
