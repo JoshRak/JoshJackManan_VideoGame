@@ -639,8 +639,8 @@
   <object id="111" name="Right_Wall2" x="420" y="351" width="26" height="125"/>
   <object id="112" name="Bottom_Wall2" x="295" y="450" width="118" height="28"/>
   <object id="113" name="Bottom_Entrance" type="new room" x="162" y="450" width="129" height="28"/>
-  <object id="106" name="Chest1" x="191" y="257" width="31" height="31"/>
-  <object id="107" name="Chest2" x="225" y="289" width="31" height="30"/>
+  <object id="106" name="Room3_Chest1" x="191" y="257" width="31" height="31"/>
+  <object id="107" name="Room3_Chest2" x="225" y="289" width="31" height="30"/>
   <object id="114" name="Top_Wall" x="255.5" y="118.5" width="158" height="35"/>
   <object id="115" name="Top Entrance" type="new room" x="194.5" y="120.5" width="60" height="35"/>
  </objectgroup>
