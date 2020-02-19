@@ -228,7 +228,7 @@ class Player(pygame.sprite.Sprite):
                             val = False
                             os.chdir(self.originalDirectory)
                     self.terminal.update(events)
-                    sleep(self.delay()*0.8)
+                    sleep(self.delay()*0.15)
         else:
             # self.velocityX = self.velocityY = 0
             if self.lastPressedButtons == "LEFT":

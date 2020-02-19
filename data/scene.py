@@ -154,7 +154,8 @@ class Scene(object):
         self.tutorialInteraction(screen)
         self.tutorialInventory(screen)
     def roomThree(self, obj, screen):
-        return self.player.roomThreeCompleted and obj.type == 'removable'
+        pass
+        # return self.player.roomThreeCompleted and obj.type == 'removable'
     def roomFour(self, screen):
         pass
     def roomFive(self, screen):
@@ -232,35 +233,35 @@ class Scene(object):
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid in layer:
                     tile = self.sceneMap.get_tile_image_by_gid(gid)
-                    if tile and not(self.roomNum == 3 and self.roomThree(obj, screen)):
+                    if tile and not(self.roomNum == 3 and self.player.roomThreeCompleted):
                         screen.blit(tile, (x * self.sceneMap.tilewidth, y * self.sceneMap.tileheight))
             elif isinstance(layer, pytmx.TiledObjectGroup):
                 for obj in layer:
-                    if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
-                        pass
-                    elif self.player.x + 32 > obj.x and self.player.x < obj.x and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height:
-                        print("hit on left, player's right")
-                        self.player.canMoveRight = False
-                        events = pygame.event.get()
-                        for event in events:
-                            if obj.type == 'chest':
-                                if self.checkChests(screen, obj, event, currentTime):
+                    if not (self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable'):
+                        print ("\n{objName}\n{objX}\n{objY}\n".format(objName=obj.name, objX = obj.x, objY = obj.y))
+                        # print(self.player.roomThreeCompleted)
+                        if self.player.x + 32 > obj.x and self.player.x < obj.x and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height:
+                            print("hit on left, player's right")
+                            self.player.x -= 7
+                            # self.player.canMoveRight = False
+                        elif self.player.x + 42 > obj.x and self.player.x < obj.x and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height:
+                            events = pygame.event.get()
+                            for event in events:
+                                if obj.type == 'chest':
+                                    if self.checkChests(screen, obj, event, currentTime):
+                                        break
+                                if obj.type == 'new room' and not (obj.name == 'Locked' and not self.player.roomFiveCompleted):
+                                    print("You have entered the {}".format(obj.name))
+                                    # self.manager.nextScene()
+                                    self.state = "transitioning"
+                                    self.player.selectStartPos("left", (None, self.player.y))
+                                    self.nextRoom = "right"
                                     break
-                            if obj.type == 'new room' and not (obj.name == 'Locked' and not self.player.roomFiveCompleted):
-                                print("You have entered the {}".format(obj.name))
-                                # self.manager.nextScene()
-                                self.state = "transitioning"
-                                self.player.selectStartPos("left", (None, self.player.y))
-                                self.nextRoom = "right"
-                                break
-                        break
-                else:
-                    for obj in layer:
-                        if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
-                            pass
-                        elif self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
+                        if self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
                             print("hit on right, player's left")
-                            self.player.canMoveLeft = False
+                            self.player.x += 7
+                            # self.player.canMoveLeft = False
+                        elif self.player.x - 10 < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
                             events = pygame.event.get()
                             for event in events:
                                 if obj.type == 'chest':
@@ -273,38 +274,28 @@ class Scene(object):
                                     self.player.selectStartPos("right")
                                     self.nextRoom = "left"
                                     break
-                            break
-                    else:
-                        print("RIGHTLEFTTRUE")
-                        self.player.canMoveLeft = True
-                        self.player.canMoveRight = True
-
-                for obj in layer:
-                    if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
-                        pass
-                    elif self.player.y < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
-                        print("hit on bottom, player's top")
-                        self.player.canMoveUp = False
-                        events = pygame.event.get()
-                        print(events)
-                        for event in events:
-                            if obj.type == 'chest':
-                                if self.checkChests(screen, obj, event, currentTime):
+                        if self.player.y < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
+                            print("hit on bottom, player's top")
+                            self.player.y += 7
+                            # self.player.canMoveUp = False
+                        elif self.player.y - 10 < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
+                            events = pygame.event.get()
+                            print(events)
+                            for event in events:
+                                if obj.type == 'chest':
+                                    if self.checkChests(screen, obj, event, currentTime):
+                                        break
+                                if obj.type == 'new room' and not (obj.name == 'Locked' and not self.player.roomFiveCompleted):
+                                    # self.manager.nextScene()
+                                    self.state = "transitioning"
+                                    self.player.selectStartPos("bottom")
+                                    self.nextRoom = "top"
                                     break
-                            if obj.type == 'new room' and not (obj.name == 'Locked' and not self.player.roomFiveCompleted):
-                                # self.manager.nextScene()
-                                self.state = "transitioning"
-                                self.player.selectStartPos("bottom")
-                                self.nextRoom = "top"
-                                break
-                        break
-                else:
-                    for obj in layer:
-                        if self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable':
-                            pass
-                        elif self.player.y + 42 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
-                            self.player.canMoveDown = False
+                        if self.player.y + 32 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
+                            self.player.y -= 7
+                            # self.player.canMoveDown = False
                             print("hit on top, player's bottom")
+                        elif self.player.y + 42 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
                             events = pygame.event.get()
                             for event in events:
                                 if obj.type == 'chest':
@@ -316,22 +307,7 @@ class Scene(object):
                                     self.player.selectStartPos("top")
                                     self.nextRoom = "bottom"
                                     break
-                            break
-                    else:
-                        print("UPDOWNTRUE")
-                        self.player.canMoveUp = True
-                        self.player.canMoveDown = True
-            # elif isinstance(layer, pytmx.TiledImageLayer):
-            #     image = pygame.get_tile_image_by_gid(gid)
-            #     if image:
-            #         screen.blit(image, (0,0))
-
-        # print("out of loop")
-        # print(self.player.canMoveUp)
-        # print(self.player.canMoveDown)
-        # print(self.player.canMoveRight)
-        # print(self.player.canMoveLeft)
-        if self.player.roomSevenCompleted == False and self.roomNum == 7:
+        if not self.player.roomSevenCompleted and self.roomNum == 7:
             self.roomTypes[self.roomNum](screen)
 
 

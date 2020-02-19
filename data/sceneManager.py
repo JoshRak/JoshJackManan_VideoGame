@@ -42,6 +42,7 @@ class SceneManager(object):
             self.scene = self.scenes[self.scene.xMapIndex][self.scene.yMapIndex - 1]
         elif self.scene.nextRoom == "right":
             self.scene = self.scenes[self.scene.xMapIndex][self.scene.yMapIndex + 1]
+        print (self.scene)
         self.draw(screen)
 
     def pauseScene(self, screen):
