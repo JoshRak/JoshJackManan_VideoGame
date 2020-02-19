@@ -15,6 +15,7 @@ while True:
         conn, addr = s.accept()
         with conn:
             while True:
+                print(addr)
                 data = conn.recv(1024)
 
                 # data = struct.unpack('<d', data)[0]

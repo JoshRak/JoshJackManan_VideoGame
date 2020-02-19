@@ -14,14 +14,14 @@ gameScreen = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Hacker Strike: Virus Offensive')
 clock = pygame.time.Clock()
 
-gameMaps = [load_pygame("./Assets/Map/Cow_Room.tmx"),
-            load_pygame("./Assets/Map/Cow_Room.tmx"),
+gameMaps = [load_pygame("./Assets/Map/Tutorial_Room1.tmx"),
+            load_pygame("./Assets/Map/Tutorial_Room2.tmx"),
             load_pygame("./Assets/Map/Garbage_Room.tmx"),
             load_pygame("./Assets/Map/Jail_Room.tmx"),
-            load_pygame("./Assets/Map/Cow_Room.tmx"),
-            load_pygame("./Assets/Map/Cow_Room.tmx"),
+            load_pygame("./Assets/Map/Island_Room.tmx"),
+            load_pygame("./Assets/Map/House_Room.tmx"),
             load_pygame("./Assets/Map/Cat_Room.tmx"),
-            load_pygame("./Assets/Map/Cow_Room.tmx"),
+            load_pygame("./Assets/Map/Tac_Room.tmx"),
             load_pygame("./Assets/Map/Brightness_Room.tmx"),
             load_pygame("./Assets/Map/Cow_Room.tmx"),
             load_pygame("./Assets/Map/Math_Room.tmx"),

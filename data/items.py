@@ -68,8 +68,8 @@ class Computer:
     imagePath : str
     delay : float
 
-mouseTier1 = Mouse(name = "IBM PS/2 Two Button Combo Classic", dpi = 200, tier = 1, notes="", imagePath="./Assets/Images/Sprites/Mice/ibmmouse_sprite.png", delay = 0.8)
-mouseTier2 = Mouse(name = "Logitech B100 corded mouse", dpi = 800, tier = 2, notes="", imagePath="./Assets/Images/Sprites/Mice/logitech_sprite.png", delay = 0.6)
+mouseTier1 = Mouse(name = "IBM PS/2 Two Button Combo Classic", dpi = 200, tier = 1, notes="", imagePath="./Assets/Images/Sprites/Mice/ibmmouse_sprite.png", delay = 0.24)
+mouseTier2 = Mouse(name = "Logitech B100 corded mouse", dpi = 800, tier = 2, notes="", imagePath="./Assets/Images/Sprites/Mice/logitech_sprite.jpeg", delay = 0.6)
 mouseTier3 = Mouse(name = "Apple magic mouse", dpi = 1300, tier = 3, notes="", imagePath="./Assets/Images/Sprites/Mice/magicMouse_sprite.png" , delay = 0.4)
 mouseTier4 = Mouse(name = "Logitech G502 HERO", dpi = 16000, tier = 1, notes="", imagePath="./Assets/Images/Sprites/Mice/logitechHero_sprite.png", delay = 0.2)
 mouseTier5 = Mouse(name = "Razer Lancehead Tournament Edition", dpi = 16000, tier = 5, notes="", imagePath="./Assets/Images/Sprites/Mice/razer_sprite.png", delay = 0)
@@ -120,7 +120,7 @@ computerTier2 = Computer(name = 'Dell Latitude E6400', mouse = None, keyboard = 
 
 computerTier3 = Computer(name = 'Lenovo Flex', mouse = None, keyboard = None,
                     cpu = CPUTier3_1, ram = 8, storage = 512,
-                    gpu = GPU(name = "Nvidia GeForce MX230", tier = 2, notes = "", imagePath = "./Assets/Images/Sprites/GPUs/nvidiaGeForceMX230.png", delay = 0.9),
+                    gpu = GPU(name = "Nvidia GeForce MX230", tier = 2, notes = "", imagePath = "./Assets/Images/Sprites/GPUs/mx230.jpeg", delay = 0.9),
                     coolingsystem = CoolingSystem(name = "Internal Fans", tier = 2, notes = "", imagePath = "./Assets/Images/Sprites/Cooling_Systems/internalFans.jpeg", delay = 1.1),
                     maxram = 16, maxstorage = 1536, display = "1920 x 1080", tier = 3, notes = "", imagePath = "./Assets/Images/Sprites/Computers/lenovo_sprite.png", delay = 0.5)
                     
