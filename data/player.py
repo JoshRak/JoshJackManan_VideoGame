@@ -35,6 +35,7 @@ class Player(pygame.sprite.Sprite):
         self.y = y
         self.posesDict = self.initPoses(posesList)
         self.positions = self.initPositions()
+        self.challengeStates = self.refreshChallengeStates()
         self.image = self.posesDict["restingDownImage"]
         self.movedLeft = False
         self.canMoveUp = True
@@ -57,6 +58,41 @@ class Player(pygame.sprite.Sprite):
             "left" : (widthOffset, 240)
         }
         return positionsDict
+    
+    def initPoses(self, posesList):
+        poseNames = ["restingDownImage", "restingUpImage", "restingLeftImage", "restingRightImage",
+                    "walkingDown1Image", "walkingDown2Image",
+                    "walkingUp1Image", "walkingUp2Image",
+                    "walkingLeft1Image", "walkingLeft2Image",
+                    "walkingRight1Image", "walkingRight2Image"]
+        return dict(zip(poseNames, posesList))
+
+    def selectStartPos(self, pos, coords=None):
+        if coords:
+            if coords[0]:
+                self.x = coords[0]
+                self.y = self.positions[pos][1]
+            elif coords[1]:
+                self.x = self.positions[pos][0]
+                self.y = coords[1]
+            return
+        self.x, self.y = self.positions[pos]
+
+    def refreshChallengeStates(self):
+        challengeStatesDict = {
+            3:self.roomThreeCompleted,
+            4:self.roomFourCompleted,
+            5:self.roomFiveCompleted,
+            6:self.roomSixCompleted,
+            7:self.roomSevenCompleted,
+            8:self.roomEightCompleted,
+            9:self.roomNineCompleted,
+            10:self.roomTenCompleted,
+            11:self.roomElevenCompleted,
+            12:self.roomTwelveCompleted
+        }
+        return challengeStatesDict
+
     def delay(self):
         delay = 0
         if self.equipped:
@@ -82,24 +118,6 @@ class Player(pygame.sprite.Sprite):
             else:
                 delay += 0.25
         return delay
-    def initPoses(self, posesList):
-        poseNames = ["restingDownImage", "restingUpImage", "restingLeftImage", "restingRightImage",
-                    "walkingDown1Image", "walkingDown2Image",
-                    "walkingUp1Image", "walkingUp2Image",
-                    "walkingLeft1Image", "walkingLeft2Image",
-                    "walkingRight1Image", "walkingRight2Image"]
-        return dict(zip(poseNames, posesList))
-
-    def selectStartPos(self, pos, coords=None):
-        if coords:
-            if coords[0]:
-                self.x = coords[0]
-                self.y = self.positions[pos][1]
-            elif coords[1]:
-                self.x = self.positions[pos][0]
-                self.y = coords[1]
-            return
-        self.x, self.y = self.positions[pos]
 
     def openInventory(self, screen):
         print(self.inventory)

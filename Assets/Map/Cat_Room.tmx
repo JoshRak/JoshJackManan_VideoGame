@@ -1049,7 +1049,7 @@
   <object id="103" name="Right Wall" x="416.667" y="354" width="29.3333" height="100.667"/>
   <object id="104" name="Bottom Wall" x="33.3333" y="450.667" width="382" height="20.6667"/>
   <object id="106" name="Book" type="Dialog" x="225.333" y="288.667" width="31.3333" height="30.6667"/>
-  <object id="107" name="Chest1" type="chest" x="96.6667" y="290" width="32.6667" height="31.3333"/>
+  <object id="107" name="Room8_Chest1" type="chest" x="96.6667" y="290" width="32.6667" height="31.3333"/>
   <object id="108" name="Bookshelf" x="33.3333" y="129.333" width="160" height="60"/>
   <object id="109" name="Bookshelf" x="256.667" y="130" width="163.333" height="60"/>
   <object id="110" name="Top Entrance" type="new room" x="192" y="130.667" width="67.3333" height="58"/>

@@ -1041,7 +1041,7 @@
 </data>
  </layer>
  <objectgroup id="8" name="All Objects">
-  <object id="97" name="Chest1" type="chest" x="129.333" y="353.333" width="32" height="32"/>
+  <object id="97" name="Room7_Chest1" type="chest" x="129.333" y="353.333" width="32" height="32"/>
   <object id="98" name="Table" x="267.333" y="342" width="74" height="26"/>
   <object id="99" name="Light" x="256" y="215.333" width="62.6667" height="71.3333"/>
   <object id="100" name="Light" x="124.667" y="218" width="67.3333" height="70"/>

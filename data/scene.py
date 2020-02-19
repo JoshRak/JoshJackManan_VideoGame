@@ -34,13 +34,22 @@ class Scene(object):
         return objectsDict
 
     def initChest(self, obj):
-        chestsDict = {
-            "CPC1" : chest.Chest(computerTier2, 1, 'COMP', obj.x, obj.y),
-            "KC1" : chest.Chest(keyboardTier1, 1, 'TOOL', obj.x, obj.y),
-            "Chest1" : chest.Chest(mouseTier2, 2, 'TOOL', obj.x, obj.y),
-            "Chest2" : chest.Chest(GPUTier3, 3, 'TOOL', obj.x, obj.y)
-        }
-        return chestsDict[obj.name]
+        # chestsDict = {
+        #     "CPC1" : chest.Chest(computerTier2, 1, 'COMP', obj.x, obj.y),
+        #     "KC1" : chest.Chest(keyboardTier1, 1, 'TOOL', obj.x, obj.y),
+        #     "Chest1" : chest.Chest(mouseTier2, 2, 'TOOL', obj.x, obj.y),
+        #     "Chest2" : chest.Chest(GPUTier3, 3, 'TOOL', obj.x, obj.y)
+        # }
+        # return chestsDict[obj.name]
+        randItem = getRandItem()
+        itemType = ""
+        
+        if getItemClass(randItem) == "computer":
+            itemType = "COMP"
+        else:
+            itemType = "TOOL"
+
+        return chest.Chest(randItem, randItem.tier, itemType, obj.x, obj.y)
 
     def initStates(self):
         statesDict = {
@@ -307,12 +316,14 @@ class Scene(object):
                                     self.player.selectStartPos("top")
                                     self.nextRoom = "bottom"
                                     break
-        if not self.player.roomSevenCompleted and self.roomNum == 7:
-            self.roomTypes[self.roomNum](screen)
+        
+        self.player.challengeStates = self.player.refreshChallengeStates()
+        
+        for challNum in self.player.challengeStates:
+            if self.roomNum == challNum and not challengeStates[challNum]:
+                self.roomTypes[self.roomNum](screen)
 
-
-        keys = pygame.key.get_pressed()
-        self.player.update(screen, keys, currentTime)
+        self.player.update(screen, key, currentTime)
         print("an updating")
         self.player.scene = self
         for entity in self.entities:

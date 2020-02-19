@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 import json
+import random
 
 @dataclass_json
 @dataclass
@@ -100,8 +101,8 @@ GPUTier5 = GPU(name = "NVIDIA Tesla V100", tier = 5, notes = "", imagePath = "./
 
 coolingSystemTier1 = CoolingSystem(name="Minka Aire Retro", tier = 1, notes="", imagePath = "./Assets/Images/Sprites/Cooling_Systems/minka_sprite.png", delay = 0.2)
 coolingSystemTier2 = CoolingSystem(name="Dayton External Cooling Fan Blade", tier = 2, notes="", imagePath = "./Assets/Images/Sprites/Cooling_Systems/dayton_sprite.png", delay = 0.15)
-coolingSystemTier4 = CoolingSystem(name="Polar Tech Dry Ice Transport Cooler", tier = 4, notes="", imagePath = "./Assets/Images/Sprites/Cooling_Systems/dryice_sprite.png", delay = 0.05)
-coolingSystemTier5 = CoolingSystem(name="Cooler Master Silver Edition", tier = 5, notes="Comes with LEDs", imagePath = "./Assets/Images/Sprites/Cooling_Systems/coolermaster_sprite.png", delay = 0)
+coolingSystemTier3 = CoolingSystem(name="Polar Tech Dry Ice Transport Cooler", tier = 4, notes="", imagePath = "./Assets/Images/Sprites/Cooling_Systems/dryice_sprite.png", delay = 0.05)
+coolingSystemTier4 = CoolingSystem(name="Cooler Master Silver Edition", tier = 5, notes="Comes with LEDs", imagePath = "./Assets/Images/Sprites/Cooling_Systems/coolermaster_sprite.png", delay = 0)
 
 computerTier0 = Computer(name = 'Potato', mouse = None, keyboard = None,
                     cpu = None, ram = 0, storage = 0,
@@ -133,3 +134,23 @@ computerTier5 = Computer(name = 'ROG Mothership GZ700 Gaming Laptop', mouse = Mo
                     keyboard = None, cpu = CPUTier5_2, ram = 64, storage = 1536, gpu = GPU(name="NVIDIA GeForce RTX 2080", tier=4, notes="", imagePath="./Assets/Images/Sprites/GPUs/rtx2080.jpeg", delay = 0.05), 
                     coolingsystem = CoolingSystem(name="Internal Fans", tier=3, notes="", imagePath="./Assets/Images/Sprites/Cooling_Systems/internalFans.jpeg", delay = 0),
                     maxram = 256, maxstorage = 4096, display = "1920 x 1080", tier = 5, notes = "", imagePath = "./Assets/Images/Sprites/Computers/", delay = 0)
+                
+allItems = [mouseTier1, mouseTier2, mouseTier3, mouseTier4, mouseTier5, keyboardTier0, keyboardTier1, keyboardTier2, keyboardTier3, keyboardTier4, keyboardTier5,
+            CPUTier1_1, CPUTier1_2, CPUTier2_1, CPUTier2_2, CPUTier3_1, CPUTier3_2, CPUTier4_1, CPUTier4_2, CPUTier5_1, CPUTier5_2,
+            GPUTier1, GPUTier2, GPUTier3, GPUTier4, GPUTier5, coolingSystemTier1, coolingSystemTier2, coolingSystemTier3, coolingSystemTier4,
+            computerTier0, computerTier1, computerTier2, computerTier3, computerTier4, computerTier5]
+
+def getItemClass(item):
+    return str(type(item))[14:-2].lower()
+
+def getRandItem():
+    item = random.choice(allItems)
+    removeItem(item)
+    return item
+
+def getItems():
+    return allItems
+
+def removeItem(item):
+    if item in allItems and item:
+        allItems.remove(item)

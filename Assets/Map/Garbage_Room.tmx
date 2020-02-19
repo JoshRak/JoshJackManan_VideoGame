@@ -637,7 +637,7 @@
   <object id="111" name="Right_Wall2" x="420" y="333" width="26" height="143"/>
   <object id="112" name="Bottom_Wall2" x="295" y="450" width="140" height="28"/>
   <object id="113" name="Locked" type="new room" x="155" y="450" width="147" height="28"/>
-  <object id="106" name="Chest1" x="191" y="257" width="31" height="31"/>
-  <object id="107" name="Chest2" x="225" y="289" width="31" height="30"/>
+  <object id="106" name="Room3_Chest1" type="chest" x="191" y="257" width="31" height="31"/>
+  <object id="107" name="Room3_Chest2" type="chest" x="225" y="289" width="31" height="30"/>
  </objectgroup>
 </map>
