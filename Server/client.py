@@ -11,6 +11,6 @@ while True:
             s.connect((HOST, PORT))
             s.sendall(b"Hello")
             data = s.recv(1024)
-            print('Received', repr(data))
+            print(data)
     except:
         continue

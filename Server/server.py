@@ -19,10 +19,6 @@ while True:
                 data = conn.recv(1024)
 
                 # data = struct.unpack('<d', data)[0]
-                try:
-                    data = struct.unpack('<d', data)[0]
-                except:
-                    break
                 if not data:
                     break
                 conn.sendall(b"Recieved")
