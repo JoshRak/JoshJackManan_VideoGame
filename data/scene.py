@@ -6,7 +6,7 @@ import itertools
 from pygame.locals import *
 import data.items as items
 import data.chest as chest
-from data.items import *
+# from data.items import *
 from data.dialogBox import DialogBox
 import textboxify
 
@@ -47,8 +47,7 @@ class Scene(object):
             "active":self.defaultState,
             "transitioning":self.transitionState,
             "chest":self.chestOpenedState,
-            "popup":self.popupState,
-            "challenge":self.challengeActiveState
+            "popup":self.popupState
         }
         return statesDict
 
@@ -79,6 +78,17 @@ class Scene(object):
             for event in events:
                 if event.type == pygame.KEYDOWN:
                     if event.key in (pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d):
+                        val = False
+    def tutorialTerminal(self, screen):
+        info_text_1 = textboxify.Text(text="Press T to open terminal", size = 30, color=(255, 255, 255), background=(222,184,135))
+        screen.blit(info_text_1.image, (40, 40))
+        pygame.display.update()
+        val = True
+        while val:
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_t:
                         val = False
     def tutorialInventory(self, screen):
         info_text_1 = textboxify.Text(text="Press Q to open inventory and", size = 30, color=(255, 255, 255), background=(222,184,135))
@@ -121,32 +131,38 @@ class Scene(object):
                     if obj.type == 'chest':
                         self.chests[obj.name] = self.initChest(obj)
                         self.chests[obj.name].scene = self
-            elif isinstance(layer, pytmx.TiledImageLayer):
-                image = pygame.get_tile_image_by_gid(gid)
-                if image:
-                    screen.blit(image, (0,0))
+            # elif isinstance(layer, pytmx.TiledImageLayer):
+            #     image = pygame.get_tile_image_by_gid(gid)
+            #     if image:
+            #         screen.blit(image, (0,0))
         for entity in self.entities:
             entity.draw(screen)
         if self.roomNum == 1:
-            self.tutorialMovement(screen)
-            self.tutorialInteraction(screen)
-            self.tutorialInventory(screen)
+            self.roomOne(screen)
+        if self.roomNum == 2:
+            self.roomTwo(screen)
         # dialogBox = DialogBox("Press WASD to move", (0,0,0), 25, (222,184,135))
         # dialogBox.render((100,100), screen)
 
     def roomOne(self, screen):
-        pass
+        self.tutorialMovement(screen)
+        self.tutorialTerminal(screen)
+        self.tutorialInteraction(screen)
+        self.tutorialInventory(screen)
     def roomTwo(self, screen):
-        pass
-    def roomThree(self, screen):
-        # while not self.player.roomThreeCompleted:
-        pass
+        self.tutorialMovement(screen)
+        self.tutorialTerminal(screen)
+        self.tutorialInteraction(screen)
+        self.tutorialInventory(screen)
+    # def roomThree(self, obj, screen):
+    #     # while not self.player.roomThreeCompleted:
+    #     return self.player.roomThreeCompleted and obj.type == 'removable'
     def roomFour(self, screen):
         pass
     def roomFive(self, screen):
         pass
-    def roomSix(self, screen):
-        pass
+    # def roomSix(self, screen):
+    #     pass
     def roomSeven(self, screen):
         pass
     def roomEight(self, screen):
@@ -204,13 +220,7 @@ class Scene(object):
                     self.state = "active"
                 print(self.currentChest.selection)
         # block player movement
-        # self.chest.render()
 
-    def popupState(self, screen, currentTime, events):
-        pass
-
-    def challengeActiveState(self, screen, currentTime, events):
-        self.defaultState(screen, currentTime, events)
 
     def transitionState(self, screen, currentTime, events):
         self.manager.nextScene()
@@ -224,7 +234,7 @@ class Scene(object):
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid in layer:
                     tile = self.sceneMap.get_tile_image_by_gid(gid)
-                    if tile and not(self.roomNum == 3 and self.player.roomThreeCompleted and layer.name=='Removable Props'):
+                    if tile and not(self.roomNum == 3 and self.roomThree()):
                         screen.blit(tile, (x * self.sceneMap.tilewidth, y * self.sceneMap.tileheight))
             elif isinstance(layer, pytmx.TiledObjectGroup):
                 for obj in layer:
@@ -343,9 +353,3 @@ class Scene(object):
 
     def pause(self, screen):
         self.manager.pauseScene(screen)
-
-    def handle_events(self, events):
-        for event in events:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                # self.manager.go_to(TitleScene())
-                pass
