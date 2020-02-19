@@ -52,7 +52,31 @@ class Player(pygame.sprite.Sprite):
             "left" : (widthOffset, 240)
         }
         return positionsDict
-
+    def delay(self):
+        delay = 0
+        if self.equipped:
+            delay += self.equipped.delay
+            if self.equipped.gpu:
+                delay += self.equipped.gpu.delay
+            else:
+                delay += 0.25
+            if self.equipped.cpu:
+                delay += self.equipped.cpu.delay
+            else:
+                delay += 0.25
+            if self.equipped.coolingsystem:
+                delay += self.equipped.coolingsystem.delay
+            else:
+                delay += 0.25
+            if self.equipped.mouse:
+                delay += self.equipped.mouse.delay
+            else:
+                delay += 0.25
+            if self.equipped.keyboard:
+                delay += self.equipped.keyboard.delay
+            else:
+                delay += 0.25
+        return delay
     def initPoses(self, posesList):
         poseNames = ["restingDownImage", "restingUpImage", "restingLeftImage", "restingRightImage",
                     "walkingDown1Image", "walkingDown2Image",
@@ -171,7 +195,7 @@ class Player(pygame.sprite.Sprite):
             self.movedLeft = not self.movedLeft
             if (key[pygame.K_q]):
                 self.openInventory(screen)
-            elif key[pygame.K_t]:
+            elif key[pygame.K_t] and self.equipped:
                 os.chdir(os.getcwd() + "/challenges")
                 print(os.getcwd())
                 val = True
@@ -182,6 +206,7 @@ class Player(pygame.sprite.Sprite):
                             val = False
                             os.chdir(self.originalDirectory)
                     self.terminal.update(events)
+                    sleep(self.delay())
         else:
             # self.velocityX = self.velocityY = 0
             if self.lastPressedButtons == "LEFT":

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="103">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="114">
  <tileset firstgid="1" source="tileset.tsx"/>
  <tileset firstgid="513" source="Test_2.tsx"/>
  <tileset firstgid="1040" name="garbage" tilewidth="32" tileheight="32" tilecount="256" columns="16">
@@ -1047,5 +1047,16 @@
   <object id="100" name="Right Wall" x="416.5" y="354.5" width="32.5" height="93"/>
   <object id="101" name="Bottom Wall" x="33" y="449.5" width="389.5" height="27.5"/>
   <object id="102" name="Left Wall" x="14.5" y="149.5" width="18" height="299"/>
+  <object id="103" name="Desk" x="83.3333" y="220.667" width="61.3333" height="35.3333"/>
+  <object id="104" name="Desk" x="66" y="291.333" width="28.6667" height="17.3333"/>
+  <object id="105" name="Desk" x="129" y="290" width="28.6667" height="17.3333"/>
+  <object id="106" name="Desk" x="192.333" y="291.333" width="28.6667" height="17.3333"/>
+  <object id="107" name="Desk" x="257.667" y="290" width="28.6667" height="17.3333"/>
+  <object id="108" name="Desk" x="319.667" y="290" width="28.6667" height="17.3333"/>
+  <object id="109" name="Desk" x="322.333" y="352.667" width="28.6667" height="17.3333"/>
+  <object id="110" name="Desk" x="257.667" y="353.333" width="28.6667" height="17.3333"/>
+  <object id="111" name="Desk" x="193.667" y="353.333" width="28.6667" height="17.3333"/>
+  <object id="112" name="Desk" x="129.667" y="355.333" width="28.6667" height="17.3333"/>
+  <object id="113" name="Desk" x="66.3333" y="352.667" width="28.6667" height="17.3333"/>
  </objectgroup>
 </map>

@@ -238,7 +238,7 @@ class Scene(object):
                             if obj.type == 'chest':
                                 if self.checkChests(screen, obj, event, currentTime):
                                     break
-                            if obj.type == 'new room':
+                            if obj.type == 'new room' and not (obj.name == 'Locked' and not self.player.roomFiveCompleted):
                                 print("You have entered the {}".format(obj.name))
                                 # self.manager.nextScene()
                                 self.state = "transitioning"
@@ -258,7 +258,7 @@ class Scene(object):
                                 if obj.type == 'chest':
                                     if self.checkChests(screen, obj, event, currentTime):
                                         break
-                                if obj.type == 'new room':
+                                if obj.type == 'new room' and not (obj.name == 'Locked' and not self.player.roomFiveCompleted):
                                     print("You have entered the {}".format(obj.name))
                                     # self.manager.nextScene()
                                     self.state = "transitioning"
@@ -283,7 +283,7 @@ class Scene(object):
                             if obj.type == 'chest':
                                 if self.checkChests(screen, obj, event, currentTime):
                                     break
-                            if obj.type == 'new room':
+                            if obj.type == 'new room' and not (obj.name == 'Locked' and not self.player.roomFiveCompleted):
                                 # self.manager.nextScene()
                                 self.state = "transitioning"
                                 self.player.selectStartPos("bottom")
@@ -302,7 +302,7 @@ class Scene(object):
                                 if obj.type == 'chest':
                                     if self.checkChests(screen, obj, event, currentTime):
                                         break
-                                if obj.type == 'new room':
+                                if obj.type == 'new room' and not (obj.name == 'Locked' and not self.player.roomFiveCompleted):
                                     # self.manager.nextScene()
                                     self.state = "transitioning"
                                     self.player.selectStartPos("top")
