@@ -9,6 +9,10 @@ import itertools
 import data.terminal as terminal
 import copy
 import os
+import socket
+
+HOST = '192.168.1.228'  # The server's hostname or IP address
+PORT = 65433    # The port used by the server
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, posesList):
@@ -25,6 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.roomTwelveCompleted = False
         self.inventory = menu.Menu(self)
         self.keysCollection = []
+        self.keysQueue = []
         self.equipped = None 
         self.x = x
         self.y = y
@@ -161,7 +166,19 @@ class Player(pygame.sprite.Sprite):
                         if event.key == pygame.K_ESCAPE:
                             val = False
 
-
+    def pushServer(self, command):
+        self.keysQueue.append(command)
+        payload = ' '.join(self.keysQueue)
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.connect((HOST, PORT))
+                s.sendall(payload.encode())
+                self.keysQueue = []
+                #data = s.recv(1024)
+        except:
+            print("here")
+            pass
+    
     def update(self, screen, keys, currentTime):
         dist = 7
         key = keys
@@ -173,11 +190,14 @@ class Player(pygame.sprite.Sprite):
                 # self.velocityY = dist
                 self.image = self.posesDict["walkingUp1Image"] if self.movedLeft else self.posesDict["walkingUp2Image"]
                 self.lastPressedButtons = "UP"
+                self.pushServer("up")
             elif (key[pygame.K_DOWN] or key[pygame.K_s]) and self.canMoveDown:
                 self.y += dist
                 # self.velocityY = -dist
                 self.image = self.posesDict["walkingDown1Image"] if self.movedLeft else self.posesDict["walkingDown2Image"]
                 self.lastPressedButtons = "DOWN"
+                #send down to server
+                self.pushServer("down")
             # else:
                 # self.velocityY = 0
             if (key[pygame.K_LEFT] or key[pygame.K_a]) and self.canMoveLeft:
@@ -185,11 +205,13 @@ class Player(pygame.sprite.Sprite):
                 # self.velocityX = -dist
                 self.image = self.posesDict["walkingLeft1Image"] if self.movedLeft else self.posesDict["walkingLeft2Image"]
                 self.lastPressedButtons = "LEFT"
+                self.pushServer("left")
             elif (key[pygame.K_RIGHT] or key[pygame.K_d]) and self.canMoveRight:
                 self.x += dist
                 # self.velocityX = dist
                 self.image = self.posesDict["walkingRight1Image"] if self.movedLeft else self.posesDict["walkingRight2Image"]
                 self.lastPressedButtons = "RIGHT"
+                self.pushServer("right")
             # else:
                 # self.velocityX = 0
             self.movedLeft = not self.movedLeft
@@ -206,7 +228,7 @@ class Player(pygame.sprite.Sprite):
                             val = False
                             os.chdir(self.originalDirectory)
                     self.terminal.update(events)
-                    sleep(self.delay())
+                    sleep(self.delay()*0.8)
         else:
             # self.velocityX = self.velocityY = 0
             if self.lastPressedButtons == "LEFT":

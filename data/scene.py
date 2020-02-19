@@ -4,9 +4,9 @@ from pytmx.util_pygame import load_pygame
 from time import sleep
 import itertools
 from pygame.locals import *
-import data.items as items
+# import data.items as items
 import data.chest as chest
-# from data.items import *
+from data.items import *
 from data.dialogBox import DialogBox
 import textboxify
 
@@ -46,8 +46,7 @@ class Scene(object):
         statesDict = {
             "active":self.defaultState,
             "transitioning":self.transitionState,
-            "chest":self.chestOpenedState,
-            "popup":self.popupState
+            "chest":self.chestOpenedState
         }
         return statesDict
 
@@ -154,24 +153,23 @@ class Scene(object):
         self.tutorialTerminal(screen)
         self.tutorialInteraction(screen)
         self.tutorialInventory(screen)
-    # def roomThree(self, obj, screen):
-    #     # while not self.player.roomThreeCompleted:
-    #     return self.player.roomThreeCompleted and obj.type == 'removable'
+    def roomThree(self, obj, screen):
+        return self.player.roomThreeCompleted and obj.type == 'removable'
     def roomFour(self, screen):
         pass
     def roomFive(self, screen):
         pass
-    # def roomSix(self, screen):
-    #     pass
+    def roomSix(self, screen):
+        pass
     def roomSeven(self, screen):
-        pass
-    def roomEight(self, screen):
-        pass
-    def roomNine(self, screen):
         darkness = pygame.Surface(screen.get_rect().size)
         darkness.fill((0, 0, 0))
         darkness.set_alpha(170)
         screen.blit(darkness, (0,0))
+    def roomEight(self, screen):
+        pass
+    def roomNine(self, screen):
+        pass
             # self.defaultState(screen, currentTime, events)
     def roomTen(self, screen):
         pass
@@ -234,7 +232,7 @@ class Scene(object):
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid in layer:
                     tile = self.sceneMap.get_tile_image_by_gid(gid)
-                    if tile and not(self.roomNum == 3 and self.roomThree()):
+                    if tile and not(self.roomNum == 3 and self.roomThree(obj, screen)):
                         screen.blit(tile, (x * self.sceneMap.tilewidth, y * self.sceneMap.tileheight))
             elif isinstance(layer, pytmx.TiledObjectGroup):
                 for obj in layer:
@@ -333,7 +331,7 @@ class Scene(object):
         # print(self.player.canMoveDown)
         # print(self.player.canMoveRight)
         # print(self.player.canMoveLeft)
-        if self.player.roomNineCompleted == False:
+        if self.player.roomSevenCompleted == False and self.roomNum == 7:
             self.roomTypes[self.roomNum](screen)
 
 

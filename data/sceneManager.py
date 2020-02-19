@@ -23,8 +23,8 @@ class SceneManager(object):
     def initScenes(self, scenes):
         scenesDict = [  [None,          scenes[1],      None,           None],
                         [scenes[0],     scenes[2],      scenes[3],      None],
-                        [None,          scenes[5],      scenes[4],      scenes[8]],
-                        [scenes[10],    scenes[9],      scenes[6],      scenes[7]],
+                        [None,          scenes[5],      scenes[4],      scenes[6]],
+                        [scenes[10],    scenes[9],      scenes[7],      scenes[8]],
                         [None,          scenes[11],     None,           None]]
         return scenesDict
 
