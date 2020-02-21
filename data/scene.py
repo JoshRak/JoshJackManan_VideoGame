@@ -9,14 +9,17 @@ import data.chest as chest
 from data.items import *
 from data.dialogBox import DialogBox
 import textboxify
+import random
 
 class Scene(object):
     def __init__(self, roomNum, sceneMap, entities):
         self.sceneMap = sceneMap
         self.roomNum = roomNum
         self.entities = entities
+        for entity in entities.sprites():
+            entity.scene = self
         self.player = entities.sprites()[0]
-        self.player.scene = self
+        # self.player.scene = self
         self.states = self.initStates()
         self.roomTypes = self.initRooms()
         self.state = "active"
@@ -147,7 +150,9 @@ class Scene(object):
             #     image = pygame.get_tile_image_by_gid(gid)
             #     if image:
             #         screen.blit(image, (0,0))
-        for entity in self.entities:
+        # while True:
+        #     print(str([str(entity) for entity in self.entities]))
+        for entity in self.entities.sprites():
             entity.draw(screen)
         if self.roomNum == 1:
             self.roomOne(screen)
@@ -178,7 +183,7 @@ class Scene(object):
     def roomSeven(self, screen):
         darkness = pygame.Surface(screen.get_rect().size)
         darkness.fill((0, 0, 0))
-        darkness.set_alpha(170)
+        darkness.set_alpha(220)
         screen.blit(darkness, (0,0))
     def roomEight(self, screen):
         pass
@@ -246,18 +251,18 @@ class Scene(object):
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid in layer:
                     tile = self.sceneMap.get_tile_image_by_gid(gid)
-                    if tile and not(self.roomNum == 3 and self.player.roomThreeCompleted and layer.name == 'Removable Props'):
+                    if tile and ((not(self.roomNum == 3 and self.player.roomThreeCompleted and layer.name == 'Removable Props')) and (not(self.roomNum == 4 and self.player.roomFourCompleted and layer.name == 'removable4'))):
                         screen.blit(tile, (x * self.sceneMap.tilewidth, y * self.sceneMap.tileheight))
             elif isinstance(layer, pytmx.TiledObjectGroup):
                 allHit = [False, False, False, False]
                 for obj in layer:
-                    if not (self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable'):
+                    if (not (self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable')) or (not (self.roomNum == 4 and self.player.roomFourCompleted and obj.type == 'removable4')):
                         # print ("\n{objName}\n{objX}\n{objY}\n".format(objName=obj.name, objX = obj.x, objY = obj.y))
                         # print(self.player.roomThreeCompleted)
                         if self.player.x + 32 > obj.x and self.player.x < obj.x and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height:
                             print("hit on left, player's right")
                             allHit[0] = True
-                            self.player.x -= 7
+                            self.player.x -= 5
                             # self.player.canMoveRight = False
                         elif self.player.x + 42 > obj.x and self.player.x < obj.x and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height:
                             events = pygame.event.get()
@@ -281,7 +286,7 @@ class Scene(object):
                         if self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
                             print("hit on right, player's left")
                             allHit[1] = True
-                            self.player.x += 7
+                            self.player.x += 5
                             # self.player.canMoveLeft = False
                         elif self.player.x - 10 < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
                             events = pygame.event.get()
@@ -305,7 +310,7 @@ class Scene(object):
                         if self.player.y < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
                             print("hit on bottom, player's top")
                             allHit[2] = True
-                            self.player.y += 7
+                            self.player.y += 5
                             # self.player.canMoveUp = False
                         elif self.player.y - 10 < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
                             events = pygame.event.get()
@@ -327,7 +332,7 @@ class Scene(object):
                                         self.nextRoom = "top"
                                         break
                         if self.player.y + 32 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
-                            self.player.y -= 7
+                            self.player.y -= 5
                             allHit[3] = True
                             # self.player.canMoveDown = False
                             print("hit on top, player's bottom")
@@ -341,8 +346,8 @@ class Scene(object):
                                     if obj.name == 'Locked' and not self.player.roomFiveCompleted:
                                         info_text_1 = textboxify.Text(text="This door is locked", size = 30, color=(255, 255, 255), background=(222,184,135))
                                         screen.blit(info_text_1.image, (200, 250))
-                                        for entiny in self.entities:
-                                            entiny.draw(screen)
+                                        for entity in self.entities:
+                                            entity.draw(screen)
                                         pygame.display.update()
                                         sleep(0.15)
                                     else:
@@ -360,12 +365,15 @@ class Scene(object):
         for challNum in self.player.challengeStates:
             if self.roomNum == challNum and not self.player.challengeStates[challNum]:
                 self.roomTypes[self.roomNum](screen)
-
-        self.player.update(screen, key, currentTime)
+        
+        # self.player.update(screen, key, currentTime)
         print("an updating")
-        self.player.scene = self
+
         for entity in self.entities:
+            entity.scene = self
             entity.draw(screen)
+            # entity.update(screen, key, currentTime)
+        self.player.update(screen, key, currentTime)
         # self.player.update(screen, keys, currentTime)
         # self.player.scene = self
 

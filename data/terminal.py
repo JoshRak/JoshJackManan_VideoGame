@@ -156,9 +156,10 @@ class Terminal(object):
         elif cmd.startswith('cd '):
             direc = cmd[3:]
             direc = direc.strip()
+            if '~' in direc:
+                self.player.roomFiveCompleted = True
+                return ["You solved the island room!"]
             directory.changePWD(direc)
-            if directory.getPWD() == 'FLAG5':
-                self.inventory.roomFiveCompleted = True
             return directory.getPWD()
         elif cmd.startswith('move '):
             cmd = cmd[5:]
@@ -180,36 +181,39 @@ class Terminal(object):
             return directory.makeFile(cmd)
         elif cmd.startswith('cat '):
             cmd = cmd[4:]
+            if 'thisIsTheFlagFile.txt' in cmd:
+                self.player.roomEightCompleted = True
+                return ["You completed the cat room!"]
             return directory.getContent(cmd)
         elif cmd.startswith('tac '):
             cmd = cmd[4:]
+            if 'FileFlagTheIsthis.txt' in cmd:
+                self.player.roomNineCompleted = True
+                return ["You completed the tac room!"]
             return directory.getReverseContent(cmd)
         elif cmd.startswith('grep '):
             cmd = split(cmd[5:])
             return directory.findContent(cmd[1], cmd[0])
         elif cmd.startswith('expr '):
             cmd = cmd[5:]
-            self.player.roomNineCompleted = True
+            if '43' in cmd and '9762' in cmd and '476112' in cmd:
+                if cmd.index('+') > 0 and cmd.index('-') > cmd.index('+'):
+                    if str(eval(cmd) == (43+9762-476112)):
+                        self.player.roomNineCompleted = True
+                        return ["You found the right answer!"]
             return ([str(eval(cmd))])
         elif cmd.startswith('sudo'):
             self.player.sudoPerms = True
+            self.player.roomFourCompleted = True
             return []
         elif cmd.startswith('xrandr '):
             if '-brightness' in cmd:
                 self.player.roomSevenCompleted = True
-            return []
+                return ["You solved the brightness room!"]
+            return ["Not quite"]
         elif cmd.startswith('FLAG3'):
             self.player.roomThreeCompleted = True
-            return []
-        elif cmd.startswith('FLAG5'):
-            self.player.roomFiveCompleted = True
-            return []
-        elif cmd.startswith('FLAG6'):
-            self.player.roomSixCompleted = True
-            return []
-        elif cmd.startswith('FLAG12'):
-            self.player.roomTwelveCompleted = True
-            return []
+            return ["You found the flag to the grep/trashcan room!"]
         elif cmd.startswith('cowsay '):
             cmd = cmd[7:]
             self.player.roomEightCompleted = True
@@ -240,6 +244,9 @@ class Terminal(object):
             return directory.unzipAll(cmd)
         elif cmd.startswith('unzip '):
             cmd = cmd[6:]
+            if 'aVeryCompressedFile.zip' in cmd:
+                self.player.roomTwelveCompleted = True
+                return ["You unzipped the right file!"]
             return directory.unzip(cmd)
         else:
             return ['%r not found.' %(cmd), '7084338aIf you have no idea what to do use "help" command.']

@@ -11,13 +11,13 @@ import copy
 import os
 import socket
 
-HOST = '192.168.43.35'  # The server's hostname or IP address
+HOST = '192.168.1.228'  # The server's hostname or IP address
 PORT = 65433    # The port used by the server
 
-class Player(pygame.sprite.Sprite):
+class GhostPlayer(pygame.sprite.Sprite):
     def __init__(self, x, y, posesList):
-        super(Player, self).__init__()
-        self.isHacker = True
+        super(GhostPlayer, self).__init__()
+        self.roomNum = None
         self.roomThreeCompleted = False 
         self.roomFourCompleted = False
         self.roomFiveCompleted = False
@@ -39,7 +39,6 @@ class Player(pygame.sprite.Sprite):
         self.positions = self.initPositions()
         self.challengeStates = self.refreshChallengeStates()
         self.image = self.posesDict["restingDownImage"]
-        self.imageStr = "restingDownImage"
         self.movedLeft = False
         self.canMoveUp = True
         self.canMoveDown = True
@@ -49,8 +48,7 @@ class Player(pygame.sprite.Sprite):
         self.isAccessingChest = False
         self.terminal = terminal.Terminal((460,490), self)
         self.originalDirectory = os.getcwd()
-        self.feedback = None
-
+        
     def initPositions(self):
         widthOffset = 80
         heightOffset = 40
@@ -188,23 +186,20 @@ class Player(pygame.sprite.Sprite):
                         if event.key == pygame.K_ESCAPE:
                             val = False
 
-    def pushServer(self):
-        payload = [self.x, self.y, self.scene.roomNum, self.isHacker, self.imageStr]
-        payload = ' '.join(str(x) for x in payload)
+    def pushServer(self, command):
+        self.keysQueue.append(command)
+        payload = ' '.join(self.keysQueue)
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.connect((HOST, PORT))
-                print("Payload" + payload)
                 s.sendall(payload.encode())
                 feedback = s.recv(1024).decode()
-                print("Feedback" + feedback)
-                self.feedback = feedback.split(" ")
-            
+                self.feedback = feedback
         except:
             pass
     
     def update(self, screen, keys, currentTime):
-        self.pushServer()
+        self.x, self.y, self.roomNum = [int(x) for x in self.scene.player.feedback[0:3]]
         dist = 4
         key = keys
         if any(key) and key.index(1) != 300 and not self.isAccessingChest:
@@ -215,14 +210,12 @@ class Player(pygame.sprite.Sprite):
                 self.y -= dist
                 # self.velocityY = dist
                 self.image = self.posesDict["walkingUp1Image"] if self.movedLeft else self.posesDict["walkingUp2Image"]
-                self.imageStr = "walkingUp1Image" if self.movedLeft else "walkingUp2Image"
                 self.lastPressedButtons = "UP"
                 # self.pushServer("up")
             elif (key[pygame.K_DOWN] or key[pygame.K_s]) and self.canMoveDown:
                 self.y += dist
                 # self.velocityY = -dist
                 self.image = self.posesDict["walkingDown1Image"] if self.movedLeft else self.posesDict["walkingDown2Image"]
-                self.imageStr = "walkingDown1Image" if self.movedLeft else "walkingDown2Image"
                 self.lastPressedButtons = "DOWN"
                 #send down to server
                 # self.pushServer("down")
@@ -232,16 +225,14 @@ class Player(pygame.sprite.Sprite):
                 self.x -= dist
                 # self.velocityX = -dist
                 self.image = self.posesDict["walkingLeft1Image"] if self.movedLeft else self.posesDict["walkingLeft2Image"]
-                self.imageStr = "walkingLeft1Image" if self.movedLeft else "walkingLeft2Image"
                 self.lastPressedButtons = "LEFT"
-                # self.pushServer("left")
+                self.pushServer("left")
             elif (key[pygame.K_RIGHT] or key[pygame.K_d]) and self.canMoveRight:
                 self.x += dist
                 # self.velocityX = dist
                 self.image = self.posesDict["walkingRight1Image"] if self.movedLeft else self.posesDict["walkingRight2Image"]
-                self.imageStr = "walkingRight1Image" if self.movedLeft else "walkingRight2Image"
                 self.lastPressedButtons = "RIGHT"
-                # self.pushServer("right")
+                self.pushServer("right")
             # else:
                 # self.velocityX = 0
             if self.netChange % 12 == 0:
@@ -264,16 +255,12 @@ class Player(pygame.sprite.Sprite):
             # self.velocityX = self.velocityY = 0
             if self.lastPressedButtons == "LEFT":
                 self.image = self.posesDict["restingLeftImage"]
-                self.imageStr = "restingLeftImage"
             elif self.lastPressedButtons == "UP":
                 self.image = self.posesDict["restingUpImage"]
-                self.imageStr = "restingUpImage"
             elif self.lastPressedButtons == "RIGHT":
                 self.image = self.posesDict["restingRightImage"]
-                self.imageStr = "restingRightImage"
             else:
                 self.image = self.posesDict["restingDownImage"]
-                self.imageStr = "restingDownImage"
         # screen.blit(self.image, (self.x, self.y))
         sleep(0.01)
 
@@ -309,8 +296,15 @@ class Player(pygame.sprite.Sprite):
         print(self.equipped)
 
     def draw(self, surface, x=None, y=None):
+        if self.scene.player.feedback:
+            print(self.scene.player.feedback)
+            self.x, self.y, self.roomNum = [int(val) for val in self.scene.player.feedback[0:3]]
+            self.image = self.posesDict[self.scene.player.feedback[4]]
+
         if x is None and y is None:
             x = self.x
             y = self.y
-        surface.blit(self.image, (x, y))
+
+        if self.roomNum == self.scene.roomNum:
+            surface.blit(self.image, (x, y))
         

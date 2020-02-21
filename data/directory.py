@@ -231,7 +231,7 @@ def createZip(content):
                     except NotADirectoryError:
                         return ['The directory name is invalid %r' %(content[0])]
                     except:
-                        retunr ['Something went wrong when trying to zip %r' %(content[0])]
+                        return ['Something went wrong when trying to zip %r' %(content[0])]
                 else:
                     try:
                         zipf = zipfile.ZipFile(content[1], 'w', zipfile.ZIP_DEFLATED)

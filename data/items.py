@@ -138,7 +138,7 @@ computerTier5 = Computer(name = 'ROG Mothership GZ700 Gaming Laptop', mouse = Mo
 allItems = [mouseTier1, mouseTier2, mouseTier3, mouseTier4, mouseTier5, keyboardTier0, keyboardTier1, keyboardTier2, keyboardTier3, keyboardTier4, keyboardTier5,
             CPUTier1_1, CPUTier1_2, CPUTier2_1, CPUTier2_2, CPUTier3_1, CPUTier3_2, CPUTier4_1, CPUTier4_2, CPUTier5_1, CPUTier5_2,
             GPUTier1, GPUTier2, GPUTier3, GPUTier4, GPUTier5, coolingSystemTier1, coolingSystemTier2, coolingSystemTier3, coolingSystemTier4,
-            computerTier0, computerTier1, computerTier2, computerTier3, computerTier4, computerTier5]
+            computerTier0, computerTier2, computerTier3, computerTier4, computerTier5]
 
 def getItemClass(item):
     return str(type(item))[14:-2].lower()
