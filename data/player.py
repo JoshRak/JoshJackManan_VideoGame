@@ -33,6 +33,7 @@ class Player(pygame.sprite.Sprite):
         self.equipped = None 
         self.x = x
         self.y = y
+        self.netChange = 0 
         self.posesDict = self.initPoses(posesList)
         self.positions = self.initPositions()
         self.challengeStates = self.refreshChallengeStates()
@@ -198,9 +199,10 @@ class Player(pygame.sprite.Sprite):
             pass
     
     def update(self, screen, keys, currentTime):
-        dist = 7
+        dist = 4
         key = keys
         if any(key) and key.index(1) != 300 and not self.isAccessingChest:
+            self.netChange += 4
             # print("here")
             if (key[pygame.K_UP] or key[pygame.K_w]) and self.canMoveUp:
                 print("Moved y", self.canMoveUp)
@@ -232,7 +234,8 @@ class Player(pygame.sprite.Sprite):
                 self.pushServer("right")
             # else:
                 # self.velocityX = 0
-            self.movedLeft = not self.movedLeft
+            if self.netChange % 12 == 0:
+                self.movedLeft = not self.movedLeft
             if (key[pygame.K_q]):
                 self.openInventory(screen)
             elif key[pygame.K_t] and self.equipped:
@@ -259,6 +262,10 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.posesDict["restingDownImage"]
         # screen.blit(self.image, (self.x, self.y))
         sleep(0.01)
+
+    def setXY(self, x, y):
+        self.x = x
+        self.y = y
 
     def equipPart(self, part):
         if self.equipped and not self.equipped.tier < part.tier:

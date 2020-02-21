@@ -77,7 +77,7 @@ mouseTier5 = Mouse(name = "Razer Lancehead Tournament Edition", dpi = 16000, tie
 
 keyboardTier0 = Keyboard(name = "Typewriter", tier = 0, notes = "", imagePath = "./Assets/Images/Sprites/Keyboards/typewriter_sprite.png", delay = 1)
 keyboardTier1 = Keyboard(name = "HP Standard 104 Key", tier = 1, notes = "", imagePath = "./Assets/Images/Sprites/Keyboards/hp_sprite.png", delay = 0.2)
-keyboardTier2 = Keyboard(name = "Dell 2GR91", tier = 2, notes = "", imagePath = "./Assets/Images/Sprites/Keyboards/", delay = 0.15)
+keyboardTier2 = Keyboard(name = "Dell 2GR91", tier = 2, notes = "", imagePath = "./Assets/Images/Sprites/Keyboards/2gr91.jpeg", delay = 0.15)
 keyboardTier3 = Keyboard(name = "Redragon K552", tier = 3, notes = "", imagePath = "./Assets/Images/Sprites/Keyboards/redDragon_sprite.png", delay = 0.1)
 keyboardTier4 = Keyboard(name = "Ideazon MERC Stealth", tier = 4, notes = "", imagePath = "./Assets/Images/Sprites/Keyboards/ideazon_sprite.png", delay = 0.05)
 keyboardTier5 = Keyboard(name = "SafeType Keyboard", tier = 5, notes = "", imagePath = "./Assets/Images/Sprites/Keyboards/safetype_sprite.png", delay = 0)

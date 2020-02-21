@@ -41,15 +41,18 @@ class Scene(object):
         #     "Chest2" : chest.Chest(GPUTier3, 3, 'TOOL', obj.x, obj.y)
         # }
         # return chestsDict[obj.name]
-        randItem = getRandItem()
         itemType = ""
+        if obj.name == "Room1_Chest1":
+            item = computerTier1
+        else:
+            item = getRandItem()
         
-        if getItemClass(randItem) == "computer":
+        if getItemClass(item) == "computer":
             itemType = "COMP"
         else:
             itemType = "TOOL"
 
-        return chest.Chest(randItem, randItem.tier, itemType, obj.x, obj.y)
+        return chest.Chest(item, item.tier, itemType, obj.x, obj.y)
 
     def initStates(self):
         statesDict = {
@@ -111,6 +114,7 @@ class Scene(object):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
                         val = False
+
     def tutorialInteraction(self,screen):
         info_text_1 = textboxify.Text(text="Press E to interact with objects", size = 29, color=(255, 255, 255), background=(222,184,135))
         screen.blit(info_text_1.image, (40, 40))
@@ -162,7 +166,7 @@ class Scene(object):
         self.tutorialTerminal(screen)
         self.tutorialInteraction(screen)
         self.tutorialInventory(screen)
-    def roomThree(self, obj, screen):
+    def roomThree(self, screen):
         pass
         # return self.player.roomThreeCompleted and obj.type == 'removable'
     def roomFour(self, screen):
@@ -242,15 +246,17 @@ class Scene(object):
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid in layer:
                     tile = self.sceneMap.get_tile_image_by_gid(gid)
-                    if tile and not(self.roomNum == 3 and self.player.roomThreeCompleted):
+                    if tile and not(self.roomNum == 3 and self.player.roomThreeCompleted and layer.name == 'Removable Props'):
                         screen.blit(tile, (x * self.sceneMap.tilewidth, y * self.sceneMap.tileheight))
             elif isinstance(layer, pytmx.TiledObjectGroup):
+                allHit = [False, False, False, False]
                 for obj in layer:
                     if not (self.roomNum == 3 and self.player.roomThreeCompleted and obj.type == 'removable'):
-                        print ("\n{objName}\n{objX}\n{objY}\n".format(objName=obj.name, objX = obj.x, objY = obj.y))
+                        # print ("\n{objName}\n{objX}\n{objY}\n".format(objName=obj.name, objX = obj.x, objY = obj.y))
                         # print(self.player.roomThreeCompleted)
                         if self.player.x + 32 > obj.x and self.player.x < obj.x and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height:
                             print("hit on left, player's right")
+                            allHit[0] = True
                             self.player.x -= 7
                             # self.player.canMoveRight = False
                         elif self.player.x + 42 > obj.x and self.player.x < obj.x and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height:
@@ -259,15 +265,22 @@ class Scene(object):
                                 if obj.type == 'chest':
                                     if self.checkChests(screen, obj, event, currentTime):
                                         break
-                                if obj.type == 'new room' and not (obj.name == 'Locked' and not self.player.roomFiveCompleted):
-                                    print("You have entered the {}".format(obj.name))
-                                    # self.manager.nextScene()
-                                    self.state = "transitioning"
-                                    self.player.selectStartPos("left", (None, self.player.y))
-                                    self.nextRoom = "right"
-                                    break
+                                if obj.type == 'new room':
+                                    if obj.name == 'Locked' and not self.player.roomFiveCompleted:
+                                        info_text_1 = textboxify.Text(text="This door is locked", size = 30, color=(255, 255, 255), background=(222,184,135))
+                                        screen.blit(info_text_1.image, (200, 250))
+                                        pygame.display.update()
+                                        sleep(0.15)
+                                    else:
+                                        print("You have entered the {}".format(obj.name))
+                                        # self.manager.nextScene()
+                                        self.state = "transitioning"
+                                        self.player.selectStartPos("left", (None, self.player.y))
+                                        self.nextRoom = "right"
+                                        break
                         if self.player.x < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
                             print("hit on right, player's left")
+                            allHit[1] = True
                             self.player.x += 7
                             # self.player.canMoveLeft = False
                         elif self.player.x - 10 < obj.x + obj.width and self.player.y + 32 >= obj.y and self.player.y <= obj.y + obj.height and self.player.x > obj.x:
@@ -276,15 +289,22 @@ class Scene(object):
                                 if obj.type == 'chest':
                                     if self.checkChests(screen, obj, event, currentTime):
                                         break
-                                if obj.type == 'new room' and not (obj.name == 'Locked' and not self.player.roomFiveCompleted):
-                                    print("You have entered the {}".format(obj.name))
-                                    # self.manager.nextScene()
-                                    self.state = "transitioning"
-                                    self.player.selectStartPos("right")
-                                    self.nextRoom = "left"
-                                    break
+                                if obj.type == 'new room':
+                                    if obj.name == 'Locked' and not self.player.roomFiveCompleted:
+                                        info_text_1 = textboxify.Text(text="This door is locked", size = 30, color=(255, 255, 255), background=(222,184,135))
+                                        screen.blit(info_text_1.image, (200, 250))
+                                        pygame.display.update()
+                                        sleep(0.15)
+                                    else:
+                                        print("You have entered the {}".format(obj.name))
+                                        # self.manager.nextScene()
+                                        self.state = "transitioning"
+                                        self.player.selectStartPos("right")
+                                        self.nextRoom = "left"
+                                        break
                         if self.player.y < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
                             print("hit on bottom, player's top")
+                            allHit[2] = True
                             self.player.y += 7
                             # self.player.canMoveUp = False
                         elif self.player.y - 10 < obj.y + obj.height and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y > obj.y:
@@ -294,14 +314,21 @@ class Scene(object):
                                 if obj.type == 'chest':
                                     if self.checkChests(screen, obj, event, currentTime):
                                         break
-                                if obj.type == 'new room' and not (obj.name == 'Locked' and not self.player.roomFiveCompleted):
-                                    # self.manager.nextScene()
-                                    self.state = "transitioning"
-                                    self.player.selectStartPos("bottom")
-                                    self.nextRoom = "top"
-                                    break
+                                if obj.type == 'new room':
+                                    if obj.name == 'Locked' and not self.player.roomFiveCompleted:
+                                        info_text_1 = textboxify.Text(text="This door is locked", size = 30, color=(255, 255, 255), background=(222,184,135))
+                                        screen.blit(info_text_1.image, (200, 250))
+                                        pygame.display.update()
+                                        sleep(0.15)
+                                    else:
+                                        # self.manager.nextScene()
+                                        self.state = "transitioning"
+                                        self.player.selectStartPos("bottom")
+                                        self.nextRoom = "top"
+                                        break
                         if self.player.y + 32 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
                             self.player.y -= 7
+                            allHit[3] = True
                             # self.player.canMoveDown = False
                             print("hit on top, player's bottom")
                         elif self.player.y + 42 > obj.y and self.player.x + 32 >= obj.x and self.player.x <= obj.x + obj.width and self.player.y < obj.y:
@@ -310,17 +337,28 @@ class Scene(object):
                                 if obj.type == 'chest':
                                     if self.checkChests(screen, obj, event, currentTime):
                                         break
-                                if obj.type == 'new room' and not (obj.name == 'Locked' and not self.player.roomFiveCompleted):
-                                    # self.manager.nextScene()
-                                    self.state = "transitioning"
-                                    self.player.selectStartPos("top")
-                                    self.nextRoom = "bottom"
-                                    break
-        
+                                if obj.type == 'new room':
+                                    if obj.name == 'Locked' and not self.player.roomFiveCompleted:
+                                        info_text_1 = textboxify.Text(text="This door is locked", size = 30, color=(255, 255, 255), background=(222,184,135))
+                                        screen.blit(info_text_1.image, (200, 250))
+                                        for entiny in self.entities:
+                                            entiny.draw(screen)
+                                        pygame.display.update()
+                                        sleep(0.15)
+                                    else:
+                                        # self.manager.nextScene()
+                                        self.state = "transitioning"
+                                        self.player.selectStartPos("top")
+                                        self.nextRoom = "bottom"
+                                        break
+        if all(allHit):
+            print("here")
+            self.player.x -= 10
+            self.player.y -= 10
         self.player.challengeStates = self.player.refreshChallengeStates()
         
         for challNum in self.player.challengeStates:
-            if self.roomNum == challNum and not challengeStates[challNum]:
+            if self.roomNum == challNum and not self.player.challengeStates[challNum]:
                 self.roomTypes[self.roomNum](screen)
 
         self.player.update(screen, key, currentTime)
