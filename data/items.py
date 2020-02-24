@@ -133,15 +133,16 @@ computerTier4 = Computer(name = 'Acer Predator Helios 300', mouse = None, keyboa
 computerTier5 = Computer(name = 'ROG Mothership GZ700 Gaming Laptop', mouse = Mouse(name="Glaudius II Gaming Mouse", dpi = 16000, tier = 4, notes="", imagePath="./Assets/Images/Sprites/Mice/glaudius2.jpeg", delay = 0.02), 
                     keyboard = None, cpu = CPUTier5_2, ram = 64, storage = 1536, gpu = GPU(name="NVIDIA GeForce RTX 2080", tier=4, notes="", imagePath="./Assets/Images/Sprites/GPUs/rtx2080.jpeg", delay = 0.05), 
                     coolingsystem = CoolingSystem(name="Internal Fans", tier=3, notes="", imagePath="./Assets/Images/Sprites/Cooling_Systems/internalFans.jpeg", delay = 0),
-                    maxram = 256, maxstorage = 4096, display = "1920 x 1080", tier = 5, notes = "", imagePath = "./Assets/Images/Sprites/Computers/", delay = 0)
+                    maxram = 256, maxstorage = 4096, display = "1920 x 1080", tier = 5, notes = "", imagePath = "./Assets/Images/Sprites/Computers/rog.jpeg", delay = 0)
                 
 allItems = [mouseTier1, mouseTier2, mouseTier3, mouseTier4, mouseTier5, keyboardTier0, keyboardTier1, keyboardTier2, keyboardTier3, keyboardTier4, keyboardTier5,
             CPUTier1_1, CPUTier1_2, CPUTier2_1, CPUTier2_2, CPUTier3_1, CPUTier3_2, CPUTier4_1, CPUTier4_2, CPUTier5_1, CPUTier5_2,
             GPUTier1, GPUTier2, GPUTier3, GPUTier4, GPUTier5, coolingSystemTier1, coolingSystemTier2, coolingSystemTier3, coolingSystemTier4,
-            computerTier0, computerTier2, computerTier3, computerTier4, computerTier5]
+            computerTier0, computerTier2, computerTier4, computerTier5]
 
 def getItemClass(item):
-    return str(type(item))[14:-2].lower()
+    print(str(type(item))[19:-2].lower())
+    return str(type(item))[19:-2].lower()
 
 def getRandItem():
     item = random.choice(allItems)

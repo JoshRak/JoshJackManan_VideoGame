@@ -135,7 +135,7 @@ class Menu(object):
             if self.player.equipped.mouse:
                 screen.blit(pygame.transform.scale(pygame.image.load(self.player.equipped.mouse.imagePath), (75, 84)), (350, 35))
             if self.player.equipped.gpu:
-                screen.blit(pygame.transform.scale(pygame.image.load(self.player.equipped.gpu.imagePath), (117, 83)), (22, 131))
+                screen.blit(pygame.transform.scale(pygame.image.load(self.player.equipped.gpu.imagePath), (120, 90)), (20, 131))
             if self.player.equipped.coolingsystem:
                 screen.blit(pygame.transform.scale(pygame.image.load(self.player.equipped.coolingsystem.imagePath),(77, 90)), (348, 131))
             if self.player.equipped.keyboard:

@@ -10,14 +10,16 @@ import data.terminal as terminal
 import copy
 import os
 import socket
+import json
 
-HOST = '192.168.43.35'  # The server's hostname or IP address
+HOST = '192.168.86.23'  # The server's hostname or IP address
 PORT = 65433    # The port used by the server
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, posesList):
+    def __init__(self, x, y, posesList, isHacker):
         super(Player, self).__init__()
-        self.isHacker = True
+        self.numRoomsCompleted = 0
+        self.isHacker = isHacker
         self.roomThreeCompleted = False 
         self.roomFourCompleted = False
         self.roomFiveCompleted = False
@@ -28,6 +30,32 @@ class Player(pygame.sprite.Sprite):
         self.roomTenCompleted = False
         self.roomElevenCompleted = False
         self.roomTwelveCompleted = False
+        self.chestDict = {
+            "Room1_Chest1" : False,
+            "Room1_Chest2" : False,
+            "Room2_Chest1" : False,
+            "Room2_Chest2" : False,
+            "Room3_Chest1" : False,
+            "Room3_Chest2" : False,
+            "Room4_Chest1" : False,
+            "Room4_Chest2" : False,
+            "Room5_Chest1" : False,
+            "Room5_Chest2" : False,
+            "Room6_Chest1" : False,
+            "Room6_Chest2" : False,
+            "Room7_Chest1" : False,
+            "Room7_Chest2" : False,
+            "Room8_Chest1" : False,
+            "Room8_Chest2" : False,
+            "Room9_Chest1" : False,
+            "Room9_Chest2" : False,
+            "Room10_Chest1" : False,
+            "Room10_Chest2" : False,
+            "Room11_Chest1" : False,
+            "Room11_Chest2" : False,
+            "Room12_Chest1" : False,
+            "Room12_Chest2" : False,
+        }  
         self.inventory = menu.Menu(self)
         self.keysCollection = []
         self.keysQueue = []
@@ -189,16 +217,59 @@ class Player(pygame.sprite.Sprite):
                             val = False
 
     def pushServer(self):
-        payload = [self.x, self.y, self.scene.roomNum, self.isHacker, self.imageStr]
-        payload = ' '.join(str(x) for x in payload)
+        payload = {
+                    "x": self.x,
+                    "y": self.y,
+                    "roomNum": self.scene.roomNum,
+                    "isHacker" : self.isHacker,
+                    "imageStr" : self.imageStr,
+                    "roomThreeCompleted" : self.roomThreeCompleted, 
+                    "roomFourCompleted" : self.roomFourCompleted, 
+                    "roomFiveCompleted" : self.roomFiveCompleted, 
+                    "roomSixCompleted" : self.roomSixCompleted, 
+                    "roomSevenCompleted" : self.roomSevenCompleted, 
+                    "roomEightCompleted" : self.roomEightCompleted, 
+                    "roomNineCompleted" : self.roomNineCompleted, 
+                    "roomTenCompleted" : self.roomTenCompleted, 
+                    "roomElevenCompleted" : self.roomElevenCompleted, 
+                    "roomTwelveCompleted" : self.roomTwelveCompleted,
+                    "Room1_Chest1" : self.chestDict["Room1_Chest1"],
+                    "Room1_Chest2" : self.chestDict["Room1_Chest2"],
+                    "Room2_Chest1" : self.chestDict["Room2_Chest1"],
+                    "Room2_Chest2" : self.chestDict["Room2_Chest2"],
+                    "Room3_Chest1" : self.chestDict["Room3_Chest1"],
+                    "Room3_Chest2" : self.chestDict["Room3_Chest2"],
+                    "Room4_Chest1" : self.chestDict["Room4_Chest1"],
+                    "Room4_Chest2" : self.chestDict["Room4_Chest2"],
+                    "Room5_Chest1" : self.chestDict["Room5_Chest1"],
+                    "Room5_Chest2" : self.chestDict["Room5_Chest2"],
+                    "Room6_Chest1" : self.chestDict["Room6_Chest1"],
+                    "Room6_Chest2" : self.chestDict["Room6_Chest2"],
+                    "Room7_Chest1" : self.chestDict["Room7_Chest1"],
+                    "Room7_Chest2" : self.chestDict["Room7_Chest2"],
+                    "Room8_Chest1" : self.chestDict["Room8_Chest1"],
+                    "Room8_Chest2" : self.chestDict["Room8_Chest2"],
+                    "Room9_Chest1" : self.chestDict["Room9_Chest1"],
+                    "Room9_Chest2" : self.chestDict["Room9_Chest2"],
+                    "Room10_Chest1" : self.chestDict["Room10_Chest1"],
+                    "Room10_Chest2" : self.chestDict["Room10_Chest2"],
+                    "Room11_Chest1" : self.chestDict["Room11_Chest1"],
+                    "Room11_Chest2" : self.chestDict["Room11_Chest2"],
+                    "Room12_Chest1" : self.chestDict["Room12_Chest1"],
+                    "Room12_Chest2" : self.chestDict["Room12_Chest2"],
+                    "numRoomsCompleted" : self.numRoomsCompleted
+                    }
+        # for chest in self.chestDict:
+        #     payload[chest] = self.chestDict[chest])
+        payload = json.dumps(payload)
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.connect((HOST, PORT))
-                print("Payload" + payload)
                 s.sendall(payload.encode())
                 feedback = s.recv(1024).decode()
-                print("Feedback" + feedback)
-                self.feedback = feedback.split(" ")
+                print ("Manana is fat" + str(feedback))
+                if feedback!= "NONE":
+                    self.feedback = json.loads(feedback)
             
         except:
             pass
@@ -299,8 +370,8 @@ class Player(pygame.sprite.Sprite):
 
     def equipComp(self, computer):
         if self.equipped:
-            if len(self.inventory.inventory == 5):
-                self.inventory.add_item(computer)
+            if len(self.inventory.inventory) != 5:
+                self.inventory.add_item(computer, 1)
                 raise ValueError("Could not equip or add to inventory!")
             else:
                 raise ValueError("Could not equip!")

@@ -10,8 +10,9 @@ import data.terminal as terminal
 import copy
 import os
 import socket
+import sys
 
-HOST = '192.168.1.228'  # The server's hostname or IP address
+HOST = '192.168.86.23'  # The server's hostname or IP address
 PORT = 65433    # The port used by the server
 
 class GhostPlayer(pygame.sprite.Sprite):
@@ -294,12 +295,81 @@ class GhostPlayer(pygame.sprite.Sprite):
         else:
             self.equipped = computer
         print(self.equipped)
+    
+    def endCondition(self, screen):
+        for i in range (0, 4):
+            self.scene.player.pushServer()
+            sleep(.15)
+        if self.scene.player.numRoomsCompleted>4:
+            #display win
+            screen.blit(pygame.transform.scale(pygame.image.load("./Assets/Images/endSceneWin.png").convert_alpha(), (448, 480)), (0,0))
+            # manager.renderOpeningScene(screen, pygame.transform.scale(pygame.image.load("./Assets/Images/startSceneAdmin.png"), (448,480)))
+            pygame.display.update()
+            # manager.draw(screen)
+        else:
+            screen.blit(pygame.transform.scale(pygame.image.load("./Assets/Images/endSceneLoss.png").convert_alpha(), (448, 480)), (0,0))
+            # manager.renderOpeningScene(screen, pygame.transform.scale(pygame.image.load("./Assets/Images/startSceneAdmin.png"), (448,480)))
+            pygame.display.update()
+            # manager.draw(screen)
+            #display loss
+        while True:
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.KEYDOWN:
+                    sys.exit(1)
 
     def draw(self, surface, x=None, y=None):
         if self.scene.player.feedback:
-            print(self.scene.player.feedback)
-            self.x, self.y, self.roomNum = [int(val) for val in self.scene.player.feedback[0:3]]
-            self.image = self.posesDict[self.scene.player.feedback[4]]
+            self.x = self.scene.player.feedback["x"]
+            self.y = self.scene.player.feedback["y"]
+            self.roomNum = self.scene.player.feedback["roomNum"]
+            if self.scene.player.feedback["imageStr"] != '0':
+                self.image = self.posesDict[self.scene.player.feedback["imageStr"]]
+            if not self.scene.player.roomThreeCompleted:
+                self.scene.player.roomThreeCompleted = self.scene.player.feedback["roomThreeCompleted"]
+            if not self.scene.player.roomFourCompleted:
+                self.scene.player.roomFourCompleted = self.scene.player.feedback["roomFourCompleted"]
+            if not self.scene.player.roomFiveCompleted:
+                self.scene.player.roomFiveCompleted = self.scene.player.feedback["roomFiveCompleted"]
+            if not self.scene.player.roomSixCompleted:
+                self.scene.player.roomSixCompleted = self.scene.player.feedback["roomSixCompleted"]
+            if not self.scene.player.roomSevenCompleted:
+                self.scene.player.roomSevenCompleted = self.scene.player.feedback["roomSevenCompleted"]
+            if not self.scene.player.roomEightCompleted:
+                self.scene.player.roomEightCompleted = self.scene.player.feedback["roomEightCompleted"]
+            if not self.scene.player.roomNineCompleted:
+                self.scene.player.roomNineCompleted = self.scene.player.feedback["roomNineCompleted"]
+            if not self.scene.player.roomTenCompleted:
+                self.scene.player.roomTenCompleted = self.scene.player.feedback["roomTenCompleted"]
+            if not self.scene.player.roomElevenCompleted:
+                self.scene.player.roomElevenCompleted = self.scene.player.feedback["roomElevenCompleted"]
+            if not self.scene.player.roomTwelveCompleted:
+                self.scene.player.roomTwelveCompleted = self.scene.player.feedback["roomTwelveCompleted"]
+            if self.scene.player.numRoomsCompleted + int(self.scene.player.feedback["numRoomsCompleted"]) == 9:
+                self.endCondition(surface)
+
+            
+            # if not self.scene.player.chestDict["Room3_Chest1"]:
+            #     try:
+            #         self.scene.player.chestDict["Room3_Chest1"] = self.scene.player.feedback["Room3_Chest1"]
+            #         self.scene.chests["Room3_Chest1"].alreadyAccessed = self.scene.player.feedback['Room3_Chest1']
+            #     except:
+            #         pass
+            # if not self.scene.player.chestDict["Room3_Chest2"]:
+            #     try:
+            #         self.scene.player.chestDict["Room3_Chest2"] = self.scene.player.feedback["Room3_Chest2"]
+            #         self.scene.chests["Room3_Chest2"].alreadyAccessed = self.scene.player.feedback['Room3_Chest2']
+            #     except:
+            #         pass
+            
+            for chest in self.scene.player.chestDict:
+                if not self.scene.player.chestDict[chest]:
+                    try:
+                        self.scene.player.chestDict[chest] = self.scene.player.feedback[chest]
+                        self.scene.chests[chest].alreadyAccessed = self.scene.player.feedback[chest]
+                    except:
+                        continue
+
 
         if x is None and y is None:
             x = self.x
@@ -307,4 +377,3 @@ class GhostPlayer(pygame.sprite.Sprite):
 
         if self.roomNum == self.scene.roomNum:
             surface.blit(self.image, (x, y))
-        

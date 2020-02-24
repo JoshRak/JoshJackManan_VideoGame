@@ -3,7 +3,8 @@ from itertools import cycle
 from time import sleep
 
 class SceneManager(object):
-    def __init__(self, sceneList):
+    def __init__(self, sceneList, playerIsHacker):
+        self.playerIsHacker = playerIsHacker
         self.scenes = self.initScenes(sceneList) 
         for scene in sceneList:
             x = [x for x in self.scenes if scene in x][0]
@@ -12,13 +13,21 @@ class SceneManager(object):
             scene.manager = self
         # self.scenes = cycle(scenes)
         # self.scene = next(self.scenes)
-        
-        self.scene = sceneList[0]
+        if self.playerIsHacker:
+            self.scene = sceneList[0]
+        else:
+            self.scene = sceneList[1]
         self.scene.manager = self
         self.fading = None
         self.alpha = 0
         self.veil = pygame.Surface(pygame.display.get_surface().get_rect().size)
         self.veil.fill((0, 0, 0))
+
+    def renderOpeningScene(self, screen, openingSceneImg):
+        screen.blit(openingSceneImg, (0,0))
+
+    def renderClosingScene(self, screen, closingSceneImg):
+        screen.blit(closingSceneImg, (0,0))
 
     def initScenes(self, scenes):
         scenesDict = [  [None,          scenes[1],      None,           None],

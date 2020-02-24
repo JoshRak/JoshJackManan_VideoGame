@@ -11,16 +11,16 @@ def scaleImgs(imgList):
         output.append(pygame.transform.scale(pygame.image.load(img).convert_alpha(), (32,32)))
     return output
 
-def initPlayer(poseImgs):
-    return player.Player(250, 250, scaleImgs(poseImgs))
+def initPlayer(poseImgs, isHacker):
+    return player.Player(250, 250, scaleImgs(poseImgs), isHacker)
 
 def initGhostPlayer(poseImgs):
     return ghostPlayer.GhostPlayer(250, 250, scaleImgs(poseImgs))
 
-def initRooms(gameMaps, poseImgs):
+def initRooms(gameMaps, poseImgs, poseImgs2):
     spriteGroup = pygame.sprite.Group()
-    spriteGroup.add(initPlayer(poseImgs))
-    spriteGroup.add(initGhostPlayer(poseImgs))
+    spriteGroup.add(initPlayer(poseImgs, True ))
+    spriteGroup.add(initGhostPlayer(poseImgs2))
     # 1, 2, 5, 6, 8
 
     lst = []
@@ -36,7 +36,7 @@ def main():
     screen_width, screen_height = 448, 480
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
-    pygame.display.set_caption('Hacker Strike: Virus Offensive')
+    pygame.display.set_caption('Hackerverse')
     currentTime = 0
 
     gameMaps = [load_pygame("./Assets/Map/Tutorial_Room1.tmx"),
@@ -66,22 +66,40 @@ def main():
                 "./Assets/Images/Sprites/Characters/walkingLeft2.png",
                 "./Assets/Images/Sprites/Characters/walkingRight1.png",
                 "./Assets/Images/Sprites/Characters/walkingRight2.png"]
+    
+    ghostPlayerPoseImgs = [ "./Assets/Images/Sprites/Characters/restingDownP2.png",
+                            "./Assets/Images/Sprites/Characters/restingUpP2.png",
+                            "./Assets/Images/Sprites/Characters/restingLeftP2.png",
+                            "./Assets/Images/Sprites/Characters/restingRightP2.png",
+                            "./Assets/Images/Sprites/Characters/walkingDown1P2.png",
+                            "./Assets/Images/Sprites/Characters/walkingDown2P2.png",
+                            "./Assets/Images/Sprites/Characters/walkingUp1P2.png",
+                            "./Assets/Images/Sprites/Characters/walkingUp2P2.png",
+                            "./Assets/Images/Sprites/Characters/walkingLeft1P2.png",
+                            "./Assets/Images/Sprites/Characters/walkingLeft2P2.png",
+                            "./Assets/Images/Sprites/Characters/walkingRight1P2.png",
+                            "./Assets/Images/Sprites/Characters/walkingRight2P2.png"]
 
-    manager = sceneManager.SceneManager(initRooms(gameMaps, poseImgs))
-    gameExit = False
-    newRoom = True
-    while not gameExit:
-        if newRoom:
-            manager.draw(screen)
-            newRoom = False
-
+    manager = sceneManager.SceneManager(initRooms(gameMaps, poseImgs, ghostPlayerPoseImgs), True)
+    val = True
+    screen.blit(pygame.transform.scale(pygame.image.load("./Assets/Images/startSceneHacker.png").convert_alpha(), (448, 480)), (0,0))
+    # manager.renderOpeningScene(screen, pygame.transform.scale(pygame.image.load("./Assets/Images/startSceneAdmin.png"), (448,480)))
+    pygame.display.update()
+    # manager.draw(screen)
+    while val:
         events = pygame.event.get()
         for event in events:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                gameExit = True
-            # if event.type == pygame.KEYDOWN and event.key == pygame.K_g:
-            #     newRoom = True
-            #     manager.nextScene()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    val = False
+    
+    manager.draw(screen)
+    
+    gameExit = False
+    
+    while not gameExit:
+        events = pygame.event.get()
+
         manager.update(screen, currentTime, events)
 
         pygame.display.flip()

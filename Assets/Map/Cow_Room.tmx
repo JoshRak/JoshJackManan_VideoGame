@@ -1146,7 +1146,7 @@
  </layer>
  <objectgroup id="8" name="All Objects">
   <object id="97" name="Right Entrance" type="new room" x="417.333" y="224" width="24.6667" height="128"/>
-  <object id="99" name="Farm" x="96" y="222" width="163.333" height="154"/>
+  <object id="99" name="Farm" x="96" y="222" width="151.333" height="154"/>
   <object id="100" name="Left Wall" type="new room" x="12.6667" y="223.333" width="20" height="129.333"/>
   <object id="101" name="Bottom Entrance" type="new room" x="161.333" y="450.667" width="128.667" height="18.6667"/>
   <object id="102" name="Top Wall" x="31.3333" y="96" width="164.667" height="62"/>

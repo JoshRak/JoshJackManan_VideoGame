@@ -3,7 +3,8 @@ from PIL import Image, ImageOps
 import itertools
 # from interactiveObject import InteractiveObject
 class Chest():
-    def __init__(self, contents, contentAmount, chestType, x, y):
+    def __init__(self, name, contents, contentAmount, chestType, x, y):
+        self.name = name
         self.contents = contents
         self.alreadyAccessed = False
         self.contentAmount = contentAmount
@@ -50,7 +51,7 @@ class Chest():
 
         screen.blit(self.chestImage, (32,32))
         print(self.contents)
-        screen.blit(pygame.transform.scale(pygame.image.load(self.contents.imagePath), (140, 155)), (155, 120))
+        screen.blit(pygame.transform.scale(pygame.image.load(self.contents.imagePath), (140, 163)), (155, 120))
         screen.blit(self.starsImg, (round((chestW - starsW) / 2) + 32, round((0.7 * chestH) - (starsH / 2)) + 32))
         
         #(round((chestW - starsW) / 2) + 999999, round((0.7 * chestH) - (starsH / 2)) + 32)
@@ -67,6 +68,7 @@ class Chest():
         self.selection = next(self.selections)
         self.selection = next(self.selections)
 
+    
     def selected(self, screen):
         player = self.scene.player
         if self.type == 'TOOL':
@@ -97,19 +99,24 @@ class Chest():
                 self.alreadyAccessed = False
                 player.isAccessingChest = False
             elif self.selection == 'EQUIP':
+                print("here1")
                 try:
                     player.isAccessingChest = False
+                    print("here2")
                     self.alreadyAccessed = True
+                    print("here3")
                     player.equipComp(self.contents)
+                    print("here4")
                 except ValueError as Er:
                     print(Er)
-                    if 'or add' in str(Er):
+                    if not ('or add' in str(Er)):
                         self.alreadyAccessed = False
                         player.isAccessingChest = True
             else:
                 try:
                     player.inventory.add_item(self.contents, 1)
                     self.alreadyAccessed = True
+                    self.player.chestDict[self.name] = True
                     player.isAccessingChest = False
                 except ValueError as Er:
                     print(Er)
