@@ -274,11 +274,15 @@ class Player(pygame.sprite.Sprite):
         startTime = time.time()
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.connect((HOST, PORT))
-                s.sendall(payload.encode())
-                feedback = s.recv(1024).decode()
-                if feedback!= "NONE":
-                    self.feedback = json.loads(feedback)
+                try:
+                    s.settimeout(0.005)
+                    s.connect((HOST, PORT))
+                    s.sendall(payload.encode())
+                    feedback = s.recv(1024).decode()
+                    if feedback!= "NONE":
+                        self.feedback = json.loads(feedback)
+                except soocket.timeout as e:
+                    pass
         except:
             pass
     

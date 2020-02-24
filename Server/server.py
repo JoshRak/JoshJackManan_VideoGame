@@ -15,6 +15,7 @@ feedbackForNonHacker = None
 while True:
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            # s.settimeout()
             s.bind((HOST, PORT))    # creates socket and listens for input from either player as JSON string
             s.listen()
             conn, addr = s.accept()
