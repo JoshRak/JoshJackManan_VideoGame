@@ -5,8 +5,8 @@ import time
 import struct
 import json
 
-HOST = '192.168.43.227'  # Standard loopback interface address (localhost)
-PORT = 65433       # Port to listen on (non-privileged ports are > 1023)
+HOST = '10.1.3.199'  # Standard loopback interface address (localhost)
+PORT = 65432       # Port to listen on (non-privileged ports are > 1023)
 
 
 feedbackForHacker = None

@@ -12,8 +12,9 @@ import os
 import socket
 import json
 import time
-HOST = '192.168.43.227'  # The server's hostname or IP address
-PORT = 65433    # The port used by the server
+
+HOST = '10.1.3.199'  # The server's hostname or IP address
+PORT = 65432    # The port used by the server
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, posesList, isHacker):
@@ -271,17 +272,15 @@ class Player(pygame.sprite.Sprite):
         payload = json.dumps(payload)
         maxTime = 0.005
         startTime = time.time()
-        while (time.time() - startTime) < maxTime:
-            try:
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                    s.connect((HOST, PORT))
-                    s.sendall(payload.encode())
-                    feedback = s.recv(1024).decode()
-                    if feedback!= "NONE":
-                        self.feedback = json.loads(feedback)
-                
-            except:
-                pass
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.connect((HOST, PORT))
+                s.sendall(payload.encode())
+                feedback = s.recv(1024).decode()
+                if feedback!= "NONE":
+                    self.feedback = json.loads(feedback)
+        except:
+            pass
     
     # updates screen depending on user input, uses velocities to handle collisions
     def update(self, screen, keys, currentTime):
