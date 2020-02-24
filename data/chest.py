@@ -79,6 +79,7 @@ class Chest():
                 try:
                     player.isAccessingChest = False
                     self.alreadyAccessed = True
+                    player.chestDict[self.name] = True
                     player.equipPart(self.contents)
                 except ValueError as Er:
                     print(Er)
@@ -89,6 +90,7 @@ class Chest():
                 try:
                     player.inventory.add_item(self.contents, 1)
                     self.alreadyAccessed = True
+                    player.chestDict[self.name] = True
                     player.isAccessingChest = False
                 except ValueError as Er:
                     print(Er)
@@ -104,6 +106,7 @@ class Chest():
                     player.isAccessingChest = False
                     print("here2")
                     self.alreadyAccessed = True
+                    player.chestDict[self.name] = True
                     print("here3")
                     player.equipComp(self.contents)
                     print("here4")
@@ -113,15 +116,15 @@ class Chest():
                         self.alreadyAccessed = False
                         player.isAccessingChest = True
             else:
-                try:
-                    player.inventory.add_item(self.contents, 1)
-                    self.alreadyAccessed = True
-                    player.chestDict[self.name] = True
-                    player.isAccessingChest = False
-                except ValueError as Er:
-                    print(Er)
-                    self.alreadyAccessed = False
-                    player.isAccessingChest = True
+                # try:
+                player.inventory.add_item(self.contents, 1)
+                self.alreadyAccessed = True
+                player.chestDict[self.name] = True
+                player.isAccessingChest = False
+                # except ValueError as Er:
+                #     print(Er)
+                #     self.alreadyAccessed = False
+                #     player.isAccessingChest = True
     
     def update(self, screen): # display the chest image on the screen 
         self.chestImage = self.states[self.selection]
