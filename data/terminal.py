@@ -216,7 +216,10 @@ class Terminal(object):
             return directory.getReverseContent(cmd)
         elif cmd.startswith('grep '):
             cmd = split(cmd[5:])
-            return directory.findContent(cmd[1], cmd[0])
+            try:
+                return directory.findContent(cmd[1], cmd[0])
+            except:
+		return ["grep: Incorrect command syntax. Try again."] 
         elif cmd.startswith('expr '):
             cmd = cmd[5:]
             if '43' in cmd and '9762' in cmd and '476112' in cmd:
