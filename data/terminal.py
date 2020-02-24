@@ -332,13 +332,7 @@ class Terminal(object):
                         lstChar.insert(self.posCursor, '|')
                         self.contentLineCurrentDisplay = ''.join(lstChar)
                     except:
-                        self.posCursor = 0
-                        if self.camBot - self.camTop == (self.fullLine - 1):
-                            self.camTop += 1
-                        self.camBot += 1
-                        self.content.append([self.root])
-                        self.contentLineCurrent = ''
-                        self.contentLineCurrentDisplay = '|'    
+                        pass     
                     self.indexListCommand = 0
                     self.showCur = 0   
                     self.currentLine = True
@@ -395,7 +389,7 @@ class Terminal(object):
                             self.currentLine = False
                     self.showCur = 0
                 elif newChar == 'kdown':
-                    if self.camBot < len(contentDisplay):
+                    if self.camBot < len(self.contentDisplay):
                         self.camBot += 1
                         self.camTop += 1
                     self.showCur = 0
