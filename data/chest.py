@@ -116,7 +116,7 @@ class Chest():
                 try:
                     player.inventory.add_item(self.contents, 1)
                     self.alreadyAccessed = True
-                    self.player.chestDict[self.name] = True
+                    player.chestDict[self.name] = True
                     player.isAccessingChest = False
                 except ValueError as Er:
                     print(Er)

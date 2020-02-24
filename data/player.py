@@ -13,7 +13,7 @@ import socket
 import json
 import time
 
-HOST = '10.1.0.252'  # The server's hostname or IP address
+HOST = '192.168.43.227'  # The server's hostname or IP address
 PORT = 65432    # The port used by the server
 
 class Player(pygame.sprite.Sprite):
@@ -270,12 +270,12 @@ class Player(pygame.sprite.Sprite):
         # for chest in self.chestDict:
         #     payload[chest] = self.chestDict[chest])
         payload = json.dumps(payload)
-        maxTime = 0.005
-        startTime = time.time()
+        # maxTime = 0.005
+        # startTime = time.time()
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 try:
-                    s.settimeout(0.005)
+                    s.settimeout(0.010)
                     s.connect((HOST, PORT))
                     s.sendall(payload.encode())
                     feedback = s.recv(1024).decode()
