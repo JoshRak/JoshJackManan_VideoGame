@@ -109,7 +109,7 @@ def main(): # open the game and load in all necessary images and map files
         manager.update(screen, currentTime, events)
 
         pygame.display.flip()
-        currentTime = clock.tick(30)
+        # currentTime = clock.tick(30)
 
 if __name__ == '__main__':
     main()
