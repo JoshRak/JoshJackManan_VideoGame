@@ -2,10 +2,16 @@ import pygame
 from PIL import Image, ImageOps
 import itertools
 
+'''
+    Inventory class that holds the objects in the inventory
+    create functionality for selected and moving items in between the inventory
+    displays menu on the screen when called
+'''
+
 class Menu(object):
     def __init__(self, player):
         self.player = player
-        self.maxItems = {'PART':'AMOUNT AS INT'}
+        # self.maxItems = {'PART':'AMOUNT AS INT'}
         self.inventory = []
         self.selections = None
         self.currentItem = None

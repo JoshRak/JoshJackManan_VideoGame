@@ -7,12 +7,12 @@ from pygame.locals import *
 # import data.items as items
 import data.chest as chest
 from data.items import *
-from data.dialogBox import DialogBox
+# from data.dialogBox import DialogBox
 import textboxify
 import random
 
 class Scene(object):
-    def __init__(self, roomNum, sceneMap, entities):
+    def __init__(self, roomNum, sceneMap, entities): # Initializes a room object that keeps track of the current state of the room
         self.sceneMap = sceneMap
         self.roomNum = roomNum
         self.entities = entities
@@ -30,13 +30,13 @@ class Scene(object):
 
         # build the room
 
-    def initObjects(self):
+    def initObjects(self): # Creates a dictionary mapping a type of object to a list of them
         objectsDict = {
             "chests": self.chests
         }
         return objectsDict
 
-    def initChest(self, obj):
+    def initChest(self, obj): # Initialize each chest based on its x and y position and name, based on a predefined dictionary of all possible chests
         # chestsDict = {
         #     "CPC1" : chest.Chest(computerTier2, 1, 'COMP', obj.x, obj.y),
         #     "KC1" : chest.Chest(keyboardTier1, 1, 'TOOL', obj.x, obj.y),
@@ -63,7 +63,7 @@ class Scene(object):
 
         return chest.Chest(obj.name, item, 1, itemType, obj.x, obj.y)
 
-    def initStates(self):
+    def initStates(self): # Create a list of states that map to functions that will be called
         statesDict = {
             "active":self.defaultState,
             "transitioning":self.transitionState,
@@ -71,7 +71,7 @@ class Scene(object):
         }
         return statesDict
 
-    def initRooms(self):
+    def initRooms(self): # Create a dictionary mapping numbers (roomNums) to their respective function
         rooms = {
             1:self.roomOne,
             2:self.roomTwo,
@@ -88,7 +88,7 @@ class Scene(object):
         }
         return rooms
 
-    def tutorialMovement(self, screen):
+    def tutorialMovement(self, screen): # Create a textbox to tell the user to press “WASD” to move and blit it onto the screen
         info_text_1 = textboxify.Text(text="Press WASD to move", size = 30, color=(255, 255, 255), background=(222,184,135))
         screen.blit(info_text_1.image, (40, 40))
         pygame.display.update()
@@ -100,7 +100,7 @@ class Scene(object):
                     if event.key in (pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d):
                         val = False
 
-    def tutorialTerminal(self, screen):
+    def tutorialTerminal(self, screen): # Create a textbox to tell the user to press “T” to access terminal and blit it onto the screen
         info_text_1 = textboxify.Text(text="Press T to open terminal.", size = 30, color=(255, 255, 255), background=(222,184,135))
         info_text_2 = textboxify.Text(text="Type in the flag if you find one!", size = 30, color=(255, 255, 255), background=(222,184,135))
         screen.blit(info_text_1.image, (40, 40))
@@ -114,7 +114,7 @@ class Scene(object):
                     if event.key == pygame.K_t:
                         val = False
 
-    def tutorialInventory(self, screen):
+    def tutorialInventory(self, screen): # Create a textbox to tell the user to press “Q” and “ESCAPE”  to access and leave the inventory, and blit the textbox onto the screen
         info_text_1 = textboxify.Text(text="Press Q to open inventory,", size = 30, color=(255, 255, 255), background=(222,184,135))
         info_text_2 = textboxify.Text(text="F to throw out items,", size = 30, color=(255, 255, 255), background=(222,184,135))
         info_text_3 = textboxify.Text(text="and escape to exit.", size = 30, color=(255, 255, 255), background=(222,184,135))
@@ -130,7 +130,7 @@ class Scene(object):
                     if event.key == pygame.K_q:
                         val = False
 
-    def tutorialInteraction(self,screen):
+    def tutorialInteraction(self,screen): # Create a textbox to tell the user to press “E” to interact with objects and blit it onto the screen
         info_text_1 = textboxify.Text(text="Press E to interact with objects.", size = 29, color=(255, 255, 255), background=(222,184,135))
         screen.blit(info_text_1.image, (40, 40))
         pygame.display.update()
@@ -142,7 +142,7 @@ class Scene(object):
                     if event.key == pygame.K_e:
                         val = False
 
-    def tutorialEquipmenet(self,screen):
+    def tutorialEquipmenet(self,screen): # Create a textbox to tell the user how to use inventory equipment and blit it onto the screen
         info_text_1 = textboxify.Text(text="If you try to equip a computer with one already", size = 20, color=(255, 255, 255), background=(222,184,135))
         info_text_2 = textboxify.Text(text="it will try to place it in your inventory.", size = 20, color=(255, 255, 255), background=(222,184,135))
         info_text_3 = textboxify.Text(text="If your inventory is full, it will through out items.", size = 20, color=(255, 255, 255), background=(222,184,135))
@@ -160,7 +160,7 @@ class Scene(object):
                     if event.key == pygame.K_RETURN:
                         val = False
     
-    def refreshScreen(self, screen):
+    def refreshScreen(self, screen): # change the screen back to its default map
         self.state = "active"
         key = pygame.key.get_pressed()
         # dialog_group = pygame.sprite.LayeredDirty()
@@ -185,7 +185,8 @@ class Scene(object):
         for entity in self.entities.sprites():
             entity.draw(screen)
 
-    def render(self, screen):
+    # Render in the initial image (and tutorial if needed) onto the screen
+    def render(self, screen): # Render in the initial image (and tutorial if needed) onto the screen
         self.state = "active"
         key = pygame.key.get_pressed()
         # dialog_group = pygame.sprite.LayeredDirty()
@@ -216,6 +217,9 @@ class Scene(object):
         # dialogBox = DialogBox("Press WASD to move", (0,0,0), 25, (222,184,135))
         # dialogBox.render((100,100), screen)
 
+    '''
+        specific functions for each room that are called when needed
+    '''
     def roomOne(self, screen):
         self.tutorialMovement(screen)
         self.refreshScreen(screen)
@@ -268,7 +272,8 @@ class Scene(object):
     #     elif self.state == "paused":
     #         self.state
 
-    def checkChests(self, screen, obj, event, currentTime):
+    # Check if the obj type is a chest, and change to chest state if it is
+    def checkChests(self, screen, obj, event, currentTime): # Check if the obj type is a chest, and change to chest state if it is
         print("checking chests")
         chest = self.objects['chests'][obj.name]
         if event.type == pygame.KEYDOWN and event.key == pygame.K_e and not chest.alreadyAccessed:
@@ -277,6 +282,7 @@ class Scene(object):
             print("open chest")
             return True
 
+    # Opens the chest screen where user can choose to leave, equip, or store an item.
     def chestOpenedState(self, screen, currentTime, events):
         print("chest opened")
         self.player.isAccessingChest = True
@@ -303,11 +309,16 @@ class Scene(object):
                 print(self.currentChest.selection)
         # block player movement
 
+    
+    # Move to the next screen on the scene manager, transitioning out of the original scene and into the next scene
 
     def transitionState(self, screen, currentTime, events):
         self.manager.nextScene()
         # self.state = "active"
         pass
+
+    # Checks player-object collisions, does challenge specified code/checks, 
+    # checks interactions with objects / moving to new room, and updates the player/screen
 
     def defaultState(self, screen, currentTime, events):
         # print("default")
@@ -479,11 +490,13 @@ class Scene(object):
         self.player.update(screen, key, currentTime)
         # self.player.update(screen, keys, currentTime)
         # self.player.scene = self
-
+    
+    # Update the class based on the current state it is in (run defaultState if the code is in its default state)
     def update(self, screen, currentTime, events):
         # if self.state != "active":
         #     self.pause(screen)
         self.states[self.state](screen, currentTime, events)
 
+    # Make the SceneManager hosting the scene pause the entire game
     def pause(self, screen):
         self.manager.pauseScene(screen)

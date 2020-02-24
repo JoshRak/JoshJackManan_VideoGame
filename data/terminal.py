@@ -10,6 +10,13 @@ from shlex import split
 # my modules
 import data.directory as directory
 
+'''
+    displays the terminal on the screen and takes in data
+        from the user
+    calls the directory file to parse the commands and
+        display the output to the user
+'''
+
 class Terminal(object):
     def __init__(self, size, player):
         self.player = player

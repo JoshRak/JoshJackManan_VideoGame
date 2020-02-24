@@ -12,7 +12,7 @@ import os
 import socket
 import json
 
-HOST = '192.168.86.23'  # The server's hostname or IP address
+HOST = '192.168.43.227'  # The server's hostname or IP address
 PORT = 65433    # The port used by the server
 
 class Player(pygame.sprite.Sprite):
@@ -79,6 +79,7 @@ class Player(pygame.sprite.Sprite):
         self.originalDirectory = os.getcwd()
         self.feedback = None
 
+    # initializes positions for player
     def initPositions(self):
         widthOffset = 80
         heightOffset = 40
@@ -91,6 +92,7 @@ class Player(pygame.sprite.Sprite):
         }
         return positionsDict
     
+    # initializes positions for player
     def initPoses(self, posesList):
         poseNames = ["restingDownImage", "restingUpImage", "restingLeftImage", "restingRightImage",
                     "walkingDown1Image", "walkingDown2Image",
@@ -99,6 +101,7 @@ class Player(pygame.sprite.Sprite):
                     "walkingRight1Image", "walkingRight2Image"]
         return dict(zip(poseNames, posesList))
 
+    # places the player in the correct position depending on the room
     def selectStartPos(self, pos, coords=None):
         if coords:
             if coords[0]:
@@ -110,6 +113,7 @@ class Player(pygame.sprite.Sprite):
             return
         self.x, self.y = self.positions[pos]
 
+    # checks state of all rooms
     def refreshChallengeStates(self):
         challengeStatesDict = {
             3:self.roomThreeCompleted,
@@ -125,6 +129,7 @@ class Player(pygame.sprite.Sprite):
         }
         return challengeStatesDict
 
+    # puts in delays for key presses depending on strength of computer
     def delay(self):
         delay = 0
         if self.equipped:
@@ -151,6 +156,7 @@ class Player(pygame.sprite.Sprite):
                 delay += 0.25
         return delay
 
+    # function that opens inventory and handles actions within inventory
     def openInventory(self, screen):
         print(self.inventory)
         self.inventory.render(screen)
@@ -216,6 +222,7 @@ class Player(pygame.sprite.Sprite):
                         if event.key == pygame.K_ESCAPE:
                             val = False
 
+    # sends dictionary of all necessary information to server so that ghost player can be updated
     def pushServer(self):
         payload = {
                     "x": self.x,
@@ -274,6 +281,7 @@ class Player(pygame.sprite.Sprite):
         except:
             pass
     
+    # updates screen depending on user input, uses velocities to handle collisions
     def update(self, screen, keys, currentTime):
         self.pushServer()
         dist = 4
@@ -320,7 +328,7 @@ class Player(pygame.sprite.Sprite):
             if (key[pygame.K_q]):
                 self.openInventory(screen)
             elif key[pygame.K_t] and self.equipped:
-                os.chdir(os.getcwd() + "/challenges")
+                os.chdir(os.getcwd() + "/challenges/" + "room{}Chall".format(self.scene.roomNum))
                 print(os.getcwd())
                 val = True
                 while val:
@@ -352,6 +360,7 @@ class Player(pygame.sprite.Sprite):
         self.x = x
         self.y = y
 
+    # allows user to equp part from chest
     def equipPart(self, part):
         if self.equipped and not self.equipped.tier < part.tier:
             currentPart = getattr(self.equipped, str(type(part))[19:-2].lower())
@@ -367,7 +376,8 @@ class Player(pygame.sprite.Sprite):
                     raise ValueError("You already have a part equipped!")
         else:
             self.inventory.add_item(part, 1)
-
+        
+    # allows user to equip computer
     def equipComp(self, computer):
         if self.equipped:
             if len(self.inventory.inventory) != 5:
@@ -379,6 +389,7 @@ class Player(pygame.sprite.Sprite):
             self.equipped = computer
         print(self.equipped)
 
+    # blits player image onto the screen 
     def draw(self, surface, x=None, y=None):
         if x is None and y is None:
             x = self.x

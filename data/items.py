@@ -3,6 +3,10 @@ from dataclasses_json import dataclass_json
 import json
 import random
 
+'''
+    creates class objects that hold easily accessible data for other classes
+'''
+
 @dataclass_json
 @dataclass
 class Mouse: 
@@ -68,6 +72,10 @@ class Computer:
     notes : str
     imagePath : str
     delay : float
+
+'''
+    initalizes the objects of the aformentioned classes
+'''
 
 mouseTier1 = Mouse(name = "IBM PS/2 Two Button Combo Classic", dpi = 200, tier = 1, notes="", imagePath="./Assets/Images/Sprites/Mice/ibmmouse_sprite.png", delay = 0.24)
 mouseTier2 = Mouse(name = "Logitech B100 corded mouse", dpi = 800, tier = 2, notes="", imagePath="./Assets/Images/Sprites/Mice/logitech_sprite.jpeg", delay = 0.2)
@@ -139,6 +147,11 @@ allItems = [mouseTier1, mouseTier2, mouseTier3, mouseTier4, mouseTier5, keyboard
             CPUTier1_1, CPUTier1_2, CPUTier2_1, CPUTier2_2, CPUTier3_1, CPUTier3_2, CPUTier4_1, CPUTier4_2, CPUTier5_1, CPUTier5_2,
             GPUTier1, GPUTier2, GPUTier3, GPUTier4, GPUTier5, coolingSystemTier1, coolingSystemTier2, coolingSystemTier3, coolingSystemTier4,
             computerTier0, computerTier2, computerTier4, computerTier5]
+
+'''
+    functions to easily get all items and specific data
+    also removeItem to keep a running list of items that have not been used before
+'''
 
 def getItemClass(item):
     print(str(type(item))[19:-2].lower())

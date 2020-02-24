@@ -3,7 +3,7 @@ from PIL import Image, ImageOps
 import itertools
 # from interactiveObject import InteractiveObject
 class Chest():
-    def __init__(self, name, contents, contentAmount, chestType, x, y):
+    def __init__(self, name, contents, contentAmount, chestType, x, y): #initalize Chest with the name of the item, its contents and amounts, whether its computer or tool, and its x and y
         self.name = name
         self.contents = contents
         self.alreadyAccessed = False
@@ -22,7 +22,7 @@ class Chest():
         else:
             self.chestImage = self.states["DEFAULT"]
     
-    def initStates(self):
+    def initStates(self): #intialize the screens for images of the tool chests
         states = {
             "DEFAULT":pygame.transform.scale(pygame.image.load("./Assets/Images/ToolChestOpened.png"), (384, 426)),
             "LEAVE":pygame.transform.scale(pygame.image.load("./Assets/Images/ToolChestLeave.png"), (384, 426)),
@@ -31,7 +31,7 @@ class Chest():
         }
         return states
 
-    def displayTier(self, tier, gapWidth = 20):
+    def displayTier(self, tier, gapWidth = 20): # display the star tiers under the image
         starImg = Image.open("./Assets/Images/transparentStar.png")
         scale = 0.1
         # starImg.show()
@@ -45,7 +45,7 @@ class Chest():
         img.save(path)
         return pygame.image.load(path).convert_alpha()
 
-    def open(self, screen):
+    def open(self, screen): # display the image of the items in the chest for the first time
         chestW, chestH = self.chestImage.get_rect().size
         starsW, starsH = self.starsImg.get_rect().size
 
@@ -61,15 +61,15 @@ class Chest():
         # else:
         #     sceneManager.drawImage('DEFAULT TOOL CHST IMAGE', (0,0))
     
-    def selectNext(self):
+    def selectNext(self): # the 'selected' option moves to the next one
         self.selection = next(self.selections)
     
-    def selectPrev(self):
+    def selectPrev(self): # the 'selected' option moves to the left one
         self.selection = next(self.selections)
         self.selection = next(self.selections)
 
     
-    def selected(self, screen):
+    def selected(self, screen): # do the specified action based on what the selected option is and what is possible
         player = self.scene.player
         if self.type == 'TOOL':
             if self.selection == 'LEAVE':
@@ -123,7 +123,7 @@ class Chest():
                     self.alreadyAccessed = False
                     player.isAccessingChest = True
     
-    def update(self, screen):
+    def update(self, screen): # display the chest image on the screen 
         self.chestImage = self.states[self.selection]
         chestW, chestH = self.chestImage.get_rect().size
         starsW, starsH = self.starsImg.get_rect().size

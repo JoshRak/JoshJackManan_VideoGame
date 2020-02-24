@@ -5,19 +5,19 @@ from time import sleep
 from pygame.locals import *
 from data import player, scene, sceneManager, ghostPlayer
 
-def scaleImgs(imgList):
+def scaleImgs(imgList): # scale the image to a 32x32 pixel size
     output = []
     for img in imgList:
         output.append(pygame.transform.scale(pygame.image.load(img).convert_alpha(), (32,32)))
     return output
 
-def initPlayer(poseImgs, isHacker):
+def initPlayer(poseImgs, isHacker): # intialize all the poses of the player
     return player.Player(250, 250, scaleImgs(poseImgs), isHacker)
 
-def initGhostPlayer(poseImgs):
+def initGhostPlayer(poseImgs): # initalize the images of the ghost player from the server
     return ghostPlayer.GhostPlayer(250, 250, scaleImgs(poseImgs))
 
-def initRooms(gameMaps, poseImgs, poseImgs2):
+def initRooms(gameMaps, poseImgs, poseImgs2): # initalize the rooms and add the sprites to the rooms
     spriteGroup = pygame.sprite.Group()
     spriteGroup.add(initPlayer(poseImgs, False))
     spriteGroup.add(initGhostPlayer(poseImgs2))
@@ -30,7 +30,7 @@ def initRooms(gameMaps, poseImgs, poseImgs2):
 
     return lst
 
-def main():
+def main(): # open the game and load in all necessary images and map files
     pygame.init()
 
     screen_width, screen_height = 448, 480
@@ -83,7 +83,7 @@ def main():
     manager = sceneManager.SceneManager(initRooms(gameMaps, poseImgs, ghostPlayerPoseImgs), False)
     val = True
     screen.blit(pygame.transform.scale(pygame.image.load("./Assets/Images/startSceneAdmin.png").convert_alpha(), (448, 480)), (0,0))
-    # manager.renderOpeningScene(screen, pygame.transform.scale(pygame.image.load("./Assets/Images/startSceneAdmin.png"), (448,480)))
+    # manager.renderOpeningScene(screen, pygame.transform.scale(pygame.image.load("./Assets/Images/startSceneAdmin.png").convert_alpha(), (448,480)))
     pygame.display.update()
     # manager.draw(screen)
     while val:
@@ -92,7 +92,13 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     val = False
-        
+    
+    # while True:
+    #     pygame.display.update()
+    #     events = pygame.event.get()
+    #     if not manager.renderSelectionScene(screen, ["./Assets/Images/selectionSceneWindows.png", "./Assets/Images/selectionSceneMac.png", "./Assets/Images/selectionSceneLinux.png"], events):
+    #         break
+
     manager.draw(screen)
     
     gameExit = False

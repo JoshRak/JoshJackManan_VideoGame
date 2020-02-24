@@ -7,6 +7,11 @@ from cowpy import cow
 
 root = Path(os.getcwd()+"/challenges")
 
+'''
+    functions for terminal commands to process and proceed with specified action
+    partial functionality since all functions and options would be too bulky
+    functionality should be evident by name
+'''
 def changePWD(newpath):
     print(os.path.abspath(root))
     # newpath = Path(os.getcwd() + "/" + newpath)
