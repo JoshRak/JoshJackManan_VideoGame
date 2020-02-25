@@ -1,0 +1,10 @@
+pygame==2.0.0.dev6
+textboxify==0.3.1
+pyperclip==1.7.0
+dataclasses_json==0.3.7
+cowpy==1.1.0
+PyTMX==3.21.7
+dataclasses==0.7
+gameterm==0.1.4
+Pillow==7.0.0
+setup==1.0
