@@ -81,17 +81,8 @@ def main():
                             "./Assets/Images/Sprites/Characters/walkingRight2P2.png"]
 
     manager = sceneManager.SceneManager(initRooms(gameMaps, poseImgs, ghostPlayerPoseImgs), True)
-    val = True
-    screen.blit(pygame.transform.scale(pygame.image.load("./Assets/Images/startSceneHacker.png").convert_alpha(), (448, 480)), (0,0))
-    # manager.renderOpeningScene(screen, pygame.transform.scale(pygame.image.load("./Assets/Images/startSceneAdmin.png"), (448,480)))
-    pygame.display.update()
-    # manager.draw(screen)
-    while val:
-        events = pygame.event.get()
-        for event in events:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    val = False
+    manager.renderOpeningScene(screen, pygame.transform.scale(pygame.image.load("./Assets/Images/startSceneHacker.png").convert_alpha(), (448,480)))
+    manager.renderSelectionScene(screen, ["./Assets/Images/selectionSceneWindows.png", "./Assets/Images/selectionSceneMac.png", "./Assets/Images/selectionSceneLinux.png"])
     
     manager.draw(screen)
     
@@ -99,6 +90,9 @@ def main():
     
     while not gameExit:
         events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                gameExit = True
 
         manager.update(screen, currentTime, events)
 
