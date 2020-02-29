@@ -149,151 +149,151 @@ class Terminal(object):
         return lstHelp
 
     def processCommand(self, cmd):
-        cmd = cmd.strip()
-        if cmd == '':
-            return []
-        elif cmd == 'exit':
-            sys.exit(0)
-        elif cmd == 'help':
-            return self.helpCommand()
-        elif cmd == 'pwd':
-            return [directory.getPWD().replace('\\', '/')]
-        elif cmd == 'ls':
-            return directory.getList()
-        elif cmd.startswith('cd '):
-            direc = cmd[3:]
-            direc = direc.strip()
-            if '~' in direc:
-                self.player.numRoomsCompleted += 1
+        try:
+            cmd = cmd.strip()
+            if cmd == '':
+                return []
+            elif cmd == 'exit':
+                sys.exit(0)
+            elif cmd == 'help':
+                return self.helpCommand()
+            elif cmd == 'pwd':
+                return [directory.getPWD().replace('\\', '/')]
+            elif cmd == 'ls':
+                return directory.getList()
+            elif cmd.startswith('cd '):
+                direc = cmd[3:]
+                direc = direc.strip()
+                if '~' in direc:
+                    self.player.numRoomsCompleted += 1
+                    self.player.roomFiveCompleted = True
+                    self.player.selectStartPos("right")
+                    self.player.scene.nextRoom = "left"
+                    self.player.scene.manager.nextScene()
+                    return ["You solved the island room!"]
+                directory.changePWD(direc)
+                return directory.getPWD()
+            elif cmd.startswith('move '):
+                cmd = cmd[5:]
+                return directory.move(cmd)
+            elif cmd.startswith('rename '):
+                cmd = cmd[7:]
+                return directory.rename(cmd)
+            elif cmd.startswith('rmf '):
+                cmd = cmd[4:]
+                return directory.removeFile(cmd)
+            elif cmd.startswith('rmdir '):
+                cmd = cmd[6:]
+                return directory.removeDir(cmd) 
+            elif cmd.startswith('mkdir '):
+                cmd = cmd[6:]
+                return directory.makeDir(cmd)
+            elif cmd.startswith('mkf '):
+                cmd = cmd[4:]
+                return directory.makeFile(cmd)
+            elif cmd == 'p':
+                self.player.roomThreeCompleted = True
+                self.player.roomFourCompleted = True
                 self.player.roomFiveCompleted = True
-                self.player.selectStartPos("right")
-                self.player.scene.nextRoom = "left"
-                self.player.scene.manager.nextScene()
-                return ["You solved the island room!"]
-            directory.changePWD(direc)
-            return directory.getPWD()
-        elif cmd.startswith('move '):
-            cmd = cmd[5:]
-            return directory.move(cmd)
-        elif cmd.startswith('rename '):
-            cmd = cmd[7:]
-            return directory.rename(cmd)
-        elif cmd.startswith('rmf '):
-            cmd = cmd[4:]
-            return directory.removeFile(cmd)
-        elif cmd.startswith('rmdir '):
-            cmd = cmd[6:]
-            return directory.removeDir(cmd) 
-        elif cmd.startswith('mkdir '):
-            cmd = cmd[6:]
-            return directory.makeDir(cmd)
-        elif cmd.startswith('mkf '):
-            cmd = cmd[4:]
-            return directory.makeFile(cmd)
-        elif cmd == 'p':
-            self.player.roomThreeCompleted = True
-            self.player.roomFourCompleted = True
-            self.player.roomFiveOneCompleted = True
-            self.player.roomSevenOneCompleted = True
-            self.player.roomEightOneCompleted = True
-            self.player.roomNineOneCompleted = True
-            self.player.roomTenOneCompleted = True
-            self.player.roomElevenOneCompleted = True
-            self.player.roomTwelveOneCompleted = True
-            self.player.numRoomsCompleted = 9
-            return []
-        elif cmd.startswith('cat '):
-            cmd = cmd[4:]
-            # if 'thisIsTheFlagFile.txt' in cmd:
-            #     self.player.roomEightCompleted = True
-            #     return ["You completed the cat room!"]
-            return directory.getContent(cmd)
-        elif cmd.startswith('tac '):
-            cmd = cmd[4:]
-            # if 'FileFlagTheIsthis.txt' in cmd:
-            #     self.player.roomNineCompleted = True
-            #     return ["You completed the tac room!"]
-            return directory.getReverseContent(cmd)
-        elif cmd.startswith('grep '):
-            cmd = split(cmd[5:])
-            try:
-                return directory.findContent(cmd[1], cmd[0])
-            except:
-		return ["grep: Incorrect command syntax. Try again."] 
-        elif cmd.startswith('expr '):
-            cmd = cmd[5:]
-            if '43' in cmd and '9762' in cmd and '476112' in cmd:
-                if cmd.index('+') > 0 and cmd.index('-') > cmd.index('+'):
-                    if str(eval(cmd) == (43+9762-476112)):
-                        self.player.numRoomsCompleted += 1
-                        self.player.roomNineCompleted = True
-                        return ["You found the right answer!"]
-            return ([str(eval(cmd))])
-        elif cmd.startswith('sudo'):
-            self.player.sudoPerms = True
-            self.player.roomFourCompleted = True
-            self.player.numRoomsCompleted += 1
-            return []
-        elif cmd.startswith('xrandr '):
-            if '-brightness' in cmd:
                 self.player.roomSevenCompleted = True
+                self.player.roomEightCompleted = True
+                self.player.roomNineCompleted = True
+                self.player.roomTenCompleted = True
+                self.player.roomElevenCompleted = True
+                self.player.roomTwelveCompleted = True
+                self.player.numRoomsCompleted = 9
+                return []
+            elif cmd.startswith('cat '):
+                cmd = cmd[4:]
+                # if 'thisIsTheFlagFile.txt' in cmd:
+                #     self.player.roomEightCompleted = True
+                #     return ["You completed the cat room!"]
+                return directory.getContent(cmd)
+            elif cmd.startswith('tac '):
+                cmd = cmd[4:]
+                # if 'FileFlagTheIsthis.txt' in cmd:
+                #     self.player.roomNineCompleted = True
+                #     return ["You completed the tac room!"]
+                return directory.getReverseContent(cmd)
+            elif cmd.startswith('grep '):
+                cmd = split(cmd[5:])
+                return directory.findContent(cmd[1], cmd[0])
+            elif cmd.startswith('expr '):
+                cmd = cmd[5:]
+                if '43' in cmd and '9762' in cmd and '476112' in cmd:
+                    if cmd.index('+') > 0 and cmd.index('-') > cmd.index('+'):
+                        if str(eval(cmd) == (43+9762-476112)):
+                            self.player.numRoomsCompleted += 1
+                            self.player.roomElevenCompleted = True
+                            return ["You found the right answer!"]
+                return ([str(eval(cmd))])
+            elif cmd.startswith('sudo'):
+                self.player.sudoPerms = True
+                self.player.roomFourCompleted = True
                 self.player.numRoomsCompleted += 1
-                return ["You solved the brightness room!"]
-            return ["Not quite"]
-        elif 'THI5_I5_TH3_GR3P_T0_5UCC355' in cmd:
-            self.player.roomThreeCompleted = True
-            self.player.numRoomsCompleted += 1
-            return ["You found the flag to the grep/trashcan room!"]
-        elif 'C4T5_4R3_V3RY_C00l_92733' in cmd:
-            self.player.roomEightCompleted = True
-            self.player.numRoomsCompleted += 1
-            return ["You found the flag to the cat room!"]
-        elif 'C001_V3RY_4R3_C4T5_18335' in cmd:
-            self.player.roomNineCompleted = True
-            self.player.numRoomsCompleted += 1
-            return ["You found the flag to the tac room!"]
-        elif 'UNZ1P_Y0UR_TR345UR3_39823' in cmd:
-            self.player.roomTwelveCompleted = True
-            self.player.numRoomsCompleted += 1
-            return ["You found the flag to the zip room!"]
-        elif cmd.startswith('cowsay '):
-            cmd = cmd[7:]
-            self.player.roomEightCompleted = True
-            self.player.numRoomsCompleted += 1
-            return directory.cowsay(cmd)
-        elif cmd.startswith('checkpath '):
-            cmd = cmd[10:]
-            return directory.checkPath(cmd)
-        elif cmd.startswith('checkdir '):
-            cmd = cmd[9:].startswith('FLAG3').startswith('FLAG3')
-            return directory.checkDir(cmd)
-        elif cmd.startswith('checkf '):
-            cmd = cmd[7:]
-            return directory.checkFile(cmd)
-        elif cmd.startswith('zip ls '):
-            cmd = cmd[7:]
-            return directory.zipLS(cmd)
-        elif cmd.startswith('zip getfilesize '):
-            cmd = cmd[16:]
-            return directory.zipGetFileSize(cmd)
-        elif cmd.startswith('zip getcomsize '):
-            cmd = cmd[15:]
-            return directory.zipGetComSize(cmd)
-        elif cmd.startswith('zip '):
-            cmd = cmd[4:]
-            return directory.createZip(cmd)
-        elif cmd.startswith('unzipall '):
-            cmd = cmd[9:]
-            return directory.unzipAll(cmd)
-        elif cmd.startswith('unzip '):
-            cmd = cmd[6:]
-            # if 'aVeryCompressedFile.zip' in cmd:
-            #     self.player.numRoomsCompleted += 1
-            #     self.player.roomTwelveCompleted = True
-            #     return ["You unzipped the right file!"]
-            return directory.unzip(cmd)
-        else:
-            return ['%r not found.' %(cmd), '7084338aIf you have no idea what to do use "help" command.']
+                return []
+            elif cmd.startswith('xrandr '):
+                if '-brightness' in cmd:
+                    self.player.roomSevenCompleted = True
+                    self.player.numRoomsCompleted += 1
+                    return ["You solved the brightness room!"]
+                return ["Not quite"]
+            elif 'THI5_I5_TH3_GR3P_T0_5UCC355' in cmd:
+                self.player.roomThreeCompleted = True
+                self.player.numRoomsCompleted += 1
+                return ["You found the flag to the grep/trashcan room!"]
+            elif 'C4T5_4R3_V3RY_C00l_92733' in cmd:
+                self.player.roomEightCompleted = True
+                self.player.numRoomsCompleted += 1
+                return ["You found the flag to the cat room!"]
+            elif 'C001_V3RY_4R3_C4T5_18335' in cmd:
+                self.player.roomNineCompleted = True
+                self.player.numRoomsCompleted += 1
+                return ["You found the flag to the tac room!"]
+            elif 'UNZ1P_Y0UR_TR345UR3_39823' in cmd:
+                self.player.roomTwelveCompleted = True
+                self.player.numRoomsCompleted += 1
+                return ["You found the flag to the zip room!"]
+            elif cmd.startswith('cowsay '):
+                cmd = cmd[7:]
+                self.player.roomTenCompleted = True
+                self.player.numRoomsCompleted += 1
+                return directory.cowsay(cmd)
+            elif cmd.startswith('checkpath '):
+                cmd = cmd[10:]
+                return directory.checkPath(cmd)
+            elif cmd.startswith('checkdir '):
+                cmd = cmd[9:].startswith('FLAG3').startswith('FLAG3')
+                return directory.checkDir(cmd)
+            elif cmd.startswith('checkf '):
+                cmd = cmd[7:]
+                return directory.checkFile(cmd)
+            elif cmd.startswith('zip ls '):
+                cmd = cmd[7:]
+                return directory.zipLS(cmd)
+            elif cmd.startswith('zip getfilesize '):
+                cmd = cmd[16:]
+                return directory.zipGetFileSize(cmd)
+            elif cmd.startswith('zip getcomsize '):
+                cmd = cmd[15:]
+                return directory.zipGetComSize(cmd)
+            elif cmd.startswith('zip '):
+                cmd = cmd[4:]
+                return directory.createZip(cmd)
+            elif cmd.startswith('unzipall '):
+                cmd = cmd[9:]
+                return directory.unzipAll(cmd)
+            elif cmd.startswith('unzip '):
+                cmd = cmd[6:]
+                # if 'aVeryCompressedFile.zip' in cmd:
+                #     self.player.numRoomsCompleted += 1
+                #     self.player.roomTwelveCompleted = True
+                #     return ["You unzipped the right file!"]
+                return directory.unzip(cmd)
+            else:
+                return ['%r not found.' %(cmd), '7084338aIf you have no idea what to do use "help" command.']
+        except:
+            return ['Something went wrong!']
 
     def update(self, events):
         self.fullLine = (self.height - 120) // 20
