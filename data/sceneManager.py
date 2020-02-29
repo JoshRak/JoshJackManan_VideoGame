@@ -26,39 +26,52 @@ class SceneManager(object): # a class to hold the data of all the running scenes
 
     def renderOpeningScene(self, screen, openingSceneImg): # display the opening scene
         screen.blit(openingSceneImg, (0,0))
+        pygame.display.update()
+        # manager.draw(screen)
+        while True:
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                        pygame.event.clear()
+                        return
 
     def processSelection(self, screen, selection): # process the selection of operating system
         if selection == "./Assets/Images/selectionSceneMac.png":
             screen.blit(pygame.transform.scale(pygame.image.load("./Assets/Images/selectionSceneMacError.png").convert_alpha(), (448,480)), (0,0))
-            val = True
-            while val:
+            pygame.display.update()
+            while True:
                 events = pygame.event.get()
                 for event in events:
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                        val = False
-            return False
+                        pygame.event.clear()
+                        return False
         return True
 
-    def renderSelectionScene(self, screen, selectionScenes, events): # display the selection scenes for operating system
+    def renderSelectionScene(self, screen, selectionScenes): # display the selection scenes for operating system
         selectionScenesCycle = cycle(selectionScenes)
         selectedScene = next(selectionScenesCycle)
+        print("selection ")
+        while True:
+            screen.blit(pygame.transform.scale(pygame.image.load(selectedScene).convert_alpha(), (448,480)), (0,0))
+            pygame.display.update()
+            events = pygame.event.get()
+        
+            for event in events:
+                if event.type == pygame.KEYDOWN and (event.key == pygame.K_LEFT or event.key == pygame.K_a):
+                    selectedScene = next(selectionScenesCycle)
+                    selectedScene = next(selectionScenesCycle)
+                elif event.type == pygame.KEYDOWN and (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
+                    selectedScene = next(selectionScenesCycle)
+                elif event.type == pygame.KEYDOWN and (event.key == pygame.K_RETURN):
+                    pygame.event.clear()
+                    if self.processSelection(screen, selectedScene):
+                        return
 
-        for event in events:
-            if event.type == pygame.KEYDOWN and (event.key == pygame.K_LEFT or event.key == pygame.K_a):
-                selectedScene = next(selectionScenesCycle)
-                selectedScene = next(selectionScenesCycle)
-            elif event.type == pygame.KEYDOWN and (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
-                selectedScene = next(selectionScenesCycle)
-            elif event.type == pygame.KEYDOWN and (event.key == pygame.K_RETURN):
-                if self.processSelection(screen, selectedScene):
-                    return False
-                else:
-                    continue
-
-        screen.blit(pygame.transform.scale(pygame.image.load(selectedScene).convert_alpha(), (448,480)), (0,0))
-
-    def renderClosingScene(self, screen, closingSceneImg): # display the closing scene
-        screen.blit(closingSceneImg, (0,0))
+    def renderClosingScene(self, screen, wonGame): # display the closing scene
+        if wonGame:
+            screen.blit(pygame.transform.scale(pygame.image.load("./Assets/Images/endSceneWin.png").convert_alpha(), (448, 480)), (0,0))
+        else:
+            screen.blit(pygame.transform.scale(pygame.image.load("./Assets/Images/endSceneLoss.png").convert_alpha(), (448, 480)), (0,0))
 
     def initScenes(self, scenes): # initalize the map scene
         scenesDict = [  [None,          scenes[1],      None,           None],
