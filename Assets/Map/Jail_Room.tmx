@@ -529,11 +529,11 @@
   <object id="104" name="Bottom_Wall1" x="28" y="450" width="131" height="26"/>
   <object id="105" name="Left_Wall2" x="9" y="350" width="20" height="126"/>
   <object id="106" name="Left Entrance" type="new room" x="9" y="231" width="20" height="116"/>
-  <object id="107" name="Left_CellWall" x="154" y="161" width="5" height="125"/>
-  <object id="108" name="Bottom_CellWall1" x="161.5" y="290" width="30.5" height="2.5"/>
-  <object id="109" name="Bottom_CellWall2" x="226" y="289" width="66" height="4"/>
-  <object id="110" name="Right_CellWall" x="289" y="161.5" width="3.5" height="125.5"/>
-  <object id="111" name="Removable_CellWall" type="removable4" x="193.5" y="289" width="31.5" height="3.5"/>
+  <object id="107" name="Left_CellWall" x="154" y="158.636" width="9.36364" height="127.364"/>
+  <object id="108" name="Bottom_CellWall1" x="158.409" y="281.636" width="30.6818" height="10.8636"/>
+  <object id="109" name="Bottom_CellWall2" x="226.909" y="283.182" width="65.0909" height="9.81818"/>
+  <object id="110" name="Right_CellWall" x="281.909" y="157.136" width="10.5909" height="129.864"/>
+  <object id="111" name="Removable_CellWall" type="removable4" x="188.591" y="283.364" width="39.3182" height="9.13636"/>
   <object id="112" name="Room4_Chest1" type="chest" x="191.5" y="192" width="32.5" height="32"/>
   <object id="113" name="Room4_Chest2" type="chest" x="126" y="351" width="36" height="33"/>
  </objectgroup>
