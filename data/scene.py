@@ -328,7 +328,7 @@ class Scene(object):
                 for x, y, gid in layer:
                     tile = self.sceneMap.get_tile_image_by_gid(gid)
                     if tile and ((not(self.roomNum == 3 and self.player.roomThreeCompleted and layer.name == 'Removable Props')) and (not(self.roomNum == 4 and self.player.roomFourCompleted and layer.name == 'removable4'))):
-                        if not self.player.roomTwelveCompleted and layer=='Removable12':
+                        if not self.player.roomTwelveCompleted and layer.name=='Removable12':
                             pass
                         else:
                             screen.blit(tile, (x * self.sceneMap.tilewidth, y * self.sceneMap.tileheight))

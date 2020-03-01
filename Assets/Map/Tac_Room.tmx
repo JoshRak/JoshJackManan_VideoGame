@@ -1044,7 +1044,7 @@
   <object id="98" name="Desk" x="101.333" y="228" width="54" height="19.3333"/>
   <object id="101" name="Book" x="190.667" y="286" width="32" height="23.3333"/>
   <object id="102" name="Room9_Chest1" type="chest" x="320" y="290" width="33.3333" height="31.3333"/>
-  <object id="103" name="Desk" x="195.667" y="226.333" width="54" height="19.3333"/>
+  <object id="103" name="Desk" x="195.667" y="231.666" width="54" height="14"/>
   <object id="104" name="Desk" x="293.667" y="227" width="54" height="19.3333"/>
   <object id="105" name="Desk" x="293" y="354.333" width="54" height="19.3333"/>
   <object id="106" name="Desk" x="196.333" y="353" width="54" height="19.3333"/>
@@ -1054,8 +1054,8 @@
   <object id="110" name="Left Wall" x="-2.66667" y="354" width="36.6667" height="95.3333"/>
   <object id="114" name="Bottom Wall" x="34.6667" y="448.667" width="389.333" height="26.6667"/>
   <object id="115" name="Right Wall" x="418" y="120.667" width="19.3333" height="328"/>
-  <object id="116" name="Bookshelves" x="32.6667" y="126.667" width="158" height="63.3333"/>
-  <object id="117" name="Top entrance" type="new room" x="191.333" y="129.333" width="64.6667" height="61.3333"/>
-  <object id="118" name="Bookshelves" x="256.667" y="128" width="160.667" height="62"/>
+  <object id="116" name="Bookshelves" x="32.6667" y="126.667" width="150.667" height="63.3333"/>
+  <object id="117" name="Top entrance" type="new room" x="182" y="129.333" width="83.3334" height="61.3333"/>
+  <object id="118" name="Bookshelves" x="264.667" y="128" width="152.667" height="62"/>
  </objectgroup>
 </map>
