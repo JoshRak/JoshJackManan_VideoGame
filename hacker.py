@@ -32,7 +32,8 @@ def initRooms(gameMaps, poseImgs, poseImgs2):
 
 def main():
     pygame.init()
-
+    pygame.mixer.music.load("./Assets/music1.mp3")
+    pygame.mixer.music.play(-1)
     screen_width, screen_height = 448, 480
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
