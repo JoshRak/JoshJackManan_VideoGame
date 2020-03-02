@@ -13,7 +13,7 @@ import socket
 import json
 import time
 
-HOST = '172.21.186.139'  # The server's hostname or IP address
+HOST = '192.168.43.227'  # The server's hostname or IP address
 PORT = 65432    # The port used by the server
 
 class Player(pygame.sprite.Sprite):
